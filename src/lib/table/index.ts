@@ -1,0 +1,1 @@
+export { useMaterialRouterTable } from './materialRouterTableHooks'

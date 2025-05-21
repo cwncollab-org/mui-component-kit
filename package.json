@@ -1,0 +1,71 @@
+{
+  "name": "@cwncollab-org/mui-component-kit",
+  "private": false,
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "homepage": "https://github.com/cwncollab-org/mui-component-kit",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cwncollab-org/mui-component-kit.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build:lib": "tsc -p tsconfig.build.json",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "prepare": "npm run build:lib",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "peerDependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^7.0.2",
+    "@mui/material": "^7.0.2",
+    "@tanstack/react-form": "^1.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^7.0.2",
+    "@mui/material": "^7.0.2",
+    "@mui/x-date-pickers": "^8.0.0",
+    "@tanstack/react-form": "^1.0.0",
+    "@tanstack/react-router": "^1.116.0",
+    "@tanstack/react-table": "^8.21.3",
+    "dayjs": "^1.11.13",
+    "material-react-table": "^3.2.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "@tanstack/react-router-devtools": "^1.116.0",
+    "@tanstack/router-vite-plugin": "^1.116.1",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@types/jest": "^29.5.14",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react-swc": "^3.8.0",
+    "eslint": "^9.22.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-transform-stub": "^2.0.0",
+    "ts-jest": "^29.3.2",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.26.1",
+    "vite": "^6.3.1",
+    "zod": "^3.24.3"
+  }
+}
