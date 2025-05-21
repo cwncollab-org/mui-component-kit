@@ -502,12 +502,12 @@ function MyComponent() {
   const confirm = useConfirmDialog()
 
   const handleClick = async () => {
-    const result = await confirm({
+    const { success } = await confirm({
       title: 'Confirm',
       message: 'Are you sure you want to add this item to cart?',
     })
 
-    if (result) {
+    if (success) {
       // Proceed
     }
   }
@@ -529,12 +529,12 @@ function MyComponent() {
   const confirmDelete = useConfirmDeleteDialog()
 
   const handleDelete = async () => {
-    const result = await confirmDelete({
+    const { success } = await confirmDelete({
       title: 'Delete Item',
       message: 'Are you sure you want to delete this item? This action cannot be undone.',
     })
 
-    if (result) {
+    if (success) {
       // Proceed with deletion
     }
   }
