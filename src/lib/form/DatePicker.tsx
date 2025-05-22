@@ -8,9 +8,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { useMemo } from 'react'
 
-type Props = Omit<
+export type DatePickerProps = Omit<
   MuiDatePickerProps,
-  'name' | 'value' | 'onChange' | 'defaultValue'
+  'name' | 'value' | 'defaultValue'
 > & {
   required?: boolean
   labelShrink?: boolean
@@ -18,7 +18,7 @@ type Props = Omit<
   fullWidth?: boolean
 }
 
-export function DatePicker(props: Props) {
+export function DatePicker(props: DatePickerProps) {
   const field = useFieldContext<Date | string>()
 
   const errorText = useMemo(() => {
@@ -26,7 +26,7 @@ export function DatePicker(props: Props) {
     return field.state.meta.errors.map(error => error.message).join(', ')
   }, [field.state.meta.errors])
 
-  const { required, labelShrink, size, fullWidth, ...rest } = props
+  const { required, labelShrink, size, fullWidth, onChange, ...rest } = props
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -34,8 +34,9 @@ export function DatePicker(props: Props) {
         {...rest}
         name={field.name}
         value={field.state.value ? dayjs(field.state.value) : null}
-        onChange={value => {
+        onChange={(value, context) => {
           if (value) {
+            onChange?.(value, context)
             field.handleChange(value.toDate())
           }
         }}

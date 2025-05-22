@@ -5,16 +5,18 @@ import dayjs from 'dayjs'
 import { useMemo } from 'react'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-type Props = Omit<
+
+export type TimePickerProps = Omit<
   MuiTimePickerProps,
-  'name' | 'value' | 'onChange' | 'defaultValue'
+  'name' | 'value' | 'defaultValue'
 > & {
   required?: boolean
   labelShrink?: boolean
   size?: 'small' | 'medium'
   fullWidth?: boolean
 }
-export function TimePicker(props: Props) {
+
+export function TimePicker(props: TimePickerProps) {
   const field = useFieldContext<Date | string>()
 
   const errorText = useMemo(() => {
@@ -22,16 +24,17 @@ export function TimePicker(props: Props) {
     return field.state.meta.errors.map(error => error.message).join(', ')
   }, [field.state.meta.errors])
 
-  const { required, labelShrink, size, fullWidth, ...rest } = props
+  const { required, labelShrink, size, fullWidth, onChange, ...rest } = props
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <MuiTimePicker
         {...rest}
         name={field.name}
         value={field.state.value ? dayjs(field.state.value) : null}
-        onChange={value => {
+        onChange={(value, context) => {
           if (value) {
             field.handleChange(value.toDate())
+            onChange?.(value, context)
           }
         }}
         slotProps={{

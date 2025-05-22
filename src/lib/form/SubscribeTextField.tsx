@@ -1,7 +1,9 @@
 import { TextField, TextFieldProps } from './TextField'
 import { useFormContext } from './formContext'
 
-export function SubscribeTextField(props: TextFieldProps) {
+export type SubscribeTextFieldProps = TextFieldProps
+
+export function SubscribeTextField(props: SubscribeTextFieldProps) {
   const form = useFormContext()
 
   const { disabled, ...rest } = props

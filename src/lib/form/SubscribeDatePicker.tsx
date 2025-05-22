@@ -1,18 +1,9 @@
-import { DatePicker } from './DatePicker'
+import { DatePicker, DatePickerProps } from './DatePicker'
 import { useFormContext } from './formContext'
-import { DatePickerProps as MuiDatePickerProps } from '@mui/x-date-pickers'
 
-type Props = Omit<
-  MuiDatePickerProps,
-  'name' | 'value' | 'onChange' | 'defaultValue'
-> & {
-  required?: boolean
-  labelShrink?: boolean
-  size?: 'small' | 'medium'
-  fullWidth?: boolean
-}
+export type SubscribeDatePickerProps = DatePickerProps
 
-export function SubscribeDatePicker(props: Props) {
+export function SubscribeDatePicker(props: SubscribeDatePickerProps) {
   const form = useFormContext()
 
   const { disabled, ...rest } = props

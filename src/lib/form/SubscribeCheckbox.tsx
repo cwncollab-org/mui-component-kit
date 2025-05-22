@@ -1,14 +1,9 @@
-import { Checkbox } from './Checkbox'
+import { Checkbox, CheckboxProps } from './Checkbox'
 import { useFormContext } from './formContext'
-import {
-  CheckboxProps as MuiCheckboxProps,
-  FormControlLabelProps as MuiFormControlLabelProps,
-} from '@mui/material'
 
-type Props = Omit<MuiCheckboxProps, 'name'> &
-  Pick<MuiFormControlLabelProps, 'label' | 'required' | 'disabled'>
+export type SubscribeCheckboxProps = CheckboxProps
 
-export function SubscribeCheckbox(props: Props) {
+export function SubscribeCheckbox(props: SubscribeCheckboxProps) {
   const form = useFormContext()
 
   const { disabled, ...rest } = props

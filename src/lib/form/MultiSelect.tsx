@@ -37,6 +37,7 @@ export type MultiSelectProps = MuiFormControlProps & {
     >
     helperText?: MuiFormHelperTextProps
   }
+  onChange?: MuiSelectProps['onChange']
 }
 
 export function MultiSelect(props: MultiSelectProps) {
@@ -49,6 +50,7 @@ export function MultiSelect(props: MultiSelectProps) {
     size,
     fullWidth,
     sortSelected = false,
+    onChange,
     ...rest
   } = props
 
@@ -111,7 +113,12 @@ export function MultiSelect(props: MultiSelectProps) {
         notched={labelShrink}
         multiple
         value={getSortedSelectedValues}
-        onChange={ev => field.handleChange(ev.target.value as string[])}
+        onChange={(ev, child) => {
+          onChange?.(ev, child)
+          if (!ev.defaultPrevented) {
+            field.handleChange(ev.target.value as string[])
+          }
+        }}
         input={<OutlinedInput label={props.label} />}
         renderValue={selected => {
           const selectedValues = selected as string[]

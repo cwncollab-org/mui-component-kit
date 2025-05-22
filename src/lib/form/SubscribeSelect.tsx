@@ -1,7 +1,9 @@
 import { Select, SelectProps } from './Select'
 import { useFormContext } from './formContext'
 
-export function SubscribeSelect(props: SelectProps) {
+export type SubscribeSelectProps = SelectProps
+
+export function SubscribeSelect(props: SubscribeSelectProps) {
   const form = useFormContext()
 
   const { disabled, ...rest } = props

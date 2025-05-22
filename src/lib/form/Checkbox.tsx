@@ -6,12 +6,12 @@ import {
 } from '@mui/material'
 import { useFieldContext } from './formContext'
 
-type Props = Omit<MuiCheckboxProps, 'name'> &
-  Pick<MuiFormControlLabelProps, 'label' | 'required' | 'disabled'>
+export type CheckboxProps = Omit<MuiCheckboxProps, 'name'> &
+  Pick<MuiFormControlLabelProps, 'label' | 'required' | 'disabled' | 'onChange'>
 
-export function Checkbox(props: Props) {
+export function Checkbox(props: CheckboxProps) {
   const field = useFieldContext<boolean>()
-  const { label, required, disabled, ...rest } = props
+  const { label, required, disabled, onChange, ...rest } = props
   return (
     <MuiFormControlLabel
       label={label}
@@ -21,7 +21,12 @@ export function Checkbox(props: Props) {
         <MuiCheckbox
           name={field.name}
           checked={field.state.value}
-          onChange={e => field.handleChange(e.target.checked)}
+          onChange={(ev, child) => {
+            onChange?.(ev, child)
+            if (!ev.defaultPrevented) {
+              field.handleChange(ev.target.checked)
+            }
+          }}
           {...rest}
         />
       }

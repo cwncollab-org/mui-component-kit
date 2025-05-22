@@ -32,6 +32,7 @@ export type SelectProps = MuiFormControlProps & {
     >
     helperText?: MuiFormHelperTextProps
   }
+  onChange?: MuiSelectProps['onChange']
 }
 
 export function Select(props: SelectProps) {
@@ -44,6 +45,7 @@ export function Select(props: SelectProps) {
     labelShrink,
     size,
     fullWidth,
+    onChange,
     ...rest
   } = props
 
@@ -88,7 +90,12 @@ export function Select(props: SelectProps) {
         label={props.label}
         name={field.name}
         value={field.state.value ?? ''}
-        onChange={ev => field.handleChange(ev.target.value as string)}
+        onChange={(ev, child) => {
+          onChange?.(ev, child)
+          if (!ev.defaultPrevented) {
+            field.handleChange(ev.target.value as string)
+          }
+        }}
       >
         {children}
         {renderedOptions.map(option => (

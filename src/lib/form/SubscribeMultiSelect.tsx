@@ -1,7 +1,9 @@
 import { MultiSelect, MultiSelectProps } from './MultiSelect'
 import { useFormContext } from './formContext'
 
-export function SubscribeMultiSelect(props: MultiSelectProps) {
+export type SubscribeMultiSelectProps = MultiSelectProps
+
+export function SubscribeMultiSelect(props: SubscribeMultiSelectProps) {
   const form = useFormContext()
 
   const { disabled, ...rest } = props

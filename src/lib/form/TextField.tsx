@@ -5,12 +5,12 @@ import {
 import { useFieldContext } from './formContext'
 import { useMemo } from 'react'
 
-export type TextFieldProps = Omit<MuiTextFieldProps, 'name'> & {
+export type TextFieldProps = Omit<MuiTextFieldProps, 'name' | 'value'> & {
   labelShrink?: boolean
 }
 
 export function TextField(props: TextFieldProps) {
-  const { label, slotProps, labelShrink, ...rest } = props
+  const { label, slotProps, labelShrink, onChange, ...rest } = props
   const field = useFieldContext<string | undefined | null>()
 
   const errorText = useMemo(() => {
@@ -24,9 +24,12 @@ export function TextField(props: TextFieldProps) {
       label={label}
       value={field.state.value ?? ''}
       onBlur={field.handleBlur}
-      onChange={e =>
-        field.handleChange(e.target.value === '' ? null : e.target.value)
-      }
+      onChange={ev => {
+        onChange?.(ev)
+        if (!ev.defaultPrevented) {
+          field.handleChange(ev.target.value === '' ? null : ev.target.value)
+        }
+      }}
       slotProps={{
         inputLabel: { shrink: labelShrink },
         ...slotProps,
