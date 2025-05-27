@@ -47,8 +47,10 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
   } = opts
 
   const initialState = opts.initialState
-  const search = tableSearchSchema.parse(useSearch({ strict: false }))
+  const originalSearch = useSearch({ strict: false })
   const navigate = useNavigate({ from: path })
+
+  const search = tableSearchSchema.parse(originalSearch)
 
   const initialPaginationState: MRT_PaginationState = {
     pageIndex: initialState?.pagination?.pageIndex ?? 0,
@@ -153,7 +155,7 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
       navigate({
         replace: true,
         // @ts-ignore
-        search: { ...search, ...nextSearch },
+        search: { ...originalSearch, ...nextSearch },
       })
     }
   }, [
