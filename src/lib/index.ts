@@ -7,5 +7,5 @@ export {
 } from './dialogs'
 export { useAppForm, withForm } from './form'
 export { RouterTab, TabLabel, useRouterTabsValue } from './tabs'
-export { useMaterialRouterTable } from './table'
+export { useMaterialRouterTable, tableSearchSchema } from './table'
 export { useConfirmDialog, useConfirmDeleteDialog } from './common-dialogs'

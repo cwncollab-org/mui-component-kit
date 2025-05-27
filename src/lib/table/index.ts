@@ -1,1 +1,4 @@
-export { useMaterialRouterTable } from './materialRouterTableHooks'
+export {
+  useMaterialRouterTable,
+  tableSearchSchema,
+} from './materialRouterTableHooks'
