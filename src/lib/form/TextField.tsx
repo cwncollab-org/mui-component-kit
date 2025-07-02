@@ -10,13 +10,22 @@ export type TextFieldProps = Omit<MuiTextFieldProps, 'name' | 'value'> & {
 }
 
 export function TextField(props: TextFieldProps) {
-  const { label, slotProps, labelShrink, onChange, ...rest } = props
+  const {
+    label,
+    slotProps,
+    labelShrink,
+    onChange,
+    helperText = '',
+    ...rest
+  } = props
   const field = useFieldContext<string | undefined | null>()
 
   const errorText = useMemo(() => {
     if (field.state.meta.errors.length === 0) return null
     return field.state.meta.errors.map(error => error.message).join(', ')
   }, [field.state.meta.errors])
+
+  const error = field.state.meta.errors.length > 0
 
   return (
     <MuiTextField
@@ -34,8 +43,8 @@ export function TextField(props: TextFieldProps) {
         inputLabel: { shrink: labelShrink },
         ...slotProps,
       }}
-      error={field.state.meta.errors.length > 0}
-      helperText={errorText}
+      error={error}
+      helperText={error ? errorText : helperText}
       {...rest}
     />
   )
