@@ -3,17 +3,25 @@ import {
   TextFieldProps as MuiTextFieldProps,
 } from '@mui/material'
 import { useFieldContext } from './formContext'
-import { useMemo } from 'react'
+import { InputHTMLAttributes, useMemo } from 'react'
 
 export type TextFieldProps = Omit<MuiTextFieldProps, 'name' | 'value'> & {
   labelShrink?: boolean
+  min?: InputHTMLAttributes<HTMLInputElement>['min']
+  max?: InputHTMLAttributes<HTMLInputElement>['max']
+  maxLength?: InputHTMLAttributes<HTMLInputElement>['maxLength']
+  pattern?: InputHTMLAttributes<HTMLInputElement>['pattern']
 }
 
 export function TextField(props: TextFieldProps) {
   const {
+    labelShrink,
+    min,
+    max,
+    maxLength,
+    pattern,
     label,
     slotProps,
-    labelShrink,
     onChange,
     helperText = '',
     ...rest
@@ -40,8 +48,21 @@ export function TextField(props: TextFieldProps) {
         }
       }}
       slotProps={{
-        inputLabel: { shrink: labelShrink },
         ...slotProps,
+        inputLabel: { ...slotProps?.inputLabel, shrink: labelShrink },
+        input: {
+          ...slotProps?.input,
+          slotProps: {
+            ...(slotProps?.input as any)?.slotProps,
+            input: {
+              ...(slotProps?.input as any)?.slotProps?.input,
+              min: min,
+              max: max,
+              maxLength: maxLength,
+              pattern: pattern,
+            },
+          },
+        },
       }}
       error={error}
       helperText={error ? errorText : helperText}

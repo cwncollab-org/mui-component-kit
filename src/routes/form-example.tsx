@@ -80,6 +80,7 @@ export function FormExample() {
               children={field => (
                 <field.SubscribeTextField
                   label='Username'
+                  maxLength={20}
                   fullWidth
                   required
                   labelShrink
