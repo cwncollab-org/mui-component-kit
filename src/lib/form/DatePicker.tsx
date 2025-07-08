@@ -26,7 +26,15 @@ export function DatePicker(props: DatePickerProps) {
     return field.state.meta.errors.map(error => error.message).join(', ')
   }, [field.state.meta.errors])
 
-  const { required, labelShrink, size, fullWidth, onChange, ...rest } = props
+  const {
+    required,
+    labelShrink,
+    size,
+    fullWidth,
+    onChange,
+    slotProps,
+    ...rest
+  } = props
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -51,6 +59,7 @@ export function DatePicker(props: DatePickerProps) {
             InputProps: {
               notched: labelShrink,
             },
+            ...(slotProps?.textField as any),
           },
         }}
       />
