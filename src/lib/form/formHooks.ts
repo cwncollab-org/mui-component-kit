@@ -13,6 +13,8 @@ import { SubscribeMultiSelect } from './SubscribeMultiSelect'
 import { SubscribeCheckbox } from './SubscribeCheckbox'
 import { SubscribeDatePicker } from './SubscribeDatePicker'
 import { SubscribeTimePicker } from './SubscribeTimePicker'
+import { RadioGroup } from './RadioGroup'
+import { SubscribeRadioGroup } from './SubscribeRadioGroup'
 
 export const { useAppForm, withForm } = createFormHook({
   fieldContext,
@@ -22,6 +24,7 @@ export const { useAppForm, withForm } = createFormHook({
     Checkbox,
     Select,
     MultiSelect,
+    RadioGroup,
     DatePicker,
     TimePicker,
     SubscribeTextField,
@@ -30,6 +33,7 @@ export const { useAppForm, withForm } = createFormHook({
     SubscribeCheckbox,
     SubscribeDatePicker,
     SubscribeTimePicker,
+    SubscribeRadioGroup,
   },
   formComponents: { SubscribeButton },
 })
