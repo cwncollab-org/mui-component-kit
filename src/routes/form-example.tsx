@@ -1,5 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Box, Button, MenuItem, Paper, Stack, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  MenuItem,
+  Paper,
+  Stack,
+  Typography,
+  Radio,
+  FormControlLabel,
+} from '@mui/material'
 import { useAppForm } from '../lib'
 import { useState } from 'react'
 import { z } from 'zod'
@@ -8,6 +17,7 @@ import dayjs from 'dayjs'
 const formSchema = z.object({
   username: z.string().min(1),
   role: z.enum(['admin', 'user']),
+  priority: z.enum(['low', 'medium', 'high']),
   date: z.date().max(dayjs().add(1, 'day').toDate()),
   time: z.date(),
   agree: z.boolean(),
@@ -35,12 +45,19 @@ const categories = [
   { value: 'science', label: 'Science' },
 ]
 
+const priorities = [
+  { value: 'low', label: 'Low Priority' },
+  { value: 'medium', label: 'Medium Priority' },
+  { value: 'high', label: 'High Priority' },
+]
+
 export function FormExample() {
   const [value, setValue] = useState<FormValues | undefined>(undefined)
   const form = useAppForm({
     defaultValues: {
       username: 'default',
       role: undefined,
+      priority: undefined,
       agree: false,
       date: undefined,
       time: undefined,
@@ -125,6 +142,22 @@ export function FormExample() {
                   sortSelected='label'
                   fullWidth
                 />
+              )}
+            />
+
+            <form.AppField
+              name='priority'
+              children={field => (
+                <field.SubscribeRadioGroup label='Priority'>
+                  {priorities.map(priority => (
+                    <FormControlLabel
+                      key={priority.value}
+                      value={priority.value}
+                      control={<Radio />}
+                      label={priority.label}
+                    />
+                  ))}
+                </field.SubscribeRadioGroup>
               )}
             />
 

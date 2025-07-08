@@ -272,7 +272,7 @@ export default function ExampleDialog2({
 ### Form Example with Zod Validation
 
 ```tsx
-import { Box, Button, Paper, Stack, Typography } from '@mui/material'
+import { Box, Button, Paper, Stack, Typography, Radio, FormControlLabel } from '@mui/material'
 import { useAppForm } from '@cwncollab-org/component-kit'
 import { useState } from 'react'
 import { z } from 'zod'
@@ -293,6 +293,8 @@ const formSchema = z.object({
     .refine(val => val === true, 'You must subscribe to continue'),
   role: z.string()
     .min(1, 'Please select a role'),
+  priority: z.enum(['low', 'medium', 'high'])
+    .refine(val => val !== undefined, 'Please select a priority'),
   birthDate: z.date()
     .min(new Date('1900-01-01'), 'Please enter a valid birth date')
     .max(new Date(), 'Birth date cannot be in the future'),
@@ -308,6 +310,7 @@ export function FormExample() {
     age: 18,
     subscribe: false,
     role: '',
+    priority: undefined,
     birthDate: new Date(),
   })
 
@@ -318,6 +321,7 @@ export function FormExample() {
       age: 18,
       subscribe: false,
       role: '',
+      priority: undefined,
       birthDate: new Date(),
     },
     onSubmit: ({ value }) => {
@@ -399,6 +403,28 @@ export function FormExample() {
               <field.Checkbox 
                 label='Subscribe to newsletter'
               />
+            )}
+          />
+          <form.AppField
+            name='priority'
+            children={field => (
+              <field.RadioGroup label='Priority'>
+                <FormControlLabel
+                  value='low'
+                  control={<Radio />}
+                  label='Low Priority'
+                />
+                <FormControlLabel
+                  value='medium'
+                  control={<Radio />}
+                  label='Medium Priority'
+                />
+                <FormControlLabel
+                  value='high'
+                  control={<Radio />}
+                  label='High Priority'
+                />
+              </field.RadioGroup>
             )}
           />
           <form.AppForm>
@@ -487,6 +513,89 @@ function MyForm() {
 | `options` | `Array<{ value: string, label: string }> \| string[]` | `[]` | The options to display in the select |
 | `sortSelected` | `'label' \| 'value' \| false` | `false` | Sort selected values by label or value |
 | `slotProps` | `object` | - | Props for underlying MUI components |
+
+
+### RadioGroup Component
+
+The RadioGroup component provides radio button selection, built on top of MUI's FormControl and RadioGroup components and integrated with TanStack Form.
+
+```tsx
+import { useAppForm } from '@cwncollab-org/component-kit'
+import { Radio, FormControlLabel } from '@mui/material'
+import { z } from 'zod'
+
+// Define your form schema
+const formSchema = z.object({
+  priority: z.enum(['low', 'medium', 'high']),
+})
+
+// Define your options
+const priorities = [
+  { value: 'low', label: 'Low Priority' },
+  { value: 'medium', label: 'Medium Priority' },
+  { value: 'high', label: 'High Priority' },
+]
+
+function MyForm() {
+  const form = useAppForm({
+    defaultValues: {
+      priority: undefined,
+    },
+    validators: {
+      onSubmit: formSchema,
+    },
+    onSubmit: ({ value }) => {
+      console.log('Selected priority:', value.priority)
+    },
+  })
+
+  return (
+    <form.AppField
+      name="priority"
+      children={field => (
+        <field.RadioGroup label="Priority">
+          {priorities.map(priority => (
+            <FormControlLabel
+              key={priority.value}
+              value={priority.value}
+              control={<Radio />}
+              label={priority.label}
+            />
+          ))}
+        </field.RadioGroup>
+      )}
+    />
+    
+    // Alternative: You can also use SubscribeRadioGroup which automatically
+    // disables the radio group when the form is submitting
+    <form.AppField
+      name="priority"
+      children={field => (
+        <field.SubscribeRadioGroup label="Priority">
+          {priorities.map(priority => (
+            <FormControlLabel
+              key={priority.value}
+              value={priority.value}
+              control={<Radio />}
+              label={priority.label}
+            />
+          ))}
+        </field.SubscribeRadioGroup>
+      )}
+    />
+  )
+}
+```
+
+#### RadioGroup Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | - | The label text for the radio group |
+| `disabled` | `boolean` | `false` | Whether the radio group is disabled |
+| `children` | `ReactNode` | - | Radio buttons (typically FormControlLabel components) |
+
+The RadioGroup component also accepts all standard MUI RadioGroup props except `name`, `value`, and `defaultValue` which are managed by the form field.
 
 
 ### Common Dialog Patterns
