@@ -103,6 +103,7 @@ export function MultiSelect(props: MultiSelectProps) {
   let selectProps = {
     ...slotProps?.select,
     input: <OutlinedInput label={props.label} />,
+    notched: labelShrink,
     renderValue: (selected: any) => {
       const selectedValues = selected as string[]
       return selectedValues
@@ -125,6 +126,7 @@ export function MultiSelect(props: MultiSelectProps) {
     }
     selectProps = {
       ...selectProps,
+      notched: true,
       input: (
         <OutlinedInput
           label={props.label}
