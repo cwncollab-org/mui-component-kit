@@ -24,7 +24,7 @@ type SortBy = 'label' | 'value' | false
 
 export type MultiSelectProps = MuiFormControlProps & {
   label?: string
-  labelShrink?: boolean
+  labelBehavior?: 'auto' | 'shrink' | 'static'
   size?: 'small' | 'medium'
   fullWidth?: boolean
   options?: Option[] | string[]
@@ -46,7 +46,7 @@ export function MultiSelect(props: MultiSelectProps) {
     children,
     slotProps,
     options,
-    labelShrink,
+    labelBehavior = 'auto',
     size,
     fullWidth,
     sortSelected = false,
@@ -93,6 +93,52 @@ export function MultiSelect(props: MultiSelectProps) {
       .map(option => option.value)
   }, [field.state.value, renderedOptions, sortSelected])
 
+  const labelShrink = labelBehavior === 'shrink' ? true : undefined
+
+  let inputLabelProps: Partial<MuiInputLabelProps> = {
+    ...slotProps?.inputLabel,
+    shrink: labelShrink,
+  }
+
+  let selectProps = {
+    ...slotProps?.select,
+    input: <OutlinedInput label={props.label} />,
+    renderValue: (selected: any) => {
+      const selectedValues = selected as string[]
+      return selectedValues
+        .map(
+          value =>
+            renderedOptions.find(opt => opt.value === value)?.label || value
+        )
+        .join(', ')
+    },
+  }
+
+  if (labelBehavior === 'static') {
+    inputLabelProps = {
+      ...inputLabelProps,
+      sx: {
+        ...(inputLabelProps as any)?.sx,
+        position: 'relative',
+        transform: 'none',
+      },
+    }
+    selectProps = {
+      ...selectProps,
+      input: (
+        <OutlinedInput
+          label={props.label}
+          notched={true}
+          sx={{
+            '& legend > span': {
+              display: 'none',
+            },
+          }}
+        />
+      ),
+    }
+  }
+
   return (
     <MuiFormControl
       error={Boolean(errorText)}
@@ -100,17 +146,12 @@ export function MultiSelect(props: MultiSelectProps) {
       size={size}
       {...rest}
     >
-      <MuiInputLabel
-        id={labelId}
-        {...slotProps?.inputLabel}
-        shrink={labelShrink}
-      >
+      <MuiInputLabel id={labelId} {...inputLabelProps}>
         {props.label}
       </MuiInputLabel>
       <MuiSelect
         id={selectId}
         labelId={labelId}
-        notched={labelShrink}
         multiple
         value={getSortedSelectedValues}
         onChange={(ev, child) => {
@@ -119,17 +160,7 @@ export function MultiSelect(props: MultiSelectProps) {
             field.handleChange(ev.target.value as string[])
           }
         }}
-        input={<OutlinedInput label={props.label} />}
-        renderValue={selected => {
-          const selectedValues = selected as string[]
-          return selectedValues
-            .map(
-              value =>
-                renderedOptions.find(opt => opt.value === value)?.label || value
-            )
-            .join(', ')
-        }}
-        {...slotProps?.select}
+        {...selectProps}
         name={field.name}
       >
         {children}

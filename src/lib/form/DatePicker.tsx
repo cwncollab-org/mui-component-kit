@@ -4,16 +4,20 @@ import {
 } from '@mui/x-date-pickers/DatePicker'
 import { useFieldContext } from './formContext'
 import dayjs from 'dayjs'
-import { LocalizationProvider } from '@mui/x-date-pickers'
+import {
+  LocalizationProvider,
+  PickersOutlinedInputProps,
+} from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { useMemo } from 'react'
+import { InputLabelProps } from '@mui/material'
 
 export type DatePickerProps = Omit<
   MuiDatePickerProps,
   'name' | 'value' | 'defaultValue'
 > & {
   required?: boolean
-  labelShrink?: boolean
+  labelBehavior?: 'auto' | 'shrink' | 'static'
   size?: 'small' | 'medium'
   fullWidth?: boolean
 }
@@ -28,13 +32,44 @@ export function DatePicker(props: DatePickerProps) {
 
   const {
     required,
-    labelShrink,
+    labelBehavior = 'auto',
     size,
     fullWidth,
     onChange,
     slotProps,
     ...rest
   } = props
+
+  const labelShrink = labelBehavior === 'shrink' ? true : undefined
+
+  let inputLabelProps: Partial<InputLabelProps> = {
+    shrink: labelShrink,
+  }
+
+  let inputProps: Partial<PickersOutlinedInputProps> = {
+    notched: labelShrink,
+  }
+
+  if (labelBehavior === 'static') {
+    inputLabelProps = {
+      ...inputLabelProps,
+      shrink: true,
+      sx: {
+        position: 'relative',
+        transform: 'none',
+      },
+    }
+    inputProps = {
+      ...inputProps,
+      notched: true,
+      sx: {
+        ...props?.sx,
+        '& legend > span': {
+          display: 'none',
+        },
+      },
+    }
+  }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -53,12 +88,10 @@ export function DatePicker(props: DatePickerProps) {
             required: required,
             error: Boolean(errorText),
             helperText: errorText,
-            InputLabelProps: { shrink: labelShrink },
             size: size,
             fullWidth: fullWidth,
-            InputProps: {
-              notched: labelShrink,
-            },
+            InputLabelProps: inputLabelProps,
+            InputProps: inputProps,
             ...(slotProps?.textField as any),
           },
         }}

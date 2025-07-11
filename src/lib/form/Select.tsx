@@ -19,7 +19,7 @@ type Option = {
 
 export type SelectProps = MuiFormControlProps & {
   label?: string
-  labelShrink?: boolean
+  labelBehavior?: 'auto' | 'shrink' | 'static'
   size?: 'small' | 'medium'
   fullWidth?: boolean
   options?: Option[] | string[]
@@ -42,7 +42,7 @@ export function Select(props: SelectProps) {
     slotProps,
     options,
     multiple,
-    labelShrink,
+    labelBehavior = 'auto',
     size,
     fullWidth,
     onChange,
@@ -67,6 +67,39 @@ export function Select(props: SelectProps) {
     return []
   }, [options])
 
+  const labelShrink = labelBehavior === 'shrink' ? true : undefined
+
+  let inputLabelProps: Partial<MuiInputLabelProps> = {
+    ...slotProps?.inputLabel,
+    shrink: labelShrink,
+  }
+
+  let selectProps = {
+    ...slotProps?.select,
+    notched: labelShrink,
+  }
+
+  if (labelBehavior === 'static') {
+    inputLabelProps = {
+      ...inputLabelProps,
+      sx: {
+        ...(inputLabelProps as any)?.sx,
+        position: 'relative',
+        transform: 'none',
+      },
+    }
+    selectProps = {
+      ...selectProps,
+      notched: true,
+      sx: {
+        ...(selectProps as any)?.sx,
+        '& legend > span': {
+          display: 'none',
+        },
+      },
+    }
+  }
+
   return (
     <MuiFormControl
       error={Boolean(errorText)}
@@ -74,19 +107,14 @@ export function Select(props: SelectProps) {
       size={size}
       {...rest}
     >
-      <MuiInputLabel
-        id={labelId}
-        {...slotProps?.inputLabel}
-        shrink={labelShrink}
-      >
+      <MuiInputLabel id={labelId} {...inputLabelProps}>
         {props.label}
       </MuiInputLabel>
       <MuiSelect
         id={selectId}
         labelId={labelId}
-        notched={labelShrink}
         multiple={multiple}
-        {...slotProps?.select}
+        {...selectProps}
         label={props.label}
         name={field.name}
         value={field.state.value ?? ''}

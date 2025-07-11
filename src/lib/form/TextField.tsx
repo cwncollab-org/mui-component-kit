@@ -1,4 +1,5 @@
 import {
+  InputLabelProps,
   TextField as MuiTextField,
   TextFieldProps as MuiTextFieldProps,
 } from '@mui/material'
@@ -6,7 +7,7 @@ import { useFieldContext } from './formContext'
 import { InputHTMLAttributes, useMemo } from 'react'
 
 export type TextFieldProps = Omit<MuiTextFieldProps, 'name' | 'value'> & {
-  labelShrink?: boolean
+  labelBehavior?: 'auto' | 'shrink' | 'static'
   min?: InputHTMLAttributes<HTMLInputElement>['min']
   max?: InputHTMLAttributes<HTMLInputElement>['max']
   maxLength?: InputHTMLAttributes<HTMLInputElement>['maxLength']
@@ -15,7 +16,7 @@ export type TextFieldProps = Omit<MuiTextFieldProps, 'name' | 'value'> & {
 
 export function TextField(props: TextFieldProps) {
   const {
-    labelShrink,
+    labelBehavior = 'auto',
     min,
     max,
     maxLength,
@@ -34,6 +35,49 @@ export function TextField(props: TextFieldProps) {
   }, [field.state.meta.errors])
 
   const error = field.state.meta.errors.length > 0
+  const labelShrink = labelBehavior === 'shrink' ? true : undefined
+
+  let inputLabelProps: Partial<InputLabelProps> = {
+    ...(slotProps?.inputLabel as Partial<InputLabelProps>),
+    shrink: labelShrink,
+    sx: {
+      ...(slotProps?.inputLabel as any)?.sx,
+    },
+  }
+  let inputProps = {
+    ...slotProps?.input,
+    slotProps: {
+      ...(slotProps?.input as any)?.slotProps,
+      input: {
+        ...(slotProps?.input as any)?.slotProps?.input,
+        min: min,
+        max: max,
+        maxLength: maxLength,
+        pattern: pattern,
+      },
+    },
+  }
+
+  if (labelBehavior === 'static') {
+    inputLabelProps = {
+      ...inputLabelProps,
+      sx: {
+        ...(inputLabelProps as any)?.sx,
+        position: 'relative',
+        transform: 'none',
+      },
+    }
+    inputProps = {
+      ...inputProps,
+      notched: true,
+      sx: {
+        ...(inputProps as any)?.sx,
+        '& legend > span': {
+          display: 'none',
+        },
+      },
+    }
+  }
 
   return (
     <MuiTextField
@@ -49,20 +93,8 @@ export function TextField(props: TextFieldProps) {
       }}
       slotProps={{
         ...slotProps,
-        inputLabel: { ...slotProps?.inputLabel, shrink: labelShrink },
-        input: {
-          ...slotProps?.input,
-          slotProps: {
-            ...(slotProps?.input as any)?.slotProps,
-            input: {
-              ...(slotProps?.input as any)?.slotProps?.input,
-              min: min,
-              max: max,
-              maxLength: maxLength,
-              pattern: pattern,
-            },
-          },
-        },
+        inputLabel: inputLabelProps,
+        input: inputProps,
       }}
       error={error}
       helperText={error ? errorText : helperText}
