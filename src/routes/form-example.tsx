@@ -22,6 +22,8 @@ const formSchema = z.object({
   agree: z.boolean(),
   email: z.string().email().optional(),
   categories: z.array(z.string()).min(1, 'Please select at least one category'),
+  skills: z.array(z.string()).optional(),
+  country: z.string().optional(),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -50,6 +52,32 @@ const priorities = [
   { value: 'high', label: 'High Priority' },
 ]
 
+const skills = [
+  { value: 'javascript', label: 'JavaScript' },
+  { value: 'typescript', label: 'TypeScript' },
+  { value: 'react', label: 'React' },
+  { value: 'vue', label: 'Vue.js' },
+  { value: 'angular', label: 'Angular' },
+  { value: 'node', label: 'Node.js' },
+  { value: 'python', label: 'Python' },
+  { value: 'java', label: 'Java' },
+  { value: 'csharp', label: 'C#' },
+  { value: 'go', label: 'Go' },
+]
+
+const countries = [
+  { value: 'us', label: 'United States' },
+  { value: 'ca', label: 'Canada' },
+  { value: 'uk', label: 'United Kingdom' },
+  { value: 'de', label: 'Germany' },
+  { value: 'fr', label: 'France' },
+  { value: 'jp', label: 'Japan' },
+  { value: 'au', label: 'Australia' },
+  { value: 'br', label: 'Brazil' },
+  { value: 'in', label: 'India' },
+  { value: 'cn', label: 'China' },
+]
+
 export function FormExample() {
   const [value, setValue] = useState<FormValues | undefined>(undefined)
   const form = useAppForm({
@@ -61,6 +89,8 @@ export function FormExample() {
       date: undefined,
       time: undefined,
       categories: [],
+      skills: [],
+      country: undefined,
     } as Partial<FormValues>,
     validators: {
       onSubmit: formSchema,
@@ -272,7 +302,7 @@ export function FormExample() {
             <form.AppField
               name='priority'
               children={field => (
-                <field.SubscribeRadioGroup label='Priority'>
+                <field.SubscribeRadioGroup label='Priority' required>
                   {priorities.map(priority => (
                     <FormControlLabel
                       key={priority.value}
@@ -356,6 +386,93 @@ export function FormExample() {
                   labelBehavior='static'
                   size='small'
                   fullWidth
+                />
+              )}
+            />
+            <Typography variant='h6'>
+              Autocomplete with different label behaviors
+            </Typography>
+            <form.AppField
+              name='country'
+              children={field => (
+                <field.SubscribeAutocomplete
+                  label='Country (auto)'
+                  labelBehavior='auto'
+                  size='small'
+                  fullWidth
+                  options={countries}
+                  placeholder='Select a country'
+                />
+              )}
+            />
+            <form.AppField
+              name='country'
+              children={field => (
+                <field.SubscribeAutocomplete
+                  label='Country (shrink)'
+                  labelBehavior='shrink'
+                  size='small'
+                  fullWidth
+                  options={countries}
+                  placeholder='Select a country'
+                />
+              )}
+            />
+            <form.AppField
+              name='country'
+              children={field => (
+                <field.SubscribeAutocomplete
+                  label='Country (static)'
+                  labelBehavior='static'
+                  size='small'
+                  fullWidth
+                  options={countries}
+                  placeholder='Select a country'
+                />
+              )}
+            />
+            <Typography variant='h6'>
+              Multiple Autocomplete with different behaviors
+            </Typography>
+            <form.AppField
+              name='skills'
+              children={field => (
+                <field.SubscribeAutocomplete
+                  label='Skills (auto)'
+                  labelBehavior='auto'
+                  size='small'
+                  fullWidth
+                  multiple
+                  options={skills}
+                  placeholder='Select skills'
+                />
+              )}
+            />
+            <form.AppField
+              name='skills'
+              children={field => (
+                <field.SubscribeAutocomplete
+                  label='Skills (shrink)'
+                  labelBehavior='shrink'
+                  size='small'
+                  fullWidth
+                  multiple
+                  options={skills}
+                  placeholder='Select skills'
+                />
+              )}
+            />
+            <form.AppField
+              name='skills'
+              children={field => (
+                <field.SubscribeAutocomplete
+                  label='Skills (static)'
+                  labelBehavior='static'
+                  size='small'
+                  fullWidth
+                  multiple
+                  options={skills}
+                  placeholder='Select skills'
                 />
               )}
             />

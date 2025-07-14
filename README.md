@@ -515,6 +515,130 @@ function MyForm() {
 | `slotProps` | `object` | - | Props for underlying MUI components |
 
 
+### Autocomplete Component
+
+The Autocomplete component provides a searchable dropdown with support for single and multiple selection, built on top of MUI's Autocomplete component and integrated with TanStack Form.
+
+```tsx
+import { useAppForm } from '@cwncollab-org/component-kit'
+import { z } from 'zod'
+
+// Define your form schema
+const formSchema = z.object({
+  country: z.string().optional(),
+  skills: z.array(z.string()).optional(),
+})
+
+// Define your options
+const countries = [
+  { value: 'us', label: 'United States' },
+  { value: 'ca', label: 'Canada' },
+  { value: 'uk', label: 'United Kingdom' },
+  { value: 'de', label: 'Germany' },
+  { value: 'fr', label: 'France' },
+]
+
+const skills = [
+  { value: 'javascript', label: 'JavaScript' },
+  { value: 'typescript', label: 'TypeScript' },
+  { value: 'react', label: 'React' },
+  { value: 'vue', label: 'Vue.js' },
+  { value: 'angular', label: 'Angular' },
+]
+
+function MyForm() {
+  const form = useAppForm({
+    defaultValues: {
+      country: undefined,
+      skills: [],
+    },
+    validators: {
+      onSubmit: formSchema,
+    },
+    onSubmit: ({ value }) => {
+      console.log('Selected country:', value.country)
+      console.log('Selected skills:', value.skills)
+    },
+  })
+
+  return (
+    <>
+      {/* Single selection autocomplete */}
+      <form.AppField
+        name="country"
+        children={field => (
+          <field.Autocomplete
+            label="Country"
+            labelBehavior="shrink"
+            size="small"
+            fullWidth
+            options={countries}
+            placeholder="Select a country"
+          />
+        )}
+      />
+
+      {/* Multiple selection autocomplete */}
+      <form.AppField
+        name="skills"
+        children={field => (
+          <field.Autocomplete
+            label="Skills"
+            labelBehavior="shrink"
+            size="small"
+            fullWidth
+            multiple
+            options={skills}
+            placeholder="Select skills"
+          />
+        )}
+      />
+
+      {/* SubscribeAutocomplete automatically disables during form submission */}
+      <form.AppField
+        name="country"
+        children={field => (
+          <field.SubscribeAutocomplete
+            label="Country"
+            labelBehavior="auto"
+            size="small"
+            fullWidth
+            options={countries}
+            placeholder="Select a country"
+          />
+        )}
+      />
+    </>
+  )
+}
+```
+
+#### Autocomplete Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | - | The label text for the autocomplete field |
+| `labelBehavior` | `'auto' \| 'shrink' \| 'static'` | `'auto'` | How the label should behave |
+| `size` | `'small' \| 'medium'` | `'medium'` | The size of the autocomplete field |
+| `fullWidth` | `boolean` | `false` | Whether the autocomplete should take full width |
+| `options` | `Array<{ value: string, label: string }> \| string[]` | `[]` | The options to display in the autocomplete |
+| `multiple` | `boolean` | `false` | Whether multiple values can be selected |
+| `freeSolo` | `boolean` | `false` | If true, the Autocomplete is free solo, meaning that the user input is not bound to provided options |
+| `placeholder` | `string` | - | Placeholder text when no option is selected |
+| `slotProps` | `object` | - | Props for underlying MUI components (autocomplete, textField, helperText) |
+| `onChange` | `(value: string \| string[] \| null) => void` | - | Callback fired when the value changes |
+
+The Autocomplete component also accepts all standard MUI FormControl props except those that conflict with the managed props.
+
+**Label Behaviors:**
+- `'auto'`: Default MUI behavior - label floats when focused or has value
+- `'shrink'`: Label is always in the shrunk (floating) position
+- `'static'`: Label appears as a static label above the input
+
+**SubscribeAutocomplete:**
+The `SubscribeAutocomplete` component has the same props as `Autocomplete` but automatically disables the field when the form is submitting, providing better UX during form submission.
+
+
 ### RadioGroup Component
 
 The RadioGroup component provides radio button selection, built on top of MUI's FormControl and RadioGroup components and integrated with TanStack Form.

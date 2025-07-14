@@ -1,4 +1,5 @@
 import { createFormHook } from '@tanstack/react-form'
+import { Autocomplete } from './Autocomplete'
 import { TextField } from './TextField'
 import { Checkbox } from './Checkbox'
 import { Select } from './Select'
@@ -7,6 +8,7 @@ import { TimePicker } from './TimePicker'
 import { fieldContext, formContext } from './formContext'
 import { SubscribeButton } from './SubscribeButton'
 import { MultiSelect } from './MultiSelect'
+import { SubscribeAutocomplete } from './SubscribeAutocomplete'
 import { SubscribeTextField } from './SubscribeTextField'
 import { SubscribeSelect } from './SubscribeSelect'
 import { SubscribeMultiSelect } from './SubscribeMultiSelect'
@@ -20,6 +22,7 @@ export const { useAppForm, withForm } = createFormHook({
   fieldContext,
   formContext,
   fieldComponents: {
+    Autocomplete,
     TextField,
     Checkbox,
     Select,
@@ -27,6 +30,7 @@ export const { useAppForm, withForm } = createFormHook({
     RadioGroup,
     DatePicker,
     TimePicker,
+    SubscribeAutocomplete,
     SubscribeTextField,
     SubscribeSelect,
     SubscribeMultiSelect,

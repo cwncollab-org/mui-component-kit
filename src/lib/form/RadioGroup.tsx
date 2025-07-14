@@ -13,17 +13,18 @@ export type RadioGroupProps = Omit<
 > & {
   label?: string
   disabled?: boolean
+  required?: boolean
 }
 
 export function RadioGroup(props: RadioGroupProps) {
-  const { label, children, disabled, ...radioGroupProps } = props
+  const { label, children, disabled, required, ...radioGroupProps } = props
 
   const field = useFieldContext<string | undefined | null>()
   const id = useId()
   const labelId = `${id}-label`
 
   return (
-    <FormControl disabled={disabled}>
+    <FormControl disabled={disabled} required={required}>
       <FormLabel id={labelId}>{label}</FormLabel>
       <MuiRadioGroup
         aria-labelledby={labelId}
