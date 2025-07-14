@@ -6,12 +6,16 @@ export type SubscribeAutocompleteProps = AutocompleteProps
 export function SubscribeAutocomplete(props: SubscribeAutocompleteProps) {
   const form = useFormContext()
 
-  const { disabled, ...rest } = props
+  const { disabled, required, ...rest } = props
 
   return (
     <form.Subscribe selector={state => state.isSubmitting}>
       {isSubmitting => (
-        <Autocomplete disabled={isSubmitting || disabled} {...rest} />
+        <Autocomplete
+          disabled={isSubmitting || disabled}
+          required={required}
+          {...rest}
+        />
       )}
     </form.Subscribe>
   )

@@ -399,6 +399,7 @@ export function FormExample() {
                   label='Country (auto)'
                   labelBehavior='auto'
                   size='small'
+                  required
                   fullWidth
                   options={countries}
                   placeholder='Select a country'

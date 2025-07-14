@@ -25,6 +25,8 @@ export type AutocompleteProps = Omit<MuiFormControlProps, 'onChange'> & {
   multiple?: boolean
   freeSolo?: boolean
   placeholder?: string
+  required?: boolean
+  disabled?: boolean
   slotProps?: {
     autocomplete?: Omit<
       MuiAutocompleteProps<Option, boolean, boolean, boolean>,
@@ -47,6 +49,8 @@ export function Autocomplete(props: AutocompleteProps) {
     size,
     fullWidth,
     placeholder,
+    required,
+    disabled,
     onChange,
     ...rest
   } = props
@@ -134,6 +138,7 @@ export function Autocomplete(props: AutocompleteProps) {
         id={id}
         multiple={multiple}
         freeSolo={freeSolo}
+        disabled={disabled}
         options={renderedOptions}
         getOptionLabel={option => {
           if (typeof option === 'string') return option
@@ -177,6 +182,7 @@ export function Autocomplete(props: AutocompleteProps) {
             label={props.label}
             placeholder={placeholder}
             error={Boolean(errorText)}
+            required={required}
             name={field.name}
             slotProps={{
               ...textFieldProps.slotProps,
