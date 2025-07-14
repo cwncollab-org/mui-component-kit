@@ -69,35 +69,43 @@ export function Autocomplete(props: AutocompleteProps) {
 
   const labelShrink = labelBehavior === 'shrink' ? true : undefined
 
-  let textFieldProps: Partial<MuiTextFieldProps> = {
-    ...slotProps?.textField,
-    InputLabelProps: {
-      ...slotProps?.textField?.InputLabelProps,
-      shrink: labelShrink,
-    },
+  let inputLabelProps = {
+    ...slotProps?.textField?.slotProps?.inputLabel,
+    shrink: labelShrink,
+  }
+
+  let inputProps = {
+    ...slotProps?.textField?.slotProps?.input,
   }
 
   if (labelBehavior === 'static') {
-    textFieldProps = {
-      ...textFieldProps,
-      InputLabelProps: {
-        ...textFieldProps.InputLabelProps,
-        sx: {
-          ...textFieldProps.InputLabelProps?.sx,
-          position: 'relative',
-          transform: 'none',
-        },
+    inputLabelProps = {
+      ...inputLabelProps,
+      sx: {
+        ...(inputLabelProps as any)?.sx,
+        position: 'relative',
+        transform: 'none',
       },
-      InputProps: {
-        ...textFieldProps.InputProps,
-        sx: {
-          ...textFieldProps.InputProps?.sx,
-          '& legend > span': {
-            display: 'none',
-          },
+    }
+    inputProps = {
+      ...inputProps,
+      notched: true,
+      sx: {
+        ...(inputProps as any)?.sx,
+        '& legend > span': {
+          display: 'none',
         },
       },
     }
+  }
+
+  const textFieldProps: Partial<MuiTextFieldProps> = {
+    ...slotProps?.textField,
+    slotProps: {
+      ...slotProps?.textField?.slotProps,
+      inputLabel: inputLabelProps,
+      input: inputProps,
+    },
   }
 
   const getCurrentValue = () => {
@@ -166,11 +174,19 @@ export function Autocomplete(props: AutocompleteProps) {
         renderInput={params => (
           <MuiTextField
             {...params}
-            {...textFieldProps}
             label={props.label}
             placeholder={placeholder}
             error={Boolean(errorText)}
             name={field.name}
+            slotProps={{
+              ...textFieldProps.slotProps,
+              input: {
+                ...params.InputProps,
+                ...inputProps,
+              },
+              inputLabel: inputLabelProps,
+            }}
+            {...(({ slotProps: _, ...rest }) => rest)(textFieldProps)}
           />
         )}
         {...slotProps?.autocomplete}
