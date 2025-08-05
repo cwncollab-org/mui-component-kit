@@ -21,6 +21,9 @@ export function MaskedInputExample() {
   const [dateValue, setDateValue] = useState('')
   const [timeValue, setTimeValue] = useState('')
   const [zipCodeValue, setZipCodeValue] = useState('')
+  const [customDefinitionValue, setCustomDefinitionValue] = useState('')
+  const [blockValue, setBlockValue] = useState('')
+  const [serialNumberValue, setSerialNumberValue] = useState('')
 
   return (
     <Paper sx={{ p: 3, maxWidth: 600, mx: 'auto', mt: 2 }}>
@@ -29,7 +32,8 @@ export function MaskedInputExample() {
           MaskedInput Examples
         </Typography>
         <Typography variant='body1' color='text.secondary' paragraph>
-          Demonstration of various input masks using the MaskedInput component.
+          Demonstration of various input masks using the MaskedInput component,
+          including basic masks, custom definitions, and block-based patterns.
         </Typography>
       </Box>
 
@@ -102,6 +106,64 @@ export function MaskedInputExample() {
           </Typography>
         </FormControl>
 
+        <FormControl>
+          <FormLabel>Product Code (Custom Definitions)</FormLabel>
+          <MaskedInput
+            mask='AA-####-**'
+            value={customDefinitionValue}
+            onChange={setCustomDefinitionValue}
+            definitions={{
+              A: /[A-Z]/,
+              '#': /[1-9]/,
+              '*': /[A-Z0-9]/,
+            }}
+          />
+          <Typography variant='caption' color='text.secondary'>
+            Format: AA-####-** (A=uppercase letter, #=digit 1-9, *=alphanumeric)
+          </Typography>
+        </FormControl>
+
+        <FormControl>
+          <FormLabel>Date (Blocks)</FormLabel>
+          <MaskedInput
+            mask='from - to'
+            value={blockValue}
+            onChange={setBlockValue}
+            blocks={{
+              from: {
+                mask: Date,
+                pattern: 'd{/}`m{/}`Y',
+                lazy: false,
+              },
+              to: {
+                mask: Date,
+                pattern: 'd{/}`m{/}`Y',
+                lazy: false,
+              },
+            }}
+          />
+          <Typography variant='caption' color='text.secondary'>
+            Format: DD/MM/YYYY - DD/MM/YYYY
+          </Typography>
+        </FormControl>
+
+        <FormControl>
+          <FormLabel>Serial Number (Mixed Definitions)</FormLabel>
+          <MaskedInput
+            mask='SN-LLLNNN-CCC'
+            value={serialNumberValue}
+            onChange={setSerialNumberValue}
+            definitions={{
+              L: /[A-Z]/,
+              N: /[0-9]/,
+              C: /[A-Z0-9]/,
+            }}
+          />
+          <Typography variant='caption' color='text.secondary'>
+            Format: SN-LLLNNN-CCC (L=letter, N=number, C=alphanumeric)
+          </Typography>
+        </FormControl>
+
         <Box sx={{ mt: 4, p: 2, bgcolor: 'grey.50', borderRadius: 1 }}>
           <Typography variant='h6' gutterBottom>
             Current Values:
@@ -124,6 +186,17 @@ export function MaskedInputExample() {
             </Typography>
             <Typography variant='body2'>
               <strong>ZIP Code:</strong> {zipCodeValue || 'Not entered'}
+            </Typography>
+            <Typography variant='body2'>
+              <strong>Product Code:</strong>{' '}
+              {customDefinitionValue || 'Not entered'}
+            </Typography>
+            <Typography variant='body2'>
+              <strong>Date Range:</strong> {blockValue || 'Not entered'}
+            </Typography>
+            <Typography variant='body2'>
+              <strong>Serial Number:</strong>{' '}
+              {serialNumberValue || 'Not entered'}
             </Typography>
           </Stack>
         </Box>
