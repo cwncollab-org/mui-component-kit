@@ -862,6 +862,7 @@ function AdvancedMaskingExamples() {
       time: '',
       currency: '',
       alphanumeric: '',
+      ipAddress: '',
     },
     onSubmit: ({ value }) => {
       console.log('Advanced mask values:', value)
@@ -899,32 +900,6 @@ function AdvancedMaskingExamples() {
         )}
       />
 
-      {/* Currency with decimal */}
-      <form.AppField
-        name="currency"
-        children={field => (
-          <field.MaskedTextField
-            mask="$num"
-            blocks={{
-              num: {
-                mask: Number,
-                scale: 2,
-                thousandsSeparator: ',',
-                padFractionalZeros: true,
-                normalizeZeros: true,
-                radix: '.',
-                mapToRadix: ['.'],
-              },
-            }}
-            label="Amount"
-            labelBehavior="shrink"
-            size="small"
-            fullWidth
-            placeholder="$1,234.56"
-          />
-        )}
-      />
-
       {/* Mixed alphanumeric */}
       <form.AppField
         name="alphanumeric"
@@ -935,6 +910,21 @@ function AdvancedMaskingExamples() {
             labelBehavior="shrink"
             size="small"
             placeholder="AB12CD"
+          />
+        )}
+      />
+
+      {/* IP Address */}
+      <form.AppField
+        name="ipAddress"
+        children={field => (
+          <field.MaskedTextField
+            mask="000.000.000.000"
+            label="IP Address"
+            labelBehavior="shrink"
+            size="small"
+            fullWidth
+            placeholder="192.168.1.1"
           />
         )}
       />
@@ -962,9 +952,11 @@ The MaskedTextField component accepts all standard MUI TextField props and forwa
 **Mask Patterns:**
 - `0` - any digit (0-9)
 - `a` - any letter (a-z, A-Z)
-- `*` - any alphanumeric character
+- `*` - any character
 - `[]` - make input optional (example: `[00]` for optional digits)
-- `{}` - define range of repetitions (example: `{1,3}` for 1 to 3 repetitions)
+- `{}` - include fixed part in unmasked value
+- ``` - prevent symbols shift back
+- `\\` - escape character to treat definition characters as fixed (example: `\\0` treats 0 as literal)
 
 **Label Behaviors:**
 - `'auto'`: Default MUI behavior - label floats when focused or has value
@@ -972,7 +964,10 @@ The MaskedTextField component accepts all standard MUI TextField props and forwa
 - `'static'`: Label appears as a static label above the input
 
 **Advanced Masking:**
-For complex masking scenarios like currency formatting or custom validation, you can pass an object with `blocks` configuration to define custom mask behaviors.
+The current MaskedTextField component supports basic mask patterns. For more advanced masking scenarios like currency formatting, custom validation, or nested patterns with custom definitions and blocks, you would need to extend the component or use IMask directly.
+
+**Available Mask Patterns:**
+The component currently supports simple string patterns where each character in the mask string represents a constraint for the corresponding input character.
 
 **SubscribeMaskedTextField:**
 The `SubscribeMaskedTextField` component has the same props as `MaskedTextField` but automatically disables the field when the form is submitting, providing better UX during form submission.
