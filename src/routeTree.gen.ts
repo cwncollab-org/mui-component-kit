@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as TabsExampleImport } from './routes/tabs-example'
 import { Route as MrtExampleImport } from './routes/mrt-example'
+import { Route as MaskedInputExampleImport } from './routes/masked-input-example'
 import { Route as FormExampleImport } from './routes/form-example'
 import { Route as DialogsExampleImport } from './routes/dialogs-example'
 import { Route as IndexImport } from './routes/index'
@@ -31,6 +32,12 @@ const TabsExampleRoute = TabsExampleImport.update({
 const MrtExampleRoute = MrtExampleImport.update({
   id: '/mrt-example',
   path: '/mrt-example',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MaskedInputExampleRoute = MaskedInputExampleImport.update({
+  id: '/masked-input-example',
+  path: '/masked-input-example',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -95,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FormExampleImport
       parentRoute: typeof rootRoute
     }
+    '/masked-input-example': {
+      id: '/masked-input-example'
+      path: '/masked-input-example'
+      fullPath: '/masked-input-example'
+      preLoaderRoute: typeof MaskedInputExampleImport
+      parentRoute: typeof rootRoute
+    }
     '/mrt-example': {
       id: '/mrt-example'
       path: '/mrt-example'
@@ -155,6 +169,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
+  '/masked-input-example': typeof MaskedInputExampleRoute
   '/mrt-example': typeof MrtExampleRoute
   '/tabs-example': typeof TabsExampleRouteWithChildren
   '/tabs-example/tab1': typeof TabsExampleTab1Route
@@ -166,6 +181,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
+  '/masked-input-example': typeof MaskedInputExampleRoute
   '/mrt-example': typeof MrtExampleRoute
   '/tabs-example/tab1': typeof TabsExampleTab1Route
   '/tabs-example/tab2': typeof TabsExampleTab2Route
@@ -177,6 +193,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
+  '/masked-input-example': typeof MaskedInputExampleRoute
   '/mrt-example': typeof MrtExampleRoute
   '/tabs-example': typeof TabsExampleRouteWithChildren
   '/tabs-example/tab1': typeof TabsExampleTab1Route
@@ -190,6 +207,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dialogs-example'
     | '/form-example'
+    | '/masked-input-example'
     | '/mrt-example'
     | '/tabs-example'
     | '/tabs-example/tab1'
@@ -200,6 +218,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dialogs-example'
     | '/form-example'
+    | '/masked-input-example'
     | '/mrt-example'
     | '/tabs-example/tab1'
     | '/tabs-example/tab2'
@@ -209,6 +228,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dialogs-example'
     | '/form-example'
+    | '/masked-input-example'
     | '/mrt-example'
     | '/tabs-example'
     | '/tabs-example/tab1'
@@ -221,6 +241,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DialogsExampleRoute: typeof DialogsExampleRoute
   FormExampleRoute: typeof FormExampleRoute
+  MaskedInputExampleRoute: typeof MaskedInputExampleRoute
   MrtExampleRoute: typeof MrtExampleRoute
   TabsExampleRoute: typeof TabsExampleRouteWithChildren
 }
@@ -229,6 +250,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DialogsExampleRoute: DialogsExampleRoute,
   FormExampleRoute: FormExampleRoute,
+  MaskedInputExampleRoute: MaskedInputExampleRoute,
   MrtExampleRoute: MrtExampleRoute,
   TabsExampleRoute: TabsExampleRouteWithChildren,
 }
@@ -246,6 +268,7 @@ export const routeTree = rootRoute
         "/",
         "/dialogs-example",
         "/form-example",
+        "/masked-input-example",
         "/mrt-example",
         "/tabs-example"
       ]
@@ -258,6 +281,9 @@ export const routeTree = rootRoute
     },
     "/form-example": {
       "filePath": "form-example.tsx"
+    },
+    "/masked-input-example": {
+      "filePath": "masked-input-example.tsx"
     },
     "/mrt-example": {
       "filePath": "mrt-example.tsx"

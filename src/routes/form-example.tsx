@@ -21,6 +21,9 @@ const formSchema = z.object({
   time: z.date(),
   agree: z.boolean(),
   email: z.string().email().optional(),
+  phone: z.string().optional(),
+  ssn: z.string().optional(),
+  creditCard: z.string().optional(),
   categories: z.array(z.string()).min(1, 'Please select at least one category'),
   skills: z.array(z.string()).optional(),
   country: z.string().optional(),
@@ -88,6 +91,9 @@ export function FormExample() {
       agree: false,
       date: undefined,
       time: undefined,
+      phone: undefined,
+      ssn: undefined,
+      creditCard: undefined,
       categories: [],
       skills: [],
       country: undefined,
@@ -480,6 +486,75 @@ export function FormExample() {
             <form.AppField
               name='email'
               children={field => <field.TextField label='Email' fullWidth />}
+            />
+            <Typography variant='h6'>
+              MaskedTextField with different label behaviors
+            </Typography>
+            <form.AppField
+              name='phone'
+              children={field => (
+                <field.SubscribeMaskedTextField
+                  mask='(000) 000-0000'
+                  label='Phone Number (auto)'
+                  labelBehavior='auto'
+                  size='small'
+                  fullWidth
+                  placeholder='(123) 456-7890'
+                />
+              )}
+            />
+            <form.AppField
+              name='phone'
+              children={field => (
+                <field.SubscribeMaskedTextField
+                  mask='(000) 000-0000'
+                  label='Phone Number (shrink)'
+                  labelBehavior='shrink'
+                  size='small'
+                  fullWidth
+                  placeholder='(123) 456-7890'
+                />
+              )}
+            />
+            <form.AppField
+              name='phone'
+              children={field => (
+                <field.SubscribeMaskedTextField
+                  mask='(000) 000-0000'
+                  label='Phone Number (static)'
+                  labelBehavior='static'
+                  size='small'
+                  fullWidth
+                  placeholder='(123) 456-7890'
+                />
+              )}
+            />
+            <Typography variant='h6'>Other Masked Input Examples</Typography>
+            <form.AppField
+              name='ssn'
+              children={field => (
+                <field.SubscribeMaskedTextField
+                  mask='000-00-0000'
+                  label='Social Security Number'
+                  labelBehavior='shrink'
+                  size='small'
+                  fullWidth
+                  placeholder='123-45-6789'
+                />
+              )}
+            />
+            <form.AppField
+              name='creditCard'
+              children={field => (
+                <field.SubscribeMaskedTextField
+                  mask='0000 0000 0000 0000'
+                  label='Credit Card Number'
+                  labelBehavior='shrink'
+                  size='small'
+                  fullWidth
+                  placeholder='1234 5678 9012 3456'
+                />
+              )}
             />
             <form.SubscribeButton type='submit' variant='contained'>
               Submit

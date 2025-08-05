@@ -17,6 +17,8 @@ import { SubscribeDatePicker } from './SubscribeDatePicker'
 import { SubscribeTimePicker } from './SubscribeTimePicker'
 import { RadioGroup } from './RadioGroup'
 import { SubscribeRadioGroup } from './SubscribeRadioGroup'
+import { MaskedTextField } from './MaskedTextField'
+import { SubscribeMaskedTextField } from './SubscribeMaskedTextField'
 
 export const { useAppForm, withForm } = createFormHook({
   fieldContext,
@@ -26,12 +28,14 @@ export const { useAppForm, withForm } = createFormHook({
     TextField,
     Checkbox,
     Select,
+    MaskedTextField,
     MultiSelect,
     RadioGroup,
     DatePicker,
     TimePicker,
     SubscribeAutocomplete,
     SubscribeTextField,
+    SubscribeMaskedTextField,
     SubscribeSelect,
     SubscribeMultiSelect,
     SubscribeCheckbox,

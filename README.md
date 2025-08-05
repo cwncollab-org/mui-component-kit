@@ -722,6 +722,262 @@ function MyForm() {
 The RadioGroup component also accepts all standard MUI RadioGroup props except `name`, `value`, and `defaultValue` which are managed by the form field.
 
 
+### MaskedTextField Component
+
+The MaskedTextField component provides input masking functionality, built on top of MUI's TextField component and `react-imask` library, integrated with TanStack Form. This component is useful for formatting user input such as phone numbers, credit card numbers, social security numbers, and other structured data.
+
+```tsx
+import { useAppForm } from '@cwncollab-org/component-kit'
+import { z } from 'zod'
+
+// Define your form schema
+const formSchema = z.object({
+  phone: z.string().min(1, 'Phone number is required'),
+  ssn: z.string().min(1, 'SSN is required'),
+  creditCard: z.string().min(1, 'Credit card number is required'),
+  zipCode: z.string().min(1, 'ZIP code is required'),
+  date: z.string().min(1, 'Date is required'),
+})
+
+function MyForm() {
+  const form = useAppForm({
+    defaultValues: {
+      phone: '',
+      ssn: '',
+      creditCard: '',
+      zipCode: '',
+      date: '',
+    },
+    validators: {
+      onSubmit: formSchema,
+    },
+    onSubmit: ({ value }) => {
+      console.log('Form values:', value)
+    },
+  })
+
+  return (
+    <>
+      {/* Phone number mask */}
+      <form.AppField
+        name="phone"
+        children={field => (
+          <field.MaskedTextField
+            mask="(000) 000-0000"
+            label="Phone Number"
+            labelBehavior="shrink"
+            size="small"
+            fullWidth
+            placeholder="(123) 456-7890"
+          />
+        )}
+      />
+
+      {/* Social Security Number mask */}
+      <form.AppField
+        name="ssn"
+        children={field => (
+          <field.MaskedTextField
+            mask="000-00-0000"
+            label="Social Security Number"
+            labelBehavior="shrink"
+            size="small"
+            fullWidth
+            placeholder="123-45-6789"
+          />
+        )}
+      />
+
+      {/* Credit Card Number mask */}
+      <form.AppField
+        name="creditCard"
+        children={field => (
+          <field.MaskedTextField
+            mask="0000 0000 0000 0000"
+            label="Credit Card Number"
+            labelBehavior="shrink"
+            size="small"
+            fullWidth
+            placeholder="1234 5678 9012 3456"
+          />
+        )}
+      />
+
+      {/* ZIP Code mask */}
+      <form.AppField
+        name="zipCode"
+        children={field => (
+          <field.MaskedTextField
+            mask="00000"
+            label="ZIP Code"
+            labelBehavior="shrink"
+            size="small"
+            placeholder="12345"
+          />
+        )}
+      />
+
+      {/* Date mask */}
+      <form.AppField
+        name="date"
+        children={field => (
+          <field.MaskedTextField
+            mask="00/00/0000"
+            label="Date (MM/DD/YYYY)"
+            labelBehavior="shrink"
+            size="small"
+            fullWidth
+            placeholder="12/31/2023"
+          />
+        )}
+      />
+
+      {/* SubscribeMaskedTextField automatically disables during form submission */}
+      <form.AppField
+        name="phone"
+        children={field => (
+          <field.SubscribeMaskedTextField
+            mask="(000) 000-0000"
+            label="Phone Number"
+            labelBehavior="auto"
+            size="small"
+            fullWidth
+            placeholder="(123) 456-7890"
+          />
+        )}
+      />
+    </>
+  )
+}
+```
+
+#### Advanced Masking Examples
+
+```tsx
+// Custom mask patterns
+function AdvancedMaskingExamples() {
+  const form = useAppForm({
+    defaultValues: {
+      license: '',
+      time: '',
+      currency: '',
+      alphanumeric: '',
+    },
+    onSubmit: ({ value }) => {
+      console.log('Advanced mask values:', value)
+    },
+  })
+
+  return (
+    <>
+      {/* License plate (letters and numbers) */}
+      <form.AppField
+        name="license"
+        children={field => (
+          <field.MaskedTextField
+            mask="aaa-0000"
+            label="License Plate"
+            labelBehavior="shrink"
+            size="small"
+            fullWidth
+            placeholder="ABC-1234"
+          />
+        )}
+      />
+
+      {/* Time format */}
+      <form.AppField
+        name="time"
+        children={field => (
+          <field.MaskedTextField
+            mask="00:00"
+            label="Time (24h format)"
+            labelBehavior="shrink"
+            size="small"
+            placeholder="14:30"
+          />
+        )}
+      />
+
+      {/* Currency with decimal */}
+      <form.AppField
+        name="currency"
+        children={field => (
+          <field.MaskedTextField
+            mask="$num"
+            blocks={{
+              num: {
+                mask: Number,
+                scale: 2,
+                thousandsSeparator: ',',
+                padFractionalZeros: true,
+                normalizeZeros: true,
+                radix: '.',
+                mapToRadix: ['.'],
+              },
+            }}
+            label="Amount"
+            labelBehavior="shrink"
+            size="small"
+            fullWidth
+            placeholder="$1,234.56"
+          />
+        )}
+      />
+
+      {/* Mixed alphanumeric */}
+      <form.AppField
+        name="alphanumeric"
+        children={field => (
+          <field.MaskedTextField
+            mask="aa00aa"
+            label="Product Code"
+            labelBehavior="shrink"
+            size="small"
+            placeholder="AB12CD"
+          />
+        )}
+      />
+    </>
+  )
+}
+```
+
+#### MaskedTextField Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `mask` | `IMaskInputProps['mask']` | - | The mask pattern to apply to the input |
+| `label` | `string` | - | The label text for the text field |
+| `labelBehavior` | `'auto' \| 'shrink' \| 'static'` | `'auto'` | How the label should behave |
+| `size` | `'small' \| 'medium'` | `'medium'` | The size of the text field |
+| `fullWidth` | `boolean` | `false` | Whether the text field should take full width |
+| `placeholder` | `string` | - | Placeholder text when the field is empty |
+| `disabled` | `boolean` | `false` | Whether the text field is disabled |
+| `required` | `boolean` | `false` | Whether the text field is required |
+| `slotProps` | `object` | - | Props for underlying MUI components |
+
+The MaskedTextField component accepts all standard MUI TextField props and forwards them to the underlying TextField component.
+
+**Mask Patterns:**
+- `0` - any digit (0-9)
+- `a` - any letter (a-z, A-Z)
+- `*` - any alphanumeric character
+- `[]` - make input optional (example: `[00]` for optional digits)
+- `{}` - define range of repetitions (example: `{1,3}` for 1 to 3 repetitions)
+
+**Label Behaviors:**
+- `'auto'`: Default MUI behavior - label floats when focused or has value
+- `'shrink'`: Label is always in the shrunk (floating) position
+- `'static'`: Label appears as a static label above the input
+
+**Advanced Masking:**
+For complex masking scenarios like currency formatting or custom validation, you can pass an object with `blocks` configuration to define custom mask behaviors.
+
+**SubscribeMaskedTextField:**
+The `SubscribeMaskedTextField` component has the same props as `MaskedTextField` but automatically disables the field when the form is submitting, providing better UX during form submission.
+
+
 ### Common Dialog Patterns
 
 Here are some common dialog patterns you can implement using the component kit:
