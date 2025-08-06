@@ -9,6 +9,7 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 import { MaskedInput } from '../lib'
+import { IMask, IMaskInput } from 'react-imask'
 
 export const Route = createFileRoute('/masked-input-example')({
   component: MaskedInputExample,
@@ -24,6 +25,7 @@ export function MaskedInputExample() {
   const [customDefinitionValue, setCustomDefinitionValue] = useState('')
   const [blockValue, setBlockValue] = useState('')
   const [serialNumberValue, setSerialNumberValue] = useState('')
+  const [imaskDirectValue, setImaskDirectValue] = useState('')
 
   return (
     <Paper sx={{ p: 3, maxWidth: 600, mx: 'auto', mt: 2 }}>
@@ -126,21 +128,31 @@ export function MaskedInputExample() {
         <FormControl>
           <FormLabel>Date (Blocks)</FormLabel>
           <MaskedInput
-            mask='from - to'
+            mask={Date}
+            pattern='d{/}`m{/}`Y - d{/}`m{/}`Y*'
             value={blockValue}
-            onChange={setBlockValue}
+            onChange={value => setBlockValue(value)}
             blocks={{
-              from: {
-                mask: Date,
-                pattern: 'd{/}`m{/}`Y',
-                lazy: false,
+              d: {
+                mask: IMask.MaskedRange,
+                from: 1,
+                to: 31,
+                maxLength: 2,
               },
-              to: {
-                mask: Date,
-                pattern: 'd{/}`m{/}`Y',
-                lazy: false,
+              m: {
+                mask: IMask.MaskedRange,
+                from: 1,
+                to: 12,
+                maxLength: 2,
+              },
+              Y: {
+                mask: IMask.MaskedRange,
+                from: 1900,
+                to: 9999,
+                maxLength: 4,
               },
             }}
+            //placeholder='DD/MM/YYYY - DD/MM/YYYY'
           />
           <Typography variant='caption' color='text.secondary'>
             Format: DD/MM/YYYY - DD/MM/YYYY
@@ -161,6 +173,40 @@ export function MaskedInputExample() {
           />
           <Typography variant='caption' color='text.secondary'>
             Format: SN-LLLNNN-CCC (L=letter, N=number, C=alphanumeric)
+          </Typography>
+        </FormControl>
+
+        <FormControl>
+          <FormLabel>Direct IMask Component (Date Range)</FormLabel>
+          <IMaskInput
+            mask={Date}
+            pattern='d{/}`m{/}`Y - d{/}`m{/}`Y*'
+            value={imaskDirectValue}
+            onAccept={value => setImaskDirectValue(value)}
+            blocks={{
+              d: {
+                mask: IMask.MaskedRange,
+                from: 1,
+                to: 31,
+                maxLength: 2,
+              },
+              m: {
+                mask: IMask.MaskedRange,
+                from: 1,
+                to: 12,
+                maxLength: 2,
+              },
+              Y: {
+                mask: IMask.MaskedRange,
+                from: 1900,
+                to: 9999,
+                maxLength: 4,
+              },
+            }}
+            placeholder='DD/MM/YYYY - DD/MM/YYYY'
+          />
+          <Typography variant='caption' color='text.secondary'>
+            Direct IMask component with blocks rendering HTML input element
           </Typography>
         </FormControl>
 
@@ -197,6 +243,9 @@ export function MaskedInputExample() {
             <Typography variant='body2'>
               <strong>Serial Number:</strong>{' '}
               {serialNumberValue || 'Not entered'}
+            </Typography>
+            <Typography variant='body2'>
+              <strong>Direct IMask:</strong> {imaskDirectValue || 'Not entered'}
             </Typography>
           </Stack>
         </Box>
