@@ -27,6 +27,6 @@ export {
   SubscribeMaskedTextField,
   type SubscribeMaskedTextFieldProps,
 } from './form'
-export { RouterTab, TabLabel, useRouterTabsValue } from './tabs'
+export { RouterTabs, RouterTab, TabLabel } from './tabs'
 export { useMaterialRouterTable, tableSearchSchema } from './table'
 export { useConfirmDialog, useConfirmDeleteDialog } from './common-dialogs'

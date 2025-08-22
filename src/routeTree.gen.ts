@@ -8,162 +8,80 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as TabsExampleRouteImport } from './routes/tabs-example'
+import { Route as MrtExampleRouteImport } from './routes/mrt-example'
+import { Route as MaskedInputExampleRouteImport } from './routes/masked-input-example'
+import { Route as FormExampleRouteImport } from './routes/form-example'
+import { Route as DialogsExampleRouteImport } from './routes/dialogs-example'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as TabsExampleIndexRouteImport } from './routes/tabs-example/index'
+import { Route as TabsExampleTab3RouteImport } from './routes/tabs-example/tab3'
+import { Route as TabsExampleTab2RouteImport } from './routes/tabs-example/tab2'
+import { Route as TabsExampleTab1RouteImport } from './routes/tabs-example/tab1'
+import { Route as TabsExampleTab3ListRouteImport } from './routes/tabs-example/tab3/list'
+import { Route as TabsExampleTab3IdRouteImport } from './routes/tabs-example/tab3/$id'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as TabsExampleImport } from './routes/tabs-example'
-import { Route as MrtExampleImport } from './routes/mrt-example'
-import { Route as MaskedInputExampleImport } from './routes/masked-input-example'
-import { Route as FormExampleImport } from './routes/form-example'
-import { Route as DialogsExampleImport } from './routes/dialogs-example'
-import { Route as IndexImport } from './routes/index'
-import { Route as TabsExampleIndexImport } from './routes/tabs-example/index'
-import { Route as TabsExampleTab2Import } from './routes/tabs-example/tab2'
-import { Route as TabsExampleTab1Import } from './routes/tabs-example/tab1'
-
-// Create/Update Routes
-
-const TabsExampleRoute = TabsExampleImport.update({
+const TabsExampleRoute = TabsExampleRouteImport.update({
   id: '/tabs-example',
   path: '/tabs-example',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const MrtExampleRoute = MrtExampleImport.update({
+const MrtExampleRoute = MrtExampleRouteImport.update({
   id: '/mrt-example',
   path: '/mrt-example',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const MaskedInputExampleRoute = MaskedInputExampleImport.update({
+const MaskedInputExampleRoute = MaskedInputExampleRouteImport.update({
   id: '/masked-input-example',
   path: '/masked-input-example',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const FormExampleRoute = FormExampleImport.update({
+const FormExampleRoute = FormExampleRouteImport.update({
   id: '/form-example',
   path: '/form-example',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const DialogsExampleRoute = DialogsExampleImport.update({
+const DialogsExampleRoute = DialogsExampleRouteImport.update({
   id: '/dialogs-example',
   path: '/dialogs-example',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const TabsExampleIndexRoute = TabsExampleIndexImport.update({
+const TabsExampleIndexRoute = TabsExampleIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => TabsExampleRoute,
 } as any)
-
-const TabsExampleTab2Route = TabsExampleTab2Import.update({
+const TabsExampleTab3Route = TabsExampleTab3RouteImport.update({
+  id: '/tab3',
+  path: '/tab3',
+  getParentRoute: () => TabsExampleRoute,
+} as any)
+const TabsExampleTab2Route = TabsExampleTab2RouteImport.update({
   id: '/tab2',
   path: '/tab2',
   getParentRoute: () => TabsExampleRoute,
 } as any)
-
-const TabsExampleTab1Route = TabsExampleTab1Import.update({
+const TabsExampleTab1Route = TabsExampleTab1RouteImport.update({
   id: '/tab1',
   path: '/tab1',
   getParentRoute: () => TabsExampleRoute,
 } as any)
-
-// Populate the FileRoutesByPath interface
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/dialogs-example': {
-      id: '/dialogs-example'
-      path: '/dialogs-example'
-      fullPath: '/dialogs-example'
-      preLoaderRoute: typeof DialogsExampleImport
-      parentRoute: typeof rootRoute
-    }
-    '/form-example': {
-      id: '/form-example'
-      path: '/form-example'
-      fullPath: '/form-example'
-      preLoaderRoute: typeof FormExampleImport
-      parentRoute: typeof rootRoute
-    }
-    '/masked-input-example': {
-      id: '/masked-input-example'
-      path: '/masked-input-example'
-      fullPath: '/masked-input-example'
-      preLoaderRoute: typeof MaskedInputExampleImport
-      parentRoute: typeof rootRoute
-    }
-    '/mrt-example': {
-      id: '/mrt-example'
-      path: '/mrt-example'
-      fullPath: '/mrt-example'
-      preLoaderRoute: typeof MrtExampleImport
-      parentRoute: typeof rootRoute
-    }
-    '/tabs-example': {
-      id: '/tabs-example'
-      path: '/tabs-example'
-      fullPath: '/tabs-example'
-      preLoaderRoute: typeof TabsExampleImport
-      parentRoute: typeof rootRoute
-    }
-    '/tabs-example/tab1': {
-      id: '/tabs-example/tab1'
-      path: '/tab1'
-      fullPath: '/tabs-example/tab1'
-      preLoaderRoute: typeof TabsExampleTab1Import
-      parentRoute: typeof TabsExampleImport
-    }
-    '/tabs-example/tab2': {
-      id: '/tabs-example/tab2'
-      path: '/tab2'
-      fullPath: '/tabs-example/tab2'
-      preLoaderRoute: typeof TabsExampleTab2Import
-      parentRoute: typeof TabsExampleImport
-    }
-    '/tabs-example/': {
-      id: '/tabs-example/'
-      path: '/'
-      fullPath: '/tabs-example/'
-      preLoaderRoute: typeof TabsExampleIndexImport
-      parentRoute: typeof TabsExampleImport
-    }
-  }
-}
-
-// Create and export the route tree
-
-interface TabsExampleRouteChildren {
-  TabsExampleTab1Route: typeof TabsExampleTab1Route
-  TabsExampleTab2Route: typeof TabsExampleTab2Route
-  TabsExampleIndexRoute: typeof TabsExampleIndexRoute
-}
-
-const TabsExampleRouteChildren: TabsExampleRouteChildren = {
-  TabsExampleTab1Route: TabsExampleTab1Route,
-  TabsExampleTab2Route: TabsExampleTab2Route,
-  TabsExampleIndexRoute: TabsExampleIndexRoute,
-}
-
-const TabsExampleRouteWithChildren = TabsExampleRoute._addFileChildren(
-  TabsExampleRouteChildren,
-)
+const TabsExampleTab3ListRoute = TabsExampleTab3ListRouteImport.update({
+  id: '/list',
+  path: '/list',
+  getParentRoute: () => TabsExampleTab3Route,
+} as any)
+const TabsExampleTab3IdRoute = TabsExampleTab3IdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => TabsExampleTab3Route,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -174,9 +92,11 @@ export interface FileRoutesByFullPath {
   '/tabs-example': typeof TabsExampleRouteWithChildren
   '/tabs-example/tab1': typeof TabsExampleTab1Route
   '/tabs-example/tab2': typeof TabsExampleTab2Route
+  '/tabs-example/tab3': typeof TabsExampleTab3RouteWithChildren
   '/tabs-example/': typeof TabsExampleIndexRoute
+  '/tabs-example/tab3/$id': typeof TabsExampleTab3IdRoute
+  '/tabs-example/tab3/list': typeof TabsExampleTab3ListRoute
 }
-
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dialogs-example': typeof DialogsExampleRoute
@@ -185,11 +105,13 @@ export interface FileRoutesByTo {
   '/mrt-example': typeof MrtExampleRoute
   '/tabs-example/tab1': typeof TabsExampleTab1Route
   '/tabs-example/tab2': typeof TabsExampleTab2Route
+  '/tabs-example/tab3': typeof TabsExampleTab3RouteWithChildren
   '/tabs-example': typeof TabsExampleIndexRoute
+  '/tabs-example/tab3/$id': typeof TabsExampleTab3IdRoute
+  '/tabs-example/tab3/list': typeof TabsExampleTab3ListRoute
 }
-
 export interface FileRoutesById {
-  __root__: typeof rootRoute
+  __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
@@ -198,9 +120,11 @@ export interface FileRoutesById {
   '/tabs-example': typeof TabsExampleRouteWithChildren
   '/tabs-example/tab1': typeof TabsExampleTab1Route
   '/tabs-example/tab2': typeof TabsExampleTab2Route
+  '/tabs-example/tab3': typeof TabsExampleTab3RouteWithChildren
   '/tabs-example/': typeof TabsExampleIndexRoute
+  '/tabs-example/tab3/$id': typeof TabsExampleTab3IdRoute
+  '/tabs-example/tab3/list': typeof TabsExampleTab3ListRoute
 }
-
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
@@ -212,7 +136,10 @@ export interface FileRouteTypes {
     | '/tabs-example'
     | '/tabs-example/tab1'
     | '/tabs-example/tab2'
+    | '/tabs-example/tab3'
     | '/tabs-example/'
+    | '/tabs-example/tab3/$id'
+    | '/tabs-example/tab3/list'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -222,7 +149,10 @@ export interface FileRouteTypes {
     | '/mrt-example'
     | '/tabs-example/tab1'
     | '/tabs-example/tab2'
+    | '/tabs-example/tab3'
     | '/tabs-example'
+    | '/tabs-example/tab3/$id'
+    | '/tabs-example/tab3/list'
   id:
     | '__root__'
     | '/'
@@ -233,10 +163,12 @@ export interface FileRouteTypes {
     | '/tabs-example'
     | '/tabs-example/tab1'
     | '/tabs-example/tab2'
+    | '/tabs-example/tab3'
     | '/tabs-example/'
+    | '/tabs-example/tab3/$id'
+    | '/tabs-example/tab3/list'
   fileRoutesById: FileRoutesById
 }
-
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DialogsExampleRoute: typeof DialogsExampleRoute
@@ -246,6 +178,127 @@ export interface RootRouteChildren {
   TabsExampleRoute: typeof TabsExampleRouteWithChildren
 }
 
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/tabs-example': {
+      id: '/tabs-example'
+      path: '/tabs-example'
+      fullPath: '/tabs-example'
+      preLoaderRoute: typeof TabsExampleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mrt-example': {
+      id: '/mrt-example'
+      path: '/mrt-example'
+      fullPath: '/mrt-example'
+      preLoaderRoute: typeof MrtExampleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/masked-input-example': {
+      id: '/masked-input-example'
+      path: '/masked-input-example'
+      fullPath: '/masked-input-example'
+      preLoaderRoute: typeof MaskedInputExampleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/form-example': {
+      id: '/form-example'
+      path: '/form-example'
+      fullPath: '/form-example'
+      preLoaderRoute: typeof FormExampleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dialogs-example': {
+      id: '/dialogs-example'
+      path: '/dialogs-example'
+      fullPath: '/dialogs-example'
+      preLoaderRoute: typeof DialogsExampleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tabs-example/': {
+      id: '/tabs-example/'
+      path: '/'
+      fullPath: '/tabs-example/'
+      preLoaderRoute: typeof TabsExampleIndexRouteImport
+      parentRoute: typeof TabsExampleRoute
+    }
+    '/tabs-example/tab3': {
+      id: '/tabs-example/tab3'
+      path: '/tab3'
+      fullPath: '/tabs-example/tab3'
+      preLoaderRoute: typeof TabsExampleTab3RouteImport
+      parentRoute: typeof TabsExampleRoute
+    }
+    '/tabs-example/tab2': {
+      id: '/tabs-example/tab2'
+      path: '/tab2'
+      fullPath: '/tabs-example/tab2'
+      preLoaderRoute: typeof TabsExampleTab2RouteImport
+      parentRoute: typeof TabsExampleRoute
+    }
+    '/tabs-example/tab1': {
+      id: '/tabs-example/tab1'
+      path: '/tab1'
+      fullPath: '/tabs-example/tab1'
+      preLoaderRoute: typeof TabsExampleTab1RouteImport
+      parentRoute: typeof TabsExampleRoute
+    }
+    '/tabs-example/tab3/list': {
+      id: '/tabs-example/tab3/list'
+      path: '/list'
+      fullPath: '/tabs-example/tab3/list'
+      preLoaderRoute: typeof TabsExampleTab3ListRouteImport
+      parentRoute: typeof TabsExampleTab3Route
+    }
+    '/tabs-example/tab3/$id': {
+      id: '/tabs-example/tab3/$id'
+      path: '/$id'
+      fullPath: '/tabs-example/tab3/$id'
+      preLoaderRoute: typeof TabsExampleTab3IdRouteImport
+      parentRoute: typeof TabsExampleTab3Route
+    }
+  }
+}
+
+interface TabsExampleTab3RouteChildren {
+  TabsExampleTab3IdRoute: typeof TabsExampleTab3IdRoute
+  TabsExampleTab3ListRoute: typeof TabsExampleTab3ListRoute
+}
+
+const TabsExampleTab3RouteChildren: TabsExampleTab3RouteChildren = {
+  TabsExampleTab3IdRoute: TabsExampleTab3IdRoute,
+  TabsExampleTab3ListRoute: TabsExampleTab3ListRoute,
+}
+
+const TabsExampleTab3RouteWithChildren = TabsExampleTab3Route._addFileChildren(
+  TabsExampleTab3RouteChildren,
+)
+
+interface TabsExampleRouteChildren {
+  TabsExampleTab1Route: typeof TabsExampleTab1Route
+  TabsExampleTab2Route: typeof TabsExampleTab2Route
+  TabsExampleTab3Route: typeof TabsExampleTab3RouteWithChildren
+  TabsExampleIndexRoute: typeof TabsExampleIndexRoute
+}
+
+const TabsExampleRouteChildren: TabsExampleRouteChildren = {
+  TabsExampleTab1Route: TabsExampleTab1Route,
+  TabsExampleTab2Route: TabsExampleTab2Route,
+  TabsExampleTab3Route: TabsExampleTab3RouteWithChildren,
+  TabsExampleIndexRoute: TabsExampleIndexRoute,
+}
+
+const TabsExampleRouteWithChildren = TabsExampleRoute._addFileChildren(
+  TabsExampleRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DialogsExampleRoute: DialogsExampleRoute,
@@ -254,60 +307,6 @@ const rootRouteChildren: RootRouteChildren = {
   MrtExampleRoute: MrtExampleRoute,
   TabsExampleRoute: TabsExampleRouteWithChildren,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/dialogs-example",
-        "/form-example",
-        "/masked-input-example",
-        "/mrt-example",
-        "/tabs-example"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/dialogs-example": {
-      "filePath": "dialogs-example.tsx"
-    },
-    "/form-example": {
-      "filePath": "form-example.tsx"
-    },
-    "/masked-input-example": {
-      "filePath": "masked-input-example.tsx"
-    },
-    "/mrt-example": {
-      "filePath": "mrt-example.tsx"
-    },
-    "/tabs-example": {
-      "filePath": "tabs-example.tsx",
-      "children": [
-        "/tabs-example/tab1",
-        "/tabs-example/tab2",
-        "/tabs-example/"
-      ]
-    },
-    "/tabs-example/tab1": {
-      "filePath": "tabs-example/tab1.tsx",
-      "parent": "/tabs-example"
-    },
-    "/tabs-example/tab2": {
-      "filePath": "tabs-example/tab2.tsx",
-      "parent": "/tabs-example"
-    },
-    "/tabs-example/": {
-      "filePath": "tabs-example/index.tsx",
-      "parent": "/tabs-example"
-    }
-  }
-}
-ROUTE_MANIFEST_END */

@@ -5,6 +5,11 @@ import { IMaskInput } from 'react-imask'
 
 export type MaskedTextFieldProps = Omit<TextFieldProps, 'slotProps'> & {
   mask: IMaskInputProps<HTMLInputElement>['mask']
+  blocks?: Record<string, any>
+  definitions?: Record<string, any>
+  pattern?: string
+  lazy?: boolean
+
   slotProps?: Omit<TextFieldProps['slotProps'], 'input'> & {
     input?: Omit<TextFieldProps['slotProps'], 'input'>
   }
@@ -12,11 +17,10 @@ export type MaskedTextFieldProps = Omit<TextFieldProps, 'slotProps'> & {
 
 const MaskedInputAdapter = React.forwardRef<HTMLInputElement, any>(
   function MaskedInputAdapter(props, ref) {
-    const { onChange, mask, ...other } = props
+    const { onChange, ...other } = props
     return (
       <IMaskInput
         {...other}
-        mask={mask}
         inputRef={ref}
         onAccept={(value: any) =>
           onChange({ target: { name: props.name, value } })
@@ -28,7 +32,7 @@ const MaskedInputAdapter = React.forwardRef<HTMLInputElement, any>(
 )
 
 export function MaskedTextField(props: MaskedTextFieldProps) {
-  const { mask, slotProps, ...rest } = props
+  const { mask, blocks, definitions, pattern, lazy, slotProps, ...rest } = props
 
   return (
     <TextField
@@ -39,6 +43,10 @@ export function MaskedTextField(props: MaskedTextFieldProps) {
           inputComponent: MaskedInputAdapter as any,
           inputProps: {
             mask: mask,
+            blocks: blocks,
+            definitions: definitions,
+            pattern: pattern,
+            lazy: lazy,
           },
           ...slotProps?.input,
         },

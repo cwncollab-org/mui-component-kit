@@ -12,6 +12,7 @@ A React component library built with TypeScript and Vite. This package provides 
 - Lazy loading support
 - Payload and result handling for dialogs
 - Form components with TanStack Form integration
+- Router-integrated tabs with URL synchronization
 
 ## Usage Examples
 
@@ -971,6 +972,122 @@ The component currently supports simple string patterns where each character in 
 
 **SubscribeMaskedTextField:**
 The `SubscribeMaskedTextField` component has the same props as `MaskedTextField` but automatically disables the field when the form is submitting, providing better UX during form submission.
+
+
+### Router Tabs
+
+The Router Tabs components provide tabbed navigation integrated with TanStack Router, allowing you to create tabs that are synced with the browser URL and support nested routing.
+
+#### Basic Router Tabs Usage
+
+```tsx
+import { Box } from '@mui/material'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { RouterTab, RouterTabs } from '@cwncollab-org/component-kit'
+
+export const Route = createFileRoute('/tabs-example')({
+  component: RouteComponent,
+})
+
+function RouteComponent() {
+  const match = Route.useMatch()
+  
+  return (
+    <Box>
+      <RouterTabs match={match}>
+        <RouterTab value='/tabs-example/tab1' label='Tab 1' />
+        <RouterTab value='/tabs-example/tab2' label='Tab 2' />
+        <RouterTab value='/tabs-example/tab3' label='Tab 3' />
+      </RouterTabs>
+      <Outlet />
+    </Box>
+  )
+}
+```
+
+#### Router Tabs with TabLabel Components
+
+The `TabLabel` component allows you to add visual indicators like error states to your tabs:
+
+```tsx
+import { RouterTab, RouterTabs, TabLabel } from '@cwncollab-org/component-kit'
+
+function MyTabsComponent() {
+  const match = Route.useMatch()
+  const [hasError, setHasError] = useState(false)
+  
+  return (
+    <RouterTabs match={match}>
+      <RouterTab 
+        value='/dashboard/overview' 
+        label={<TabLabel label='Overview' />} 
+      />
+      <RouterTab 
+        value='/dashboard/settings' 
+        label={<TabLabel label='Settings' error={hasError} />} 
+      />
+      <RouterTab 
+        value='/dashboard/profile' 
+        label='Profile' 
+      />
+    </RouterTabs>
+  )
+}
+```
+
+#### Nested Router Tabs
+
+Router Tabs support nested routing structures:
+
+```tsx
+// Parent route: /tabs-example/tab3
+function Tab3Component() {
+  const match = Route.useMatch()
+  
+  return (
+    <Box>
+      <Typography variant='h6'>Tab 3 Content</Typography>
+      <RouterTabs match={match}>
+        <RouterTab value='/tabs-example/tab3/list' label='List View' />
+        <RouterTab value='/tabs-example/tab3/123' label='Detail View' />
+      </RouterTabs>
+      <Outlet />
+    </Box>
+  )
+}
+```
+
+#### RouterTabs Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `match` | `MakeRouteMatch` | - | The route match object from TanStack Router used to determine active tab |
+| `children` | `ReactNode` | - | RouterTab components |
+
+The RouterTabs component also accepts all standard MUI Tabs props except `value` which is automatically managed based on the current route.
+
+#### RouterTab Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `ValidateToPath` | - | The route path this tab should navigate to |
+| `label` | `ReactNode` | - | The label content for the tab (can be string or TabLabel component) |
+
+The RouterTab component also accepts all standard MUI Tab props except `value` which is used for routing.
+
+#### TabLabel Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | - | The text label for the tab |
+| `error` | `boolean` | `false` | Whether to show an error indicator (red dot) next to the label |
+
+**Features:**
+- **URL Synchronization**: Tab selection is automatically synchronized with the browser URL
+- **Nested Routing**: Supports complex nested tab structures with child routes
+- **Type Safety**: Full TypeScript support with path validation
+- **MUI Integration**: Built on top of Material-UI Tabs with full styling support
+- **Error Indicators**: Visual error states with the TabLabel component
 
 
 ### Common Dialog Patterns

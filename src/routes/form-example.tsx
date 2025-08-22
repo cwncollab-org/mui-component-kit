@@ -556,6 +556,67 @@ export function FormExample() {
                 />
               )}
             />
+            <Typography variant='h6'>Advanced Pattern Examples</Typography>
+            <form.AppField
+              name='email'
+              children={field => (
+                <field.SubscribeMaskedTextField
+                  mask={/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/}
+                  label='Email with Pattern Validation'
+                  labelBehavior='shrink'
+                  size='small'
+                  fullWidth
+                  placeholder='user@example.com'
+                />
+              )}
+            />
+            <form.AppField
+              name='phone'
+              children={field => (
+                <field.SubscribeMaskedTextField
+                  mask='{+1} (000) 000-0000'
+                  blocks={{
+                    '+1': {
+                      mask: '+1',
+                      lazy: false,
+                    },
+                  }}
+                  definitions={{
+                    '0': /[0-9]/,
+                  }}
+                  label='US Phone with Blocks & Definitions'
+                  labelBehavior='shrink'
+                  size='small'
+                  fullWidth
+                  placeholder='+1 (555) 123-4567'
+                />
+              )}
+            />
+            <form.AppField
+              name='ssn'
+              children={field => (
+                <field.SubscribeMaskedTextField
+                  mask='SSN: 000-00-0000'
+                  blocks={{
+                    SSN: {
+                      mask: 'SSN:',
+                      lazy: false,
+                    },
+                  }}
+                  definitions={{
+                    '0': {
+                      mask: /[0-9]/,
+                      placeholderChar: '#',
+                    },
+                  }}
+                  label='SSN with Custom Placeholder'
+                  labelBehavior='shrink'
+                  size='small'
+                  fullWidth
+                  placeholder='SSN: ###-##-####'
+                />
+              )}
+            />
             <form.SubscribeButton type='submit' variant='contained'>
               Submit
             </form.SubscribeButton>
