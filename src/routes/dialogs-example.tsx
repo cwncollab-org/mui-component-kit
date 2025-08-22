@@ -54,19 +54,13 @@ export function DialogsExample() {
       </Paper>
       <Paper sx={{ p: 2 }}>
         <Typography variant='h6'>Example dialog</Typography>
-        <Button
-          variant='contained'
-          onClick={() => openDialog('example-dialog', ExampleDialog)}
-        >
+        <Button variant='contained' onClick={() => openDialog(ExampleDialog)}>
           Open Dialog
         </Button>
       </Paper>
       <Paper sx={{ p: 2 }}>
         <Typography variant='h6'>Example dialog 2 (Lazy)</Typography>
-        <Button
-          variant='contained'
-          onClick={() => openDialog('example-dialog2', ExampleDialog2)}
-        >
+        <Button variant='contained' onClick={() => openDialog(ExampleDialog2)}>
           Open Dialog
         </Button>
       </Paper>
@@ -88,11 +82,7 @@ export function DialogsExample() {
         <Button
           variant='contained'
           onClick={async () => {
-            await openDialog(
-              'example-dialog-with-payload',
-              ExampleDialogWithPayload,
-              { payload: { name } }
-            )
+            await openDialog(ExampleDialogWithPayload, { payload: { name } })
           }}
         >
           Open Dialog
@@ -103,10 +93,7 @@ export function DialogsExample() {
         <Button
           variant='contained'
           onClick={async () => {
-            const result = await openDialog(
-              'example-dialog-with-result',
-              ExampleDialogWithResult
-            )
+            const result = await openDialog(ExampleDialogWithResult)
             setResult(JSON.stringify(result))
           }}
         >

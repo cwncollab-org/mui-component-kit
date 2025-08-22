@@ -7,7 +7,7 @@ export type ManagedDialogProps<TPayload, TResult> = Omit<
 >
 
 export type ManagedDialog<TPayload, TResult> = {
-  key: string
+  dialogKey: string
   Component: React.FC<DialogProps<TPayload, TResult>>
   props: ManagedDialogProps<TPayload, TResult>
   id: string
@@ -17,12 +17,18 @@ export type ManagedDialog<TPayload, TResult> = {
   ) => void
 }
 
+export type OpenDialogOptions<TPayload, TResult> = ManagedDialogProps<
+  TPayload,
+  TResult
+> & {
+  dialogKey?: string
+}
+
 type DialogManagerContextType = {
   providerId: string
   openDialog: <TPayload, TResult>(
-    key: string,
     Dialog: React.FC<DialogProps<TPayload, TResult>>,
-    props?: ManagedDialogProps<TPayload, TResult>
+    opts?: OpenDialogOptions<TPayload, TResult>
   ) => Promise<DialogResult<TResult>>
   closeDialog: <TData>(key: string, result: DialogResult<TData>) => void
   dialogs: ManagedDialog<unknown, unknown>[]

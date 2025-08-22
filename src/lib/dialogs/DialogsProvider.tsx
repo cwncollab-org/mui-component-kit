@@ -3,6 +3,7 @@ import {
   dialogsContext,
   ManagedDialog,
   ManagedDialogProps,
+  OpenDialogOptions,
 } from './dialogsContext'
 import { DialogProps, DialogResult } from './types'
 import { Backdrop, CircularProgress } from '@mui/material'
@@ -12,28 +13,32 @@ export function DialogsProvider({ children }: PropsWithChildren) {
   const providerId = useId()
 
   const openDialog = async <TPayload, TResult>(
-    key: string,
     Dialog: React.FC<DialogProps<TPayload, TResult>>,
-    props?: ManagedDialogProps<TPayload, TResult>
+    opts?: OpenDialogOptions<TPayload, TResult>
   ): Promise<DialogResult<TResult>> => {
+    const { dialogKey = Dialog.name, ...props } = opts || {}
     return new Promise<DialogResult<TResult>>(resolve => {
-      const existingDialog = dialogs.find(dialog => dialog.key === key)
+      const existingDialog = dialogs.find(
+        dialog => dialog.dialogKey === dialogKey
+      )
       if (existingDialog) {
         existingDialog.open = true
         existingDialog.resolve = resolve as (
           value: DialogResult<unknown> | PromiseLike<DialogResult<unknown>>
         ) => void
         existingDialog.props = props as ManagedDialogProps<unknown, unknown>
-        setDialogs(prev => prev.map(d => (d.key === key ? existingDialog : d)))
+        setDialogs(prev =>
+          prev.map(d => (d.dialogKey === dialogKey ? existingDialog : d))
+        )
         return
       }
 
-      const dialogId = `${providerId}-${key}`
+      const dialogId = `${providerId}-${dialogKey}`
       const dialog: ManagedDialog<unknown, unknown> = {
         id: dialogId,
         open: true,
         Component: Dialog as React.FC<DialogProps<unknown, unknown>>,
-        key,
+        dialogKey,
         props: props as ManagedDialogProps<unknown, unknown>,
         resolve: resolve as (
           value: DialogResult<unknown> | PromiseLike<DialogResult<unknown>>
@@ -47,12 +52,12 @@ export function DialogsProvider({ children }: PropsWithChildren) {
     key: string,
     result: DialogResult<TResult> | 'backdropClick' | 'escapeKeyDown'
   ) => {
-    const dialog = dialogs.find(dialog => dialog.key === key)
+    const dialog = dialogs.find(dialog => dialog.dialogKey === key)
     if (!dialog) {
       return
     }
     dialog.open = false
-    setDialogs(prev => prev.map(d => (d.key === key ? dialog : d)))
+    setDialogs(prev => prev.map(d => (d.dialogKey === key ? dialog : d)))
     if (result === 'backdropClick' || result === 'escapeKeyDown') {
       dialog.resolve({ success: false })
       return
@@ -61,7 +66,7 @@ export function DialogsProvider({ children }: PropsWithChildren) {
   }
 
   const removeDialog = (key: string) => {
-    setDialogs(prev => prev.filter(d => d.key !== key))
+    setDialogs(prev => prev.filter(d => d.dialogKey !== key))
   }
 
   const handleCloseWithResult = <TResult,>(
@@ -96,11 +101,11 @@ export function DialogsProvider({ children }: PropsWithChildren) {
             onClose={(
               _,
               result: DialogResult<unknown> | 'backdropClick' | 'escapeKeyDown'
-            ) => handleCloseWithResult(dialog.key, result)}
+            ) => handleCloseWithResult(dialog.dialogKey, result)}
             slotProps={{
               transition: {
                 onExited: () => {
-                  removeDialog(dialog.key)
+                  removeDialog(dialog.dialogKey)
                 },
               },
             }}

@@ -18,6 +18,7 @@ export type ConfirmDialogOptions = {
     confirm?: ButtonProps
     cancel?: ButtonProps
   }
+  dialogKey?: string
 }
 
 type ConfirmDialogProps = DialogProps<ConfirmDialogOptions>

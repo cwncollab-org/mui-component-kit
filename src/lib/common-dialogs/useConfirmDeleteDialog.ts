@@ -14,6 +14,7 @@ export function useConfirmDeleteDialog() {
           ...options?.slotProps?.confirm,
         },
       },
+      dialogKey: 'confirm-delete-dialog',
     })
   }
   return confirmDelete

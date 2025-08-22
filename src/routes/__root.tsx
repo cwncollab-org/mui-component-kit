@@ -1,4 +1,4 @@
-import { AppBar, Box, Link, Stack, Toolbar, Typography } from '@mui/material'
+import { Box, Link, Stack } from '@mui/material'
 import {
   createRootRoute,
   Outlet,
