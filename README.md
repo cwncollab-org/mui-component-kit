@@ -36,7 +36,7 @@ function AppPage() {
   return (
     <Button
       variant='contained'
-      onClick={() => openDialog('example-dialog', ExampleDialog)}
+      onClick={() => openDialog(ExampleDialog)}
     >
       Open Basic Dialog
     </Button>
@@ -49,16 +49,18 @@ function AppPage() {
 ```tsx
 import {
   Dialog,
-  DialogTitle,
   DialogContentText,
   DialogContent,
   DialogProps,
+  DialogTitle,
 } from '@mui/material'
+import { DialogCloseButton } from '@cwncollab-org/component-kit'
 
 export default function ExampleDialog({ open, onClose, ...rest }: DialogProps) {
   return (
     <Dialog open={open} onClose={onClose} {...rest}>
       <DialogTitle>Example Dialog</DialogTitle>
+      <DialogCloseButton onClick={() => onClose?.({}, 'escapeKeyDown')} />
       <DialogContent>
         <DialogContentText>This is an example dialog</DialogContentText>
       </DialogContent>
@@ -66,6 +68,8 @@ export default function ExampleDialog({ open, onClose, ...rest }: DialogProps) {
   )
 }
 ```
+
+> **Note**: The `DialogCloseButton` is an optional component that provides a close button (X) in the top-right corner of the dialog. It's positioned absolutely and styled to match Material-UI design patterns.
 
 ### Dialog with Payload
 
@@ -86,12 +90,8 @@ function AppPage() {
       />
       <Button
         variant='contained'
-        onClick={() => {
-          openDialog(
-            'example-dialog-with-payload',
-            ExampleDialogWithPayload,
-            { payload: { name } }
-          )
+        onClick={async () => {
+          await openDialog(ExampleDialogWithPayload, { payload: { name } })
         }}
       >
         Open Dialog with Payload
@@ -110,7 +110,7 @@ import {
   DialogContentText,
   DialogContent,
 } from '@mui/material'
-import { DialogProps } from '../lib'
+import { DialogProps } from '@cwncollab-org/component-kit'
 
 type Payload = {
   name: string
@@ -143,30 +143,22 @@ import ExampleDialogWithResult from './examples/ExampleDialogWithResult'
 
 function AppPage() {
   const { openDialog } = useDialogs()
-  const [result, setResult] = useState<{ name: string } | null>(null)
+  const [result, setResult] = useState('')
 
   return (
     <>
       <Button
         variant='contained'
         onClick={async () => {
-          const result = await openDialog(
-            'example-dialog-with-result',
-            ExampleDialogWithResult,
-            { payload: { name: 'Initial Name' } }
-          )
-          if (result?.success) {
-            setResult(result.data)
-          }
+          const result = await openDialog(ExampleDialogWithResult)
+          setResult(JSON.stringify(result))
         }}
       >
         Open Dialog with Result
       </Button>
-      {result && (
-        <Typography variant='body1'>
-          Result: {result.name}
-        </Typography>
-      )}
+      <Typography variant='body1' sx={{ mt: 1 }}>
+        Result: {result}
+      </Typography>
     </>
   )
 }
@@ -183,7 +175,7 @@ import {
   DialogActions,
   Button,
 } from '@mui/material'
-import { DialogProps } from '../lib'
+import { DialogProps } from '@cwncollab-org/component-kit'
 import { useState } from 'react'
 
 type Payload = {
@@ -235,7 +227,7 @@ function AppPage() {
   return (
     <Button
       variant='contained'
-      onClick={() => openDialog('example-dialog2', ExampleDialog2)}
+      onClick={() => openDialog(ExampleDialog2)}
     >
       Open Lazy Loaded Dialog
     </Button>
@@ -1103,19 +1095,24 @@ function MyComponent() {
   const confirm = useConfirmDialog()
 
   const handleClick = async () => {
-    const { success } = await confirm({
+    const result = await confirm({
       title: 'Confirm',
-      message: 'Are you sure you want to add this item to cart?',
+      message: 'Are you sure you want to confirm?',
+      confirmText: 'Confirm',
+      cancelText: 'Cancel',
     })
-
-    if (success) {
-      // Proceed
+    
+    if (result.success) {
+      // Proceed with the action
+      console.log('User confirmed')
+    } else {
+      console.log('User cancelled')
     }
   }
 
   return (
     <Button onClick={handleClick}>
-      Click
+      Confirm Action
     </Button>
   )
 }
@@ -1130,20 +1127,59 @@ function MyComponent() {
   const confirmDelete = useConfirmDeleteDialog()
 
   const handleDelete = async () => {
-    const { success } = await confirmDelete({
-      title: 'Delete Item',
-      message: 'Are you sure you want to delete this item? This action cannot be undone.',
+    const result = await confirmDelete({
+      title: 'Confirm Delete',
+      message: 'Are you sure you want to delete this item?',
+      confirmText: 'Delete',
+      cancelText: 'Cancel',
     })
 
-    if (success) {
+    if (result.success) {
       // Proceed with deletion
+      console.log('Item deleted')
+    } else {
+      console.log('Deletion cancelled')
     }
   }
 
   return (
-    <Button onClick={handleDelete}>
+    <Button onClick={handleDelete} color="error">
       Delete Item
     </Button>
+  )
+}
+```
+
+#### Advanced Dialog Usage with Dialog Count
+
+```tsx
+import { useDialogs, useConfirmDialog } from '@cwncollab-org/component-kit'
+
+function DialogManager() {
+  const { openDialog, dialogs } = useDialogs()
+  const confirm = useConfirmDialog()
+
+  return (
+    <Stack spacing={2}>
+      <Typography variant='body1'>
+        Active dialogs: {dialogs.length}
+      </Typography>
+      
+      <Button
+        variant='contained'
+        onClick={async () => {
+          const result = await confirm({
+            title: 'Multiple Dialogs',
+            message: 'You can open multiple dialogs simultaneously.',
+            confirmText: 'OK',
+            cancelText: 'Cancel',
+          })
+          console.log(result)
+        }}
+      >
+        Open Confirmation Dialog
+      </Button>
+    </Stack>
   )
 }
 ```
