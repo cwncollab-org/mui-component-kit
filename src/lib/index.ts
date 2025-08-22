@@ -30,3 +30,4 @@ export {
 export { RouterTabs, RouterTab, TabLabel } from './tabs'
 export { useMaterialRouterTable, tableSearchSchema } from './table'
 export { useConfirmDialog, useConfirmDeleteDialog } from './common-dialogs'
+export { Link } from './link'

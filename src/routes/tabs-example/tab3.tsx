@@ -1,5 +1,6 @@
 import { Box } from '@mui/material'
-import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { Link } from '../../lib'
 
 export const Route = createFileRoute('/tabs-example/tab3')({
   component: RouteComponent,
