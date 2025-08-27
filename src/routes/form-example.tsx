@@ -126,6 +126,9 @@ export function FormExample() {
         }}
       >
         <form.AppForm>
+          <form.Subscribe selector={state => state.isDirty}>
+            {isDirty => <>isDirty: {isDirty ? 'true' : 'false'}</>}
+          </form.Subscribe>
           <Stack spacing={2} alignItems='stretch'>
             <Typography variant='h6'>
               TextField with different label behaviors
@@ -570,28 +573,7 @@ export function FormExample() {
                 />
               )}
             />
-            <form.AppField
-              name='phone'
-              children={field => (
-                <field.SubscribeMaskedTextField
-                  mask='{+1} (000) 000-0000'
-                  blocks={{
-                    '+1': {
-                      mask: '+1',
-                      lazy: false,
-                    },
-                  }}
-                  definitions={{
-                    '0': /[0-9]/,
-                  }}
-                  label='US Phone with Blocks & Definitions'
-                  labelBehavior='shrink'
-                  size='small'
-                  fullWidth
-                  placeholder='+1 (555) 123-4567'
-                />
-              )}
-            />
+
             <form.AppField
               name='ssn'
               children={field => (
