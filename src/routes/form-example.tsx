@@ -91,7 +91,7 @@ export function FormExample() {
       agree: false,
       date: undefined,
       time: undefined,
-      phone: undefined,
+      phone: '(123) 456-7890',
       ssn: undefined,
       creditCard: undefined,
       categories: [],
@@ -506,7 +506,7 @@ export function FormExample() {
                 />
               )}
             />
-            <form.AppField
+            {/* <form.AppField
               name='phone'
               children={field => (
                 <field.SubscribeMaskedTextField
@@ -531,7 +531,7 @@ export function FormExample() {
                   placeholder='(123) 456-7890'
                 />
               )}
-            />
+            /> */}
             <Typography variant='h6'>Other Masked Input Examples</Typography>
             <form.AppField
               name='ssn'

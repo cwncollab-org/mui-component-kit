@@ -12,10 +12,12 @@ export type MaskedTextFieldProps = Omit<TextFieldProps, 'slotProps'> & {
 } & ReactMaskOpts
 
 export function MaskedTextField(props: MaskedTextFieldProps) {
-  const { slotProps, ...rest } = props
+  const { slotProps, labelBehavior, fullWidth, ...rest } = props
 
   return (
     <TextField
+      labelBehavior={labelBehavior}
+      fullWidth={fullWidth}
       {...rest}
       slotProps={{
         ...slotProps,

@@ -8,13 +8,18 @@ export const MaskedInputAdapter = React.forwardRef<
   HTMLInputElement,
   MaskedInputAdapterProps
 >(function MaskedInputAdapter(props, ref) {
-  const { onChange, ...other } = props
+  const { name, value, onChange, ...other } = props
   return (
     <IMaskInput
       {...other}
+      name={name}
+      value={value}
       inputRef={ref}
-      onComplete={value => {
-        onChange({ target: { name: props.name, value } })
+      onAccept={newValue => {
+        if (value === newValue) {
+          return
+        }
+        onChange({ target: { name: name, value: newValue } })
       }}
     />
   )
