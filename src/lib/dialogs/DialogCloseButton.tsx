@@ -1,17 +1,20 @@
-import { IconButton } from '@mui/material'
+import { IconButton, IconButtonProps } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
-type Props = {
-  onClick: () => void
-}
+export type DialogCloseButtonProps = IconButtonProps
 
-export function DialogCloseButton(props: Props) {
-  const { onClick } = props
+export function DialogCloseButton(props: DialogCloseButtonProps) {
+  const { sx, ...rest } = props
 
   return (
     <IconButton
-      sx={{ position: 'absolute', right: 12, top: 12 }}
-      onClick={onClick}
+      sx={{
+        ...sx,
+        position: 'absolute',
+        right: 12,
+        top: 12,
+      }}
+      {...rest}
     >
       <CloseIcon />
     </IconButton>
