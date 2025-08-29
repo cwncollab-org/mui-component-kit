@@ -1,3 +1,4 @@
+export { IMask } from 'react-imask'
 export { useAppForm, withForm } from './formHooks'
 export { type AutocompleteProps } from './Autocomplete'
 export { type CheckboxProps } from './Checkbox'

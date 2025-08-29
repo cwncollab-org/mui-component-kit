@@ -719,6 +719,8 @@ The RadioGroup component also accepts all standard MUI RadioGroup props except `
 
 The MaskedTextField component provides input masking functionality, built on top of MUI's TextField component and `react-imask` library, integrated with TanStack Form. This component is useful for formatting user input such as phone numbers, credit card numbers, social security numbers, and other structured data.
 
+The component now supports the full `react-imask` API, allowing for advanced masking patterns including custom definitions, blocks, regular expressions, and more complex validation patterns.
+
 ```tsx
 import { useAppForm } from '@cwncollab-org/component-kit'
 import { z } from 'zod'
@@ -751,7 +753,7 @@ function MyForm() {
 
   return (
     <>
-      {/* Phone number mask */}
+      {/* Basic phone number mask */}
       <form.AppField
         name="phone"
         children={field => (
@@ -796,20 +798,6 @@ function MyForm() {
         )}
       />
 
-      {/* ZIP Code mask */}
-      <form.AppField
-        name="zipCode"
-        children={field => (
-          <field.MaskedTextField
-            mask="00000"
-            label="ZIP Code"
-            labelBehavior="shrink"
-            size="small"
-            placeholder="12345"
-          />
-        )}
-      />
-
       {/* Date mask */}
       <form.AppField
         name="date"
@@ -846,16 +834,22 @@ function MyForm() {
 
 #### Advanced Masking Examples
 
+The MaskedTextField component now supports advanced react-imask features including custom definitions, blocks, regular expressions, and complex validation patterns:
+
 ```tsx
-// Custom mask patterns
+import { useAppForm } from '@cwncollab-org/component-kit'
+import { IMask } from 'react-imask'
+import { z } from 'zod'
+
+// Advanced masking patterns using react-imask features
 function AdvancedMaskingExamples() {
   const form = useAppForm({
     defaultValues: {
-      license: '',
+      productCode: '',
+      email: '',
+      serialNumber: '',
+      dateRange: '',
       time: '',
-      currency: '',
-      alphanumeric: '',
-      ipAddress: '',
     },
     onSubmit: ({ value }) => {
       console.log('Advanced mask values:', value)
@@ -864,60 +858,121 @@ function AdvancedMaskingExamples() {
 
   return (
     <>
-      {/* License plate (letters and numbers) */}
+      {/* Custom definitions for product codes */}
       <form.AppField
-        name="license"
+        name="productCode"
         children={field => (
           <field.MaskedTextField
-            mask="aaa-0000"
-            label="License Plate"
+            mask="AA-####-**"
+            definitions={{
+              A: /[A-Z]/,          // Uppercase letters only
+              '#': /[1-9]/,        // Digits 1-9 only
+              '*': /[A-Z0-9]/,     // Alphanumeric uppercase
+            }}
+            label="Product Code"
             labelBehavior="shrink"
             size="small"
             fullWidth
-            placeholder="ABC-1234"
+            placeholder="AB-1234-CD"
           />
         )}
       />
 
-      {/* Time format */}
+      {/* Email validation with regex pattern */}
+      <form.AppField
+        name="email"
+        children={field => (
+          <field.MaskedTextField
+            mask={/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/}
+            label="Email with Pattern Validation"
+            labelBehavior="shrink"
+            size="small"
+            fullWidth
+            placeholder="user@example.com"
+          />
+        )}
+      />
+
+      {/* Serial number with mixed definitions */}
+      <form.AppField
+        name="serialNumber"
+        children={field => (
+          <field.MaskedTextField
+            mask="SN-LLLNNN-CCC"
+            definitions={{
+              L: /[A-Z]/,      // Letters
+              N: /[0-9]/,      // Numbers
+              C: /[A-Z0-9]/,   // Alphanumeric
+            }}
+            label="Serial Number"
+            labelBehavior="shrink"
+            size="small"
+            fullWidth
+            placeholder="SN-ABC123-XYZ"
+          />
+        )}
+      />
+
+      {/* Date range with blocks (advanced pattern) */}
+      <form.AppField
+        name="dateRange"
+        children={field => (
+          <field.MaskedTextField
+            mask={Date}
+            pattern="d{/}`m{/}`Y - d{/}`m{/}`Y*"
+            blocks={{
+              d: {
+                mask: IMask.MaskedRange,
+                from: 1,
+                to: 31,
+                maxLength: 2,
+              },
+              m: {
+                mask: IMask.MaskedRange,
+                from: 1,
+                to: 12,
+                maxLength: 2,
+              },
+              Y: {
+                mask: IMask.MaskedRange,
+                from: 1900,
+                to: 9999,
+                maxLength: 4,
+              },
+            }}
+            label="Date Range"
+            labelBehavior="shrink"
+            size="small"
+            fullWidth
+            placeholder="DD/MM/YYYY - DD/MM/YYYY"
+          />
+        )}
+      />
+
+      {/* Time format with validation */}
       <form.AppField
         name="time"
         children={field => (
           <field.MaskedTextField
-            mask="00:00"
+            mask="HH:MM"
+            blocks={{
+              HH: {
+                mask: IMask.MaskedRange,
+                from: 0,
+                to: 23,
+                maxLength: 2,
+              },
+              MM: {
+                mask: IMask.MaskedRange,
+                from: 0,
+                to: 59,
+                maxLength: 2,
+              },
+            }}
             label="Time (24h format)"
             labelBehavior="shrink"
             size="small"
             placeholder="14:30"
-          />
-        )}
-      />
-
-      {/* Mixed alphanumeric */}
-      <form.AppField
-        name="alphanumeric"
-        children={field => (
-          <field.MaskedTextField
-            mask="aa00aa"
-            label="Product Code"
-            labelBehavior="shrink"
-            size="small"
-            placeholder="AB12CD"
-          />
-        )}
-      />
-
-      {/* IP Address */}
-      <form.AppField
-        name="ipAddress"
-        children={field => (
-          <field.MaskedTextField
-            mask="000.000.000.000"
-            label="IP Address"
-            labelBehavior="shrink"
-            size="small"
-            fullWidth
-            placeholder="192.168.1.1"
           />
         )}
       />
@@ -928,9 +983,16 @@ function AdvancedMaskingExamples() {
 
 #### MaskedTextField Props
 
+The MaskedTextField component accepts all `react-imask` options as props, providing full access to the masking library's capabilities:
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `mask` | `IMaskInputProps['mask']` | - | The mask pattern to apply to the input |
+| `mask` | `ReactMaskOpts['mask']` | - | The mask pattern - can be string, RegExp, function, or IMask class |
+| `definitions` | `ReactMaskOpts['definitions']` | - | Custom character definitions for the mask pattern |
+| `blocks` | `ReactMaskOpts['blocks']` | - | Block definitions for complex patterns with validation |
+| `pattern` | `ReactMaskOpts['pattern']` | - | Pattern string when using blocks |
+| `lazy` | `ReactMaskOpts['lazy']` | - | Show placeholder and fixed characters only on focus |
+| `placeholderChar` | `ReactMaskOpts['placeholderChar']` | - | Character to show for unfilled mask positions |
 | `label` | `string` | - | The label text for the text field |
 | `labelBehavior` | `'auto' \| 'shrink' \| 'static'` | `'auto'` | How the label should behave |
 | `size` | `'small' \| 'medium'` | `'medium'` | The size of the text field |
@@ -940,30 +1002,32 @@ function AdvancedMaskingExamples() {
 | `required` | `boolean` | `false` | Whether the text field is required |
 | `slotProps` | `object` | - | Props for underlying MUI components |
 
-The MaskedTextField component accepts all standard MUI TextField props and forwards them to the underlying TextField component.
+The MaskedTextField component accepts all standard MUI TextField props and all `react-imask` options, providing full flexibility for complex masking scenarios.
 
-**Mask Patterns:**
+**Basic Mask Patterns:**
 - `0` - any digit (0-9)
-- `a` - any letter (a-z, A-Z)
+- `a` - any letter (a-z, A-Z)  
 - `*` - any character
-- `[]` - make input optional (example: `[00]` for optional digits)
+- `[]` - make input optional
 - `{}` - include fixed part in unmasked value
-- ``` - prevent symbols shift back
-- `\\` - escape character to treat definition characters as fixed (example: `\\0` treats 0 as literal)
+- `\` - escape character
+
+**Advanced Features:**
+- **Custom Definitions**: Define your own character patterns using regular expressions
+- **Blocks**: Create complex validated input segments (like date ranges, time validation)
+- **Regular Expressions**: Use regex patterns for complex validation rules
+- **IMask Classes**: Access to all IMask functionality including MaskedRange, MaskedDate, etc.
+- **Dynamic Masking**: Conditional masks based on input content
 
 **Label Behaviors:**
 - `'auto'`: Default MUI behavior - label floats when focused or has value
-- `'shrink'`: Label is always in the shrunk (floating) position
+- `'shrink'`: Label is always in the shrunk (floating) position  
 - `'static'`: Label appears as a static label above the input
-
-**Advanced Masking:**
-The current MaskedTextField component supports basic mask patterns. For more advanced masking scenarios like currency formatting, custom validation, or nested patterns with custom definitions and blocks, you would need to extend the component or use IMask directly.
-
-**Available Mask Patterns:**
-The component currently supports simple string patterns where each character in the mask string represents a constraint for the corresponding input character.
 
 **SubscribeMaskedTextField:**
 The `SubscribeMaskedTextField` component has the same props as `MaskedTextField` but automatically disables the field when the form is submitting, providing better UX during form submission.
+
+For more advanced masking scenarios, refer to the [react-imask documentation](https://imask.js.org/) as the MaskedTextField component provides full access to all react-imask features.
 
 
 ### Router Tabs

@@ -45,7 +45,7 @@ export function MaskedInputExample() {
           <MaskedInput
             mask='(000) 000-0000'
             value={phoneValue}
-            onChange={setPhoneValue}
+            onChange={e => setPhoneValue(e.target.value)}
           />
           <Typography variant='caption' color='text.secondary'>
             Format: (123) 456-7890
@@ -57,7 +57,7 @@ export function MaskedInputExample() {
           <MaskedInput
             mask='000-00-0000'
             value={ssnValue}
-            onChange={setSsnValue}
+            onChange={e => setSsnValue(e.target.value)}
           />
           <Typography variant='caption' color='text.secondary'>
             Format: 123-45-6789
@@ -69,7 +69,7 @@ export function MaskedInputExample() {
           <MaskedInput
             mask='0000 0000 0000 0000'
             value={creditCardValue}
-            onChange={setCreditCardValue}
+            onChange={e => setCreditCardValue(e.target.value)}
           />
           <Typography variant='caption' color='text.secondary'>
             Format: 1234 5678 9012 3456
@@ -81,7 +81,7 @@ export function MaskedInputExample() {
           <MaskedInput
             mask='00/00/0000'
             value={dateValue}
-            onChange={setDateValue}
+            onChange={e => setDateValue(e.target.value)}
           />
           <Typography variant='caption' color='text.secondary'>
             Format: MM/DD/YYYY
@@ -90,7 +90,11 @@ export function MaskedInputExample() {
 
         <FormControl>
           <FormLabel>Time</FormLabel>
-          <MaskedInput mask='00:00' value={timeValue} onChange={setTimeValue} />
+          <MaskedInput
+            mask='00:00'
+            value={timeValue}
+            onChange={e => setTimeValue(e.target.value)}
+          />
           <Typography variant='caption' color='text.secondary'>
             Format: HH:MM
           </Typography>
@@ -101,7 +105,7 @@ export function MaskedInputExample() {
           <MaskedInput
             mask='00000-0000'
             value={zipCodeValue}
-            onChange={setZipCodeValue}
+            onChange={e => setZipCodeValue(e.target.value)}
           />
           <Typography variant='caption' color='text.secondary'>
             Format: 12345-6789
@@ -113,7 +117,7 @@ export function MaskedInputExample() {
           <MaskedInput
             mask='AA-####-**'
             value={customDefinitionValue}
-            onChange={setCustomDefinitionValue}
+            onChange={e => setCustomDefinitionValue(e.target.value)}
             definitions={{
               A: /[A-Z]/,
               '#': /[1-9]/,
@@ -131,7 +135,7 @@ export function MaskedInputExample() {
             mask={Date}
             pattern='d{/}`m{/}`Y - d{/}`m{/}`Y*'
             value={blockValue}
-            onChange={value => setBlockValue(value)}
+            onChange={e => setBlockValue(e.target.value)}
             blocks={{
               d: {
                 mask: IMask.MaskedRange,
@@ -164,7 +168,7 @@ export function MaskedInputExample() {
           <MaskedInput
             mask='SN-LLLNNN-CCC'
             value={serialNumberValue}
-            onChange={setSerialNumberValue}
+            onChange={e => setSerialNumberValue(e.target.value)}
             definitions={{
               L: /[A-Z]/,
               N: /[0-9]/,

@@ -1,7 +1,7 @@
 {
   "name": "@cwncollab-org/mui-component-kit",
   "private": false,
-  "version": "0.4.5",
+  "version": "0.5.0",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

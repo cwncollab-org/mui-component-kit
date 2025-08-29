@@ -1,14 +1,8 @@
+import { InputBaseComponentProps as MuiInputBaseComponentProps } from '@mui/material'
 import React from 'react'
-import { IMaskInput, IMaskInputProps } from 'react-imask'
+import { IMaskInput, ReactMaskOpts } from 'react-imask'
 
-export type MaskedInputAdapterProps = {
-  onChange: (event: { target: { name: string; value: string } }) => void
-  name: string
-  mask: IMaskInputProps<HTMLInputElement>['mask']
-  definitions?: Record<string, RegExp>
-  blocks?: Record<string, any>
-  overwrite?: boolean
-}
+export type MaskedInputAdapterProps = MuiInputBaseComponentProps & ReactMaskOpts
 
 export const MaskedInputAdapter = React.forwardRef<
   HTMLInputElement,
@@ -17,9 +11,9 @@ export const MaskedInputAdapter = React.forwardRef<
   const { onChange, ...other } = props
   return (
     <IMaskInput
-      {...(other as any)}
+      {...other}
       inputRef={ref}
-      onComplete={(value: any) => {
+      onComplete={value => {
         onChange({ target: { name: props.name, value } })
       }}
     />
