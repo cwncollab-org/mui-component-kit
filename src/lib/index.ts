@@ -13,6 +13,7 @@ export {
   SubscribeMaskedTextField,
   useAppForm,
   withForm,
+  withFieldGroup,
   type CheckboxProps,
   type DatePickerProps,
   type MaskedInputProps,

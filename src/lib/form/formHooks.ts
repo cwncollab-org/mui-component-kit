@@ -20,7 +20,7 @@ import { SubscribeRadioGroup } from './SubscribeRadioGroup'
 import { MaskedTextField } from './MaskedTextField'
 import { SubscribeMaskedTextField } from './SubscribeMaskedTextField'
 
-export const { useAppForm, withForm } = createFormHook({
+export const { useAppForm, withForm, withFieldGroup } = createFormHook({
   fieldContext,
   formContext,
   fieldComponents: {

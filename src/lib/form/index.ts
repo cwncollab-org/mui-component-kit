@@ -1,5 +1,5 @@
 export { IMask } from 'react-imask'
-export { useAppForm, withForm } from './formHooks'
+export { useAppForm, withForm, withFieldGroup } from './formHooks'
 export { type AutocompleteProps } from './Autocomplete'
 export { type CheckboxProps } from './Checkbox'
 export { type DatePickerProps } from './DatePicker'
