@@ -24,7 +24,15 @@ export function RadioGroup(props: RadioGroupProps) {
   const labelId = `${id}-label`
 
   return (
-    <FormControl disabled={disabled} required={required}>
+    <FormControl
+      disabled={disabled}
+      required={required}
+      data-isdirty={field.state.meta.isDirty || undefined}
+      data-ispristine={field.state.meta.isPristine || undefined}
+      data-istouched={field.state.meta.isTouched || undefined}
+      data-isdefaultvalue={field.state.meta.isDefaultValue || undefined}
+      data-isvalid={field.state.meta.isValid || undefined}
+    >
       <FormLabel id={labelId}>{label}</FormLabel>
       <MuiRadioGroup
         aria-labelledby={labelId}

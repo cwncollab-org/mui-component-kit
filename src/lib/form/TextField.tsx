@@ -98,6 +98,11 @@ export function TextField(props: TextFieldProps) {
       }}
       error={error}
       helperText={error ? errorText : helperText}
+      data-isdirty={field.state.meta.isDirty || undefined}
+      data-ispristine={field.state.meta.isPristine || undefined}
+      data-istouched={field.state.meta.isTouched || undefined}
+      data-isdefaultvalue={field.state.meta.isDefaultValue || undefined}
+      data-isvalid={field.state.meta.isValid || undefined}
       {...rest}
     />
   )
