@@ -6,11 +6,21 @@ import {
 } from './MaskedInputAdapter'
 import React from 'react'
 
-export type MaskedInputProps = MuiInputProps & ReactMaskOpts
+export type MaskedInputProps = MuiInputProps &
+  ReactMaskOpts & {
+    triggerChangeOnAccept?: boolean
+    triggerChangeOnComplete?: boolean
+  }
 
 export const MaskedInput = React.forwardRef<HTMLInputElement, MaskedInputProps>(
   (props, ref) => {
-    const { value, onChange, ...inputProps } = props
+    const {
+      value,
+      onChange,
+      triggerChangeOnAccept,
+      triggerChangeOnComplete,
+      ...inputProps
+    } = props
 
     return (
       <MuiInput
@@ -18,7 +28,13 @@ export const MaskedInput = React.forwardRef<HTMLInputElement, MaskedInputProps>(
         value={value}
         onChange={onChange}
         inputComponent={MaskedInputAdapter}
-        inputProps={inputProps as MaskedInputAdapterProps}
+        inputProps={
+          {
+            ...inputProps,
+            triggerChangeOnAccept,
+            triggerChangeOnComplete,
+          } as MaskedInputAdapterProps
+        }
       />
     )
   }

@@ -9,10 +9,20 @@ export type MaskedTextFieldProps = Omit<TextFieldProps, 'slotProps'> & {
   slotProps?: Omit<TextFieldProps['slotProps'], 'input'> & {
     input?: Omit<TextFieldProps['slotProps'], 'input'>
   }
-} & ReactMaskOpts
+} & ReactMaskOpts & {
+    triggerChangeOnAccept?: boolean
+    triggerChangeOnComplete?: boolean
+  }
 
 export function MaskedTextField(props: MaskedTextFieldProps) {
-  const { slotProps, labelBehavior, fullWidth, ...rest } = props
+  const {
+    slotProps,
+    labelBehavior,
+    fullWidth,
+    triggerChangeOnAccept,
+    triggerChangeOnComplete,
+    ...rest
+  } = props
 
   return (
     <TextField
@@ -23,7 +33,11 @@ export function MaskedTextField(props: MaskedTextFieldProps) {
         ...slotProps,
         input: {
           inputComponent: MaskedInputAdapter,
-          inputProps: rest as MaskedInputAdapterProps,
+          inputProps: {
+            ...rest,
+            triggerChangeOnAccept,
+            triggerChangeOnComplete,
+          } as MaskedInputAdapterProps,
           ...slotProps?.input,
         },
       }}
