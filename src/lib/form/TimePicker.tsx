@@ -1,7 +1,7 @@
 import { TimePicker as MuiTimePicker } from '@mui/x-date-pickers/TimePicker'
 import { TimePickerProps as MuiTimePickerProps } from '@mui/x-date-pickers/TimePicker'
 import { useFieldContext } from './formContext'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import { useMemo } from 'react'
 import {
   LocalizationProvider,
@@ -21,7 +21,7 @@ export type TimePickerProps = Omit<
 }
 
 export function TimePicker(props: TimePickerProps) {
-  const field = useFieldContext<Date | string>()
+  const field = useFieldContext<Dayjs>()
 
   const errorText = useMemo(() => {
     if (field.state.meta.errors.length === 0) return null
@@ -74,10 +74,10 @@ export function TimePicker(props: TimePickerProps) {
       <MuiTimePicker
         {...rest}
         name={field.name}
-        value={field.state.value ? dayjs(field.state.value) : null}
+        value={field.state.value ? field.state.value : null}
         onChange={(value, context) => {
           if (value) {
-            field.handleChange(value.toDate())
+            field.handleChange(value)
             onChange?.(value, context)
           }
         }}

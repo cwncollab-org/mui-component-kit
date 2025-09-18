@@ -3,7 +3,7 @@ import {
   DatePickerProps as MuiDatePickerProps,
 } from '@mui/x-date-pickers/DatePicker'
 import { useFieldContext } from './formContext'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import {
   LocalizationProvider,
   PickersOutlinedInputProps,
@@ -23,7 +23,7 @@ export type DatePickerProps = Omit<
 }
 
 export function DatePicker(props: DatePickerProps) {
-  const field = useFieldContext<Date | string>()
+  const field = useFieldContext<Dayjs>()
 
   const errorText = useMemo(() => {
     if (field.state.meta.errors.length === 0) return null
@@ -76,11 +76,11 @@ export function DatePicker(props: DatePickerProps) {
       <MuiDatePicker
         {...rest}
         name={field.name}
-        value={field.state.value ? dayjs(field.state.value) : null}
+        value={field.state.value ? field.state.value : null}
         onChange={(value, context) => {
           if (value) {
+            field.handleChange(value)
             onChange?.(value, context)
-            field.handleChange(value.toDate())
           }
         }}
         slotProps={{

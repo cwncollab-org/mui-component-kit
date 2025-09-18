@@ -12,13 +12,20 @@ import { useAppForm } from '../lib'
 import { useState } from 'react'
 import { z } from 'zod'
 
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
+
+export const dayjsSchema = z.codec(z.iso.datetime(), z.custom<Dayjs>(), {
+  encode: date => date.toISOString(),
+  decode: isoString => dayjs(isoString),
+})
+
 const formSchema = z.object({
   username: z.string().min(1),
   role: z.enum(['admin', 'user']),
   priority: z.enum(['low', 'medium', 'high']),
   date: z.date().max(dayjs().add(1, 'day').toDate()),
   time: z.date(),
+  dayjsDate: dayjsSchema.optional(),
   agree: z.boolean(),
   email: z.string().email().optional(),
   phone: z.string().optional(),
@@ -29,7 +36,7 @@ const formSchema = z.object({
   country: z.string().optional(),
 })
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = z.input<typeof formSchema>
 
 export const Route = createFileRoute('/form-example')({
   component: FormExample,
@@ -91,6 +98,7 @@ export function FormExample() {
       agree: false,
       date: undefined,
       time: undefined,
+      dayjsDate: undefined,
       phone: '(123) 456-7890',
       ssn: undefined,
       creditCard: undefined,
@@ -357,6 +365,18 @@ export function FormExample() {
                   label='Date (static)'
                   required
                   labelBehavior='static'
+                  fullWidth
+                  size='small'
+                />
+              )}
+            />
+            <Typography variant='h6'>DayJS DatePicker Example</Typography>
+            <form.AppField
+              name='dayjsDate'
+              children={field => (
+                <field.SubscribeDatePicker
+                  label='DayJS Date'
+                  labelBehavior='shrink'
                   fullWidth
                   size='small'
                 />
