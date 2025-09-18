@@ -1,7 +1,7 @@
 import { TimePicker as MuiTimePicker } from '@mui/x-date-pickers/TimePicker'
 import { TimePickerProps as MuiTimePickerProps } from '@mui/x-date-pickers/TimePicker'
 import { useFieldContext } from './formContext'
-import dayjs, { Dayjs } from 'dayjs'
+import { Dayjs } from 'dayjs'
 import { useMemo } from 'react'
 import {
   LocalizationProvider,

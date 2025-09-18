@@ -3,7 +3,7 @@ import {
   DatePickerProps as MuiDatePickerProps,
 } from '@mui/x-date-pickers/DatePicker'
 import { useFieldContext } from './formContext'
-import dayjs, { Dayjs } from 'dayjs'
+import { Dayjs } from 'dayjs'
 import {
   LocalizationProvider,
   PickersOutlinedInputProps,
