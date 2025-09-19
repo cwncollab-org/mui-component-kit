@@ -264,8 +264,12 @@ export default function ExampleDialog2({
 
 ### Form Example with Zod Validation
 
+**Important**: When using DatePicker or TimePicker components, you must wrap your application (or the specific form) with `LocalizationProvider` from `@mui/x-date-pickers`.
+
 ```tsx
 import { Box, Button, Paper, Stack, Typography, Radio, FormControlLabel } from '@mui/material'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { useAppForm } from '@cwncollab-org/component-kit'
 import { useState } from 'react'
 import { z } from 'zod'
@@ -325,19 +329,20 @@ export function FormExample() {
   })
 
   return (
-    <Paper sx={{ p: 2 }}>
-      <Box>
-        <Typography>Form Example with Zod Validation</Typography>
-      </Box>
-      <Box
-        component='form'
-        sx={{ py: 2 }}
-        onSubmit={e => {
-          e.preventDefault()
-          e.stopPropagation()
-          form.handleSubmit()
-        }}
-      >
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Paper sx={{ p: 2 }}>
+        <Box>
+          <Typography>Form Example with Zod Validation</Typography>
+        </Box>
+        <Box
+          component='form'
+          sx={{ py: 2 }}
+          onSubmit={e => {
+            e.preventDefault()
+            e.stopPropagation()
+            form.handleSubmit()
+          }}
+        >
         <Stack spacing={2}>
           <form.AppField
             name='username'
@@ -436,6 +441,7 @@ export function FormExample() {
         </Stack>
       </Box>
     </Paper>
+    </LocalizationProvider>
   )
 }
 ```
@@ -713,6 +719,130 @@ function MyForm() {
 | `children` | `ReactNode` | - | Radio buttons (typically FormControlLabel components) |
 
 The RadioGroup component also accepts all standard MUI RadioGroup props except `name`, `value`, and `defaultValue` which are managed by the form field.
+
+
+### DatePicker and TimePicker Components
+
+The DatePicker and TimePicker components provide date and time selection functionality, built on top of MUI's DatePicker and TimePicker components from `@mui/x-date-pickers`, integrated with TanStack Form.
+
+**Important Requirements:**
+- **LocalizationProvider**: You must wrap your application (or form) with `LocalizationProvider` from `@mui/x-date-pickers`
+- **Date Adapter**: You need to install and configure a date adapter (e.g., `@mui/x-date-pickers/AdapterDayjs`)
+
+**Value Format Support:**
+Both DatePicker and TimePicker support two value formats through the `valueFormat` prop:
+- `'adapter'` (default): Uses the date adapter's native format (e.g., Dayjs objects)
+- `'Date'`: Converts to/from native JavaScript Date objects
+
+```tsx
+import { useAppForm } from '@cwncollab-org/component-kit'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { z } from 'zod'
+import dayjs, { Dayjs } from 'dayjs'
+
+// Define your form schema
+const formSchema = z.object({
+  // For native Date objects
+  nativeDate: z.date(),
+  nativeTime: z.date(),
+  // For Dayjs objects (using adapter format)
+  dayjsDate: z.custom<Dayjs>(),
+})
+
+function MyForm() {
+  const form = useAppForm({
+    defaultValues: {
+      nativeDate: new Date(),
+      nativeTime: new Date(),
+      dayjsDate: dayjs(),
+    },
+    validators: {
+      onSubmit: formSchema,
+    },
+    onSubmit: ({ value }) => {
+      console.log('Form values:', value)
+    },
+  })
+
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <form.AppField
+        name='nativeDate'
+        children={field => (
+          <field.SubscribeDatePicker
+            label='Date (Native Date format)'
+            valueFormat='Date'
+            labelBehavior='shrink'
+            fullWidth
+            size='small'
+          />
+        )}
+      />
+      
+      <form.AppField
+        name='nativeTime'
+        children={field => (
+          <field.SubscribeTimePicker
+            label='Time (Native Date format)'
+            valueFormat='Date'
+            labelBehavior='shrink'
+            fullWidth
+            size='small'
+          />
+        )}
+      />
+      
+      <form.AppField
+        name='dayjsDate'
+        children={field => (
+          <field.SubscribeDatePicker
+            label='Date (Adapter format - Dayjs)'
+            valueFormat='adapter'
+            labelBehavior='shrink'
+            fullWidth
+            size='small'
+          />
+        )}
+      />
+    </LocalizationProvider>
+  )
+}
+```
+
+#### DatePicker Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `valueFormat` | `'adapter' \| 'Date'` | `'adapter'` | Value format - adapter's native format or JavaScript Date |
+| `labelBehavior` | `'auto' \| 'shrink' \| 'static'` | `'auto'` | How the label should behave |
+| `size` | `'small' \| 'medium'` | `'medium'` | The size of the date picker field |
+| `fullWidth` | `boolean` | `false` | Whether the date picker should take full width |
+| `required` | `boolean` | `false` | Whether the date picker is required |
+| `disabled` | `boolean` | `false` | Whether the date picker is disabled |
+| `slotProps` | `object` | - | Props for underlying MUI components |
+
+#### TimePicker Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `valueFormat` | `'adapter' \| 'Date'` | `'adapter'` | Value format - adapter's native format or JavaScript Date |
+| `labelBehavior` | `'auto' \| 'shrink' \| 'static'` | `'auto'` | How the label should behave |
+| `size` | `'small' \| 'medium'` | `'medium'` | The size of the time picker field |
+| `fullWidth` | `boolean` | `false` | Whether the time picker should take full width |
+| `required` | `boolean` | `false` | Whether the time picker is required |
+| `disabled` | `boolean` | `false` | Whether the time picker is disabled |
+| `slotProps` | `object` | - | Props for underlying MUI components |
+
+Both DatePicker and TimePicker accept all standard MUI DatePicker/TimePicker props except `name`, `value`, and `defaultValue` which are managed by the form field.
+
+**Label Behaviors:**
+- `'auto'`: Default MUI behavior - label floats when focused or has value
+- `'shrink'`: Label is always in the shrunk (floating) position
+- `'static'`: Label appears as a static label above the input
+
+**Subscribe Components:**
+The `SubscribeDatePicker` and `SubscribeTimePicker` components have the same props but automatically disable the field when the form is submitting, providing better UX during form submission.
 
 
 ### MaskedTextField Component

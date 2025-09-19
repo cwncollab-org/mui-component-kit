@@ -1,7 +1,7 @@
 {
   "name": "@cwncollab-org/mui-component-kit",
   "private": false,
-  "version": "0.6.2",
+  "version": "0.7.0",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -29,22 +29,17 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.0.2",
     "@mui/material": "^7.0.2",
+    "@mui/x-date-pickers": "^8.0.0",
+    "dayjs": "^1.11.18",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
-    "@mui/icons-material": "^7.0.2",
-    "@mui/material": "^7.0.2",
-    "@mui/x-date-pickers": "^8.0.0",
     "@tanstack/react-form": "^1.19.2",
     "@tanstack/react-router": "^1.116.0",
     "@tanstack/react-table": "^8.21.3",
-    "dayjs": "^1.11.13",
     "material-react-table": "^3.2.1",
-    "react-imask": "^7.6.1",
-    "zod": "^4.1.5"
+    "react-imask": "^7.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
@@ -66,6 +61,7 @@
     "ts-jest": "^29.3.2",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.26.1",
-    "vite": "^6.3.1"
+    "vite": "^6.3.1",
+    "zod": "^4.1.9"
   }
 }

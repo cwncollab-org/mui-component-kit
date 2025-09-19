@@ -14,6 +14,19 @@ export type TextFieldProps = Omit<MuiTextFieldProps, 'name' | 'value'> & {
   pattern?: InputHTMLAttributes<HTMLInputElement>['pattern']
 }
 
+const converters: Record<
+  string,
+  { fromString: (value: string) => any; toString: (value: any) => string }
+> = {
+  number: {
+    fromString: (value: string) => {
+      const parsed = parseFloat(value)
+      return isNaN(parsed) ? null : parsed
+    },
+    toString: (value: any) => (value == null ? '' : String(value)),
+  },
+}
+
 export function TextField(props: TextFieldProps) {
   const {
     labelBehavior = 'auto',
@@ -27,7 +40,7 @@ export function TextField(props: TextFieldProps) {
     helperText = '',
     ...rest
   } = props
-  const field = useFieldContext<string | undefined | null>()
+  const field = useFieldContext<string | number | undefined | null>()
 
   const errorText = useMemo(() => {
     if (field.state.meta.errors.length === 0) return null
@@ -79,16 +92,22 @@ export function TextField(props: TextFieldProps) {
     }
   }
 
+  const type = props.type
+
   return (
     <MuiTextField
       name={field.name}
       label={label}
-      value={field.state.value ?? ''}
+      value={convertToString(type, field.state.value) ?? ''}
       onBlur={field.handleBlur}
       onChange={ev => {
         onChange?.(ev)
         if (!ev.defaultPrevented) {
-          field.handleChange(ev.target.value === '' ? null : ev.target.value)
+          field.handleChange(
+            ev.target.value === ''
+              ? null
+              : convertFromString(type, ev.target.value)
+          )
         }
       }}
       slotProps={{
@@ -106,4 +125,18 @@ export function TextField(props: TextFieldProps) {
       {...rest}
     />
   )
+}
+
+function convertToString(type: string | undefined, value: any) {
+  if (type && converters[type]) {
+    return converters[type].toString(value)
+  }
+  return value == null ? '' : String(value)
+}
+
+function convertFromString(type: string | undefined, value: any) {
+  if (type && converters[type]) {
+    return converters[type].fromString(value)
+  }
+  return value
 }
