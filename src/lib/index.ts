@@ -11,11 +11,11 @@ export {
   MaskedInput,
   MaskedTextField,
   SubscribeMaskedTextField,
-  useAppForm,
-  withForm,
-  withFieldGroup,
   useAppFieldContext,
+  useAppForm,
   useAppFormContext,
+  withFieldGroup,
+  withForm,
   type CheckboxProps,
   type DatePickerProps,
   type MaskedInputProps,
@@ -33,5 +33,9 @@ export {
   type TimePickerProps,
 } from './form'
 export { Link } from './link'
-export { tableSearchSchema, useMaterialRouterTable } from './table'
+export {
+  tableSearchSchema,
+  useMaterialRouterTable,
+  type TableSearch,
+} from './table'
 export { RouterTab, RouterTabs, TabLabel } from './tabs'

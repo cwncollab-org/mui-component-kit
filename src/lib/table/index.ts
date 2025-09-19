@@ -1,4 +1,5 @@
 export {
-  useMaterialRouterTable,
   tableSearchSchema,
+  useMaterialRouterTable,
+  type TableSearch,
 } from './materialRouterTableHooks'
