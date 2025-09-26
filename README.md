@@ -728,6 +728,7 @@ The DatePicker and TimePicker components provide date and time selection functio
 **Important Requirements:**
 - **LocalizationProvider**: You must wrap your application (or form) with `LocalizationProvider` from `@mui/x-date-pickers`
 - **Date Adapter**: You need to install and configure a date adapter (e.g., `@mui/x-date-pickers/AdapterDayjs`)
+  - To use Buddhist Era date pickers, use `AdapterDayjsWithBuddhistEra` from this library as your date adapter.
 
 **Value Format Support:**
 Both DatePicker and TimePicker support two value formats through the `valueFormat` prop:
