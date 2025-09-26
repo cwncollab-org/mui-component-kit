@@ -39,3 +39,4 @@ export {
   type TableSearch,
 } from './table'
 export { RouterTab, RouterTabs, TabLabel } from './tabs'
+export * from './adapters'

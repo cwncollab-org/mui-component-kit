@@ -14,6 +14,7 @@ import { Route as MrtExampleRouteImport } from './routes/mrt-example'
 import { Route as MaskedInputExampleRouteImport } from './routes/masked-input-example'
 import { Route as FormExampleRouteImport } from './routes/form-example'
 import { Route as DialogsExampleRouteImport } from './routes/dialogs-example'
+import { Route as BuddhistDatepickerExampleRouteImport } from './routes/buddhist-datepicker-example'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TabsExampleIndexRouteImport } from './routes/tabs-example/index'
 import { Route as TabsExampleTab3RouteImport } from './routes/tabs-example/tab3'
@@ -47,6 +48,12 @@ const DialogsExampleRoute = DialogsExampleRouteImport.update({
   path: '/dialogs-example',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BuddhistDatepickerExampleRoute =
+  BuddhistDatepickerExampleRouteImport.update({
+    id: '/buddhist-datepicker-example',
+    path: '/buddhist-datepicker-example',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -85,6 +92,7 @@ const TabsExampleTab3IdRoute = TabsExampleTab3IdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/buddhist-datepicker-example': typeof BuddhistDatepickerExampleRoute
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
@@ -99,6 +107,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/buddhist-datepicker-example': typeof BuddhistDatepickerExampleRoute
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
@@ -113,6 +122,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/buddhist-datepicker-example': typeof BuddhistDatepickerExampleRoute
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
@@ -129,6 +139,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/buddhist-datepicker-example'
     | '/dialogs-example'
     | '/form-example'
     | '/masked-input-example'
@@ -143,6 +154,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/buddhist-datepicker-example'
     | '/dialogs-example'
     | '/form-example'
     | '/masked-input-example'
@@ -156,6 +168,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/buddhist-datepicker-example'
     | '/dialogs-example'
     | '/form-example'
     | '/masked-input-example'
@@ -171,6 +184,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BuddhistDatepickerExampleRoute: typeof BuddhistDatepickerExampleRoute
   DialogsExampleRoute: typeof DialogsExampleRoute
   FormExampleRoute: typeof FormExampleRoute
   MaskedInputExampleRoute: typeof MaskedInputExampleRoute
@@ -213,6 +227,13 @@ declare module '@tanstack/react-router' {
       path: '/dialogs-example'
       fullPath: '/dialogs-example'
       preLoaderRoute: typeof DialogsExampleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/buddhist-datepicker-example': {
+      id: '/buddhist-datepicker-example'
+      path: '/buddhist-datepicker-example'
+      fullPath: '/buddhist-datepicker-example'
+      preLoaderRoute: typeof BuddhistDatepickerExampleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -301,6 +322,7 @@ const TabsExampleRouteWithChildren = TabsExampleRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BuddhistDatepickerExampleRoute: BuddhistDatepickerExampleRoute,
   DialogsExampleRoute: DialogsExampleRoute,
   FormExampleRoute: FormExampleRoute,
   MaskedInputExampleRoute: MaskedInputExampleRoute,
