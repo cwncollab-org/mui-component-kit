@@ -12,7 +12,14 @@ export default function ExampleDialog2({
   ...rest
 }: DialogProps) {
   return (
-    <Dialog open={open} onClose={onClose} {...rest}>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      {...rest}
+      slotProps={{
+        paper: { sx: { height: '80vh' } },
+      }}
+    >
       <DialogTitle>Example Dialog</DialogTitle>
       <DialogContent>
         <DialogContentText>This is an example dialog 2</DialogContentText>

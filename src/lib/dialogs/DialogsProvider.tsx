@@ -102,14 +102,10 @@ export function DialogsProvider({ children }: PropsWithChildren) {
               _,
               result: DialogResult<unknown> | 'backdropClick' | 'escapeKeyDown'
             ) => handleCloseWithResult(dialog.dialogKey, result)}
-            slotProps={{
-              transition: {
-                onExited: () => {
-                  removeDialog(dialog.dialogKey)
-                },
-              },
-            }}
             closeAfterTransition={false}
+            onTransitionExited={() => {
+              removeDialog(dialog.dialogKey)
+            }}
             {...dialog.props}
           />
         ))}
