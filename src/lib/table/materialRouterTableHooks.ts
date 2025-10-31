@@ -79,7 +79,8 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
 
   const searchPaginationState: MRT_PaginationState = {
     pageIndex: search.page ? search.page - 1 : 0,
-    pageSize: search.pageSize ?? defaultPageSize,
+    pageSize:
+      search.pageSize ?? initialPaginationState.pageSize ?? defaultPageSize,
   }
 
   const searchDensityState: MRT_DensityState =
