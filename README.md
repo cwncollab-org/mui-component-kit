@@ -638,6 +638,97 @@ The Autocomplete component also accepts all standard MUI FormControl props excep
 The `SubscribeAutocomplete` component has the same props as `Autocomplete` but automatically disables the field when the form is submitting, providing better UX during form submission.
 
 
+### Material Router Table
+
+The `useMaterialRouterTable` hook provides Material React Table integration with TanStack Router, enabling URL-synchronized table state including pagination, sorting, column visibility, and density settings.
+
+```tsx
+import { useMaterialRouterTable } from '@cwncollab-org/component-kit'
+import { MaterialReactTable } from 'material-react-table'
+import { createFileRoute } from '@tanstack/react-router'
+
+const columns = [
+  {
+    header: 'Name',
+    accessorKey: 'name',
+  },
+  {
+    header: 'Email',
+    accessorKey: 'email',
+  },
+  {
+    header: 'Role',
+    accessorKey: 'role',
+  },
+]
+
+const data = [
+  { name: 'John Doe', email: 'john@example.com', role: 'Admin' },
+  { name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
+  // ... more data
+]
+
+function RouteComponent() {
+  const table = useMaterialRouterTable({
+    columns,
+    data,
+    initialState: {
+      columnVisibility: {
+        role: false, // Hide role column by default
+      },
+      pagination: { 
+        pageIndex: 0, 
+        pageSize: 20 
+      },
+      density: 'compact',
+    },
+  })
+
+  return <MaterialReactTable table={table} />
+}
+
+export const Route = createFileRoute('/users')({
+  component: RouteComponent,
+})
+```
+
+#### useMaterialRouterTable Arguments
+
+The hook accepts a single argument of type `MRT_TableOptions<TData>` with the following key properties:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `columns` | `MRT_ColumnDef<TData>[]` | Column definitions for the table |
+| `data` | `TData[]` | Array of data objects to display |
+| `initialState` | `object` | Initial table state configuration |
+| `initialState.pagination` | `{ pageIndex: number, pageSize: number }` | Initial pagination settings |
+| `initialState.columnVisibility` | `Record<string, boolean>` | Initial column visibility state |
+| `initialState.density` | `'compact' \| 'comfortable' \| 'spacious'` | Initial table density |
+| `initialState.sorting` | `Array<{ id: string, desc: boolean }>` | Initial sorting configuration |
+| `onPaginationChange` | `(state: MRT_PaginationState) => void` | Optional pagination change handler |
+| `onSortingChange` | `(state: MRT_SortingState) => void` | Optional sorting change handler |
+| `onDensityChange` | `(state: MRT_DensityState) => void` | Optional density change handler |
+| `onColumnVisibilityChange` | `(state: MRT_VisibilityState) => void` | Optional column visibility change handler |
+
+**URL Synchronization:**
+The hook automatically synchronizes the following table state with URL search parameters:
+- `page` - Current page number (1-based in URL, 0-based internally)
+- `pageSize` - Number of items per page
+- `order` - Column ID for sorting
+- `desc` - Sort direction (true for descending)
+- `density` - Table density setting
+- `columns` - Visible column keys (joined with `-`)
+
+**Features:**
+- **URL Persistence**: Table state is preserved in the URL and survives page refreshes
+- **Browser Navigation**: Users can use back/forward buttons to navigate table states
+- **Shareable URLs**: Table states can be shared via URL
+- **Type Safety**: Full TypeScript support with generic data types
+- **MRT Integration**: Seamless integration with Material React Table features
+
+The hook returns a configured Material React Table instance that can be passed directly to the `MaterialReactTable` component.
+
+
 ### RadioGroup Component
 
 The RadioGroup component provides radio button selection, built on top of MUI's FormControl and RadioGroup components and integrated with TanStack Form.

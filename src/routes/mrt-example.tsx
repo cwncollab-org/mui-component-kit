@@ -194,12 +194,12 @@ const opts = {
       column3: false,
       column4: false,
     },
-    pagination: { pageIndex: 1, pageSize: 20 },
+    pagination: { pageIndex: 0, pageSize: 20 },
   },
 }
 
 function RouteComponent() {
-  const table = useMaterialRouterTable(Route.fullPath, opts)
+  const table = useMaterialRouterTable(opts)
   return (
     <div>
       <MaterialReactTable table={table} />

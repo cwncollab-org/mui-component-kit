@@ -1,9 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import {
-  useNavigate,
-  useSearch,
-  ValidateFromPath,
-} from '@tanstack/react-router'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import { z } from 'zod'
 import {
   MRT_DensityState,
@@ -34,7 +30,6 @@ export const tableSearchSchema = z.object({
 export type TableSearch = z.infer<typeof tableSearchSchema>
 
 export function useMaterialRouterTable<TData extends MRT_RowData>(
-  path: ValidateFromPath,
   opts: MRT_TableOptions<TData>
 ) {
   const {
@@ -48,7 +43,7 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
 
   const initialState = opts.initialState
   const originalSearch = useSearch({ strict: false })
-  const navigate = useNavigate({ from: path })
+  const navigate = useNavigate({})
 
   const search = tableSearchSchema.parse(originalSearch)
 
