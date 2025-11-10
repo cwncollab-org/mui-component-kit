@@ -4,10 +4,11 @@ import {
   MaskedInputAdapter,
   MaskedInputAdapterProps,
 } from './MaskedInputAdapter'
+import { InputProps as MuiInputProps } from '@mui/material'
 
 export type MaskedTextFieldProps = Omit<TextFieldProps, 'slotProps'> & {
-  slotProps?: Omit<TextFieldProps['slotProps'], 'input'> & {
-    input?: Omit<TextFieldProps['slotProps'], 'input'>
+  slotProps?: Omit<NonNullable<TextFieldProps['slotProps']>, 'input'> & {
+    input?: MaskedInputAdapterProps
   }
 } & ReactMaskOpts & {
     triggerChangeOnAccept?: boolean
@@ -39,7 +40,7 @@ export function MaskedTextField(props: MaskedTextFieldProps) {
             triggerChangeOnComplete,
           } as MaskedInputAdapterProps,
           ...slotProps?.input,
-        },
+        } as MuiInputProps,
       }}
     />
   )
