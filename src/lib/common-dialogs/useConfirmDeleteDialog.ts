@@ -1,21 +1,31 @@
-import { ConfirmDialogOptions } from './ConfirmDialog'
-import { useConfirmDialog } from './useConfirmDialog'
+import { useCallback } from 'react'
+import { useDialogs } from '../dialogs/dialogsHooks'
+import {
+  ConfirmDeleteDialog,
+  ConfirmDeleteDialogOptions,
+} from './ConfirmDeleteDialog'
 
 export function useConfirmDeleteDialog() {
-  const confirm = useConfirmDialog()
-  const confirmDelete = async (options?: ConfirmDialogOptions) => {
-    return await confirm({
-      ...options,
-      slotProps: {
-        ...options?.slotProps,
-        confirm: {
-          color: 'error',
-          variant: 'contained',
-          ...options?.slotProps?.confirm,
+  const { openDialog } = useDialogs()
+  const confirmDelete = useCallback(
+    (options?: ConfirmDeleteDialogOptions) =>
+      openDialog(ConfirmDeleteDialog, {
+        dialogKey: 'confirm-delete-dialog',
+        payload: {
+          title: 'Confirm Delete',
+          confirmText: 'Delete',
+          ...options,
+          slotProps: {
+            ...options?.slotProps,
+            confirm: {
+              color: 'error',
+              variant: 'contained',
+              ...options?.slotProps?.confirm,
+            },
+          },
         },
-      },
-      dialogKey: 'confirm-delete-dialog',
-    })
-  }
+      }),
+    [openDialog]
+  )
   return confirmDelete
 }

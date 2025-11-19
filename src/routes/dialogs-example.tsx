@@ -1,6 +1,6 @@
 import { Box, Button, Input, Paper, Stack, Typography } from '@mui/material'
 import { createFileRoute } from '@tanstack/react-router'
-import { lazy, useState } from 'react'
+import { lazy, useEffect, useState } from 'react'
 import ExampleDialog from '../examples/ExampleDialog'
 import ExampleDialogWithPayload from '../examples/ExampleDialogWithPayload'
 import ExampleDialogWithResult from '../examples/ExampleDialogWithResult'
@@ -17,6 +17,21 @@ export function DialogsExample() {
   const [result, setResult] = useState('')
   const confirm = useConfirmDialog()
   const confirmDelete = useConfirmDeleteDialog()
+
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    console.log('Current open dialogs:', dialogs)
+  }, [dialogs])
+
+  useEffect(() => {
+    console.log('openDialog changed')
+  }, [openDialog])
+
+  useEffect(() => {
+    console.log('confirm changed')
+  }, [confirm])
+
   return (
     <Stack spacing={2}>
       <Box>
@@ -37,8 +52,12 @@ export function DialogsExample() {
         >
           Confirm
         </Button>
+      </Paper>
+      <Paper sx={{ p: 2 }}>
+        <Typography variant='h6'>Confirm Delete (No input)</Typography>
         <Button
           variant='contained'
+          color='error'
           onClick={async () => {
             const result = await confirmDelete({
               title: 'Confirm Delete',
@@ -49,7 +68,40 @@ export function DialogsExample() {
             console.log(result)
           }}
         >
-          Confirm Delete
+          Delete Item
+        </Button>
+      </Paper>
+      <Paper sx={{ p: 2 }}>
+        <Typography variant='h6'>
+          Confirm Delete (With input verification)
+        </Typography>
+        <Typography variant='body2' color='text.secondary' sx={{ mb: 1 }}>
+          Type &quot;DELETE&quot; to confirm deletion
+        </Typography>
+        <Button
+          variant='contained'
+          color='error'
+          onClick={async () => {
+            const result = await confirmDelete({
+              title: 'Confirm Delete',
+              message:
+                'This action cannot be undone. Please type DELETE to confirm.',
+              confirmText: 'Delete',
+              cancelText: 'Cancel',
+              confirmInputText: 'DELETE',
+              inputLabel: 'Type DELETE to confirm',
+              inputPlaceholder: 'DELETE',
+              slotProps: {
+                input: {
+                  helperText: 'This is case-sensitive',
+                  variant: 'outlined',
+                },
+              },
+            })
+            console.log(result)
+          }}
+        >
+          Delete with Verification
         </Button>
       </Paper>
       <Paper sx={{ p: 2 }}>
@@ -102,6 +154,11 @@ export function DialogsExample() {
         <Typography variant='body1' sx={{ mt: 1 }}>
           Result: {result}
         </Typography>
+      </Paper>
+      <Paper sx={{ p: 2 }}>
+        <Button onClick={() => setCount(count => count + 1)}>
+          A Button {count}
+        </Button>
       </Paper>
     </Stack>
   )
