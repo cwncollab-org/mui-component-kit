@@ -4,13 +4,9 @@ import {
 } from '@mui/x-date-pickers/DatePicker'
 import { useFieldContext } from './formContext'
 
-import {
-  PickersOutlinedInputProps,
-  PickerValidDate,
-  usePickerAdapter,
-} from '@mui/x-date-pickers'
+import { PickerValidDate, usePickerAdapter } from '@mui/x-date-pickers'
 import { useMemo } from 'react'
-import { InputLabelProps } from '@mui/material'
+import { createPickerSlotProps } from './utils'
 
 export type DatePickerProps = Omit<
   MuiDatePickerProps,
@@ -77,36 +73,14 @@ export function DatePicker(props: DatePickerProps) {
     }
   }
 
-  const labelShrink = labelBehavior === 'shrink' ? true : undefined
-
-  let inputLabelProps: Partial<InputLabelProps> = {
-    shrink: labelShrink,
-  }
-
-  let inputProps: Partial<PickersOutlinedInputProps> = {
-    notched: labelShrink,
-  }
-
-  if (labelBehavior === 'static') {
-    inputLabelProps = {
-      ...inputLabelProps,
-      shrink: true,
-      sx: {
-        position: 'relative',
-        transform: 'none',
-      },
-    }
-    inputProps = {
-      ...inputProps,
-      notched: true,
-      sx: {
-        ...props?.sx,
-        '& legend > span': {
-          display: 'none',
-        },
-      },
-    }
-  }
+  const { inputProps, inputLabelProps } = useMemo(
+    () =>
+      createPickerSlotProps({
+        labelBehavior,
+        sx: props?.sx,
+      }),
+    [labelBehavior, props?.sx]
+  )
 
   return (
     <MuiDatePicker

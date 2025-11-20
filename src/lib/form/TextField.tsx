@@ -1,10 +1,10 @@
 import {
-  InputLabelProps,
   TextField as MuiTextField,
   TextFieldProps as MuiTextFieldProps,
 } from '@mui/material'
 import { useFieldContext } from './formContext'
 import { InputHTMLAttributes, useMemo } from 'react'
+import { createTextFieldSlotProps } from './utils'
 
 export type TextFieldProps = Omit<MuiTextFieldProps, 'name' | 'value'> & {
   labelBehavior?: 'auto' | 'shrink' | 'static'
@@ -48,49 +48,19 @@ export function TextField(props: TextFieldProps) {
   }, [field.state.meta.errors])
 
   const error = field.state.meta.errors.length > 0
-  const labelShrink = labelBehavior === 'shrink' ? true : undefined
 
-  let inputLabelProps: Partial<InputLabelProps> = {
-    ...(slotProps?.inputLabel as Partial<InputLabelProps>),
-    shrink: labelShrink,
-    sx: {
-      ...(slotProps?.inputLabel as any)?.sx,
-    },
-  }
-  let inputProps = {
-    ...slotProps?.input,
-    slotProps: {
-      ...(slotProps?.input as any)?.slotProps,
-      input: {
-        ...(slotProps?.input as any)?.slotProps?.input,
-        min: min,
-        max: max,
-        maxLength: maxLength,
-        pattern: pattern,
-      },
-    },
-  }
-
-  if (labelBehavior === 'static') {
-    inputLabelProps = {
-      ...inputLabelProps,
-      sx: {
-        ...(inputLabelProps as any)?.sx,
-        position: 'relative',
-        transform: 'none',
-      },
-    }
-    inputProps = {
-      ...inputProps,
-      notched: true,
-      sx: {
-        ...(inputProps as any)?.sx,
-        '& legend > span': {
-          display: 'none',
-        },
-      },
-    }
-  }
+  const { input: inputProps, inputLabel: inputLabelProps } = useMemo(
+    () =>
+      createTextFieldSlotProps({
+        labelBehavior,
+        min,
+        max,
+        maxLength,
+        pattern,
+        slotProps,
+      }),
+    [labelBehavior, min, max, maxLength, pattern, slotProps]
+  )
 
   const type = props.type
 

@@ -10,6 +10,7 @@ import {
 } from '@mui/material'
 import { useFieldContext } from './formContext'
 import { useId, useMemo } from 'react'
+import { createTextFieldSlotProps } from './utils'
 
 type Option = {
   value: string
@@ -71,37 +72,14 @@ export function Autocomplete(props: AutocompleteProps) {
     return []
   }, [options])
 
-  const labelShrink = labelBehavior === 'shrink' ? true : undefined
-
-  let inputLabelProps = {
-    ...slotProps?.textField?.slotProps?.inputLabel,
-    shrink: labelShrink,
-  }
-
-  let inputProps = {
-    ...slotProps?.textField?.slotProps?.input,
-  }
-
-  if (labelBehavior === 'static') {
-    inputLabelProps = {
-      ...inputLabelProps,
-      sx: {
-        ...(inputLabelProps as any)?.sx,
-        position: 'relative',
-        transform: 'none',
-      },
-    }
-    inputProps = {
-      ...inputProps,
-      notched: true,
-      sx: {
-        ...(inputProps as any)?.sx,
-        '& legend > span': {
-          display: 'none',
-        },
-      },
-    }
-  }
+  const { input: inputProps, inputLabel: inputLabelProps } = useMemo(
+    () =>
+      createTextFieldSlotProps({
+        labelBehavior,
+        slotProps: slotProps?.textField?.slotProps,
+      }),
+    [labelBehavior, slotProps?.textField?.slotProps]
+  )
 
   const textFieldProps: Partial<MuiTextFieldProps> = {
     ...slotProps?.textField,

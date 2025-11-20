@@ -11,6 +11,7 @@ import {
 } from '@mui/material'
 import { useFieldContext } from './formContext'
 import { useId, useMemo } from 'react'
+import { createSelectSlotProps } from './utils'
 
 type Option = {
   value: string
@@ -67,38 +68,14 @@ export function Select(props: SelectProps) {
     return []
   }, [options])
 
-  const labelShrink = labelBehavior === 'shrink' ? true : undefined
-
-  let inputLabelProps: Partial<MuiInputLabelProps> = {
-    ...slotProps?.inputLabel,
-    shrink: labelShrink,
-  }
-
-  let selectProps = {
-    ...slotProps?.select,
-    notched: labelShrink,
-  }
-
-  if (labelBehavior === 'static') {
-    inputLabelProps = {
-      ...inputLabelProps,
-      sx: {
-        ...(inputLabelProps as any)?.sx,
-        position: 'relative',
-        transform: 'none',
-      },
-    }
-    selectProps = {
-      ...selectProps,
-      notched: true,
-      sx: {
-        ...(selectProps as any)?.sx,
-        '& legend > span': {
-          display: 'none',
-        },
-      },
-    }
-  }
+  const { inputLabelProps, selectProps } = useMemo(
+    () =>
+      createSelectSlotProps({
+        labelBehavior,
+        slotProps,
+      }),
+    [labelBehavior, slotProps]
+  )
 
   return (
     <MuiFormControl

@@ -14,6 +14,7 @@ import {
 } from '@mui/material'
 import { useFieldContext } from './formContext'
 import { useId, useMemo } from 'react'
+import { createSelectSlotProps } from './utils'
 
 type Option = {
   value: string
@@ -93,17 +94,19 @@ export function MultiSelect(props: MultiSelectProps) {
       .map(option => option.value)
   }, [field.state.value, renderedOptions, sortSelected])
 
-  const labelShrink = labelBehavior === 'shrink' ? true : undefined
+  const { inputLabelProps, selectProps: baseSelectProps } = useMemo(
+    () =>
+      createSelectSlotProps({
+        labelBehavior,
+        slotProps,
+      }),
+    [labelBehavior, slotProps]
+  )
 
-  let inputLabelProps: Partial<MuiInputLabelProps> = {
-    ...slotProps?.inputLabel,
-    shrink: labelShrink,
-  }
-
-  let selectProps = {
-    ...slotProps?.select,
+  // MultiSelect needs special handling for OutlinedInput
+  const selectProps = {
+    ...baseSelectProps,
     input: <OutlinedInput label={props.label} />,
-    notched: labelShrink,
     renderValue: (selected: any) => {
       const selectedValues = selected as string[]
       return selectedValues
@@ -115,30 +118,19 @@ export function MultiSelect(props: MultiSelectProps) {
     },
   }
 
+  // Override input for static label behavior
   if (labelBehavior === 'static') {
-    inputLabelProps = {
-      ...inputLabelProps,
-      sx: {
-        ...(inputLabelProps as any)?.sx,
-        position: 'relative',
-        transform: 'none',
-      },
-    }
-    selectProps = {
-      ...selectProps,
-      notched: true,
-      input: (
-        <OutlinedInput
-          label={props.label}
-          notched={true}
-          sx={{
-            '& legend > span': {
-              display: 'none',
-            },
-          }}
-        />
-      ),
-    }
+    selectProps.input = (
+      <OutlinedInput
+        label={props.label}
+        notched={true}
+        sx={{
+          '& legend > span': {
+            display: 'none',
+          },
+        }}
+      />
+    )
   }
 
   return (
