@@ -1,3 +1,4 @@
+export * from './adapters'
 export { useConfirmDeleteDialog, useConfirmDialog } from './common-dialogs'
 export {
   DialogCloseButton,
@@ -7,6 +8,9 @@ export {
   type DialogResult,
 } from './dialogs'
 export {
+  createPickerSlotProps,
+  createSelectSlotProps,
+  createTextFieldSlotProps,
   IMask,
   MaskedInput,
   MaskedTextField,
@@ -17,6 +21,9 @@ export {
   withFieldGroup,
   withForm,
   type CheckboxProps,
+  type CreatePickerSlotPropsOptions,
+  type CreateSelectSlotPropsOptions,
+  type CreateTextFieldSlotPropsOptions,
   type DatePickerProps,
   type MaskedInputProps,
   type MaskedTextFieldProps,
@@ -39,4 +46,3 @@ export {
   type TableSearch,
 } from './table'
 export { RouterTab, RouterTabs, TabLabel } from './tabs'
-export * from './adapters'
