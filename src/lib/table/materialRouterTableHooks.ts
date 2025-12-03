@@ -15,16 +15,18 @@ const defaultPageSize = 10
 const defaultDensity = 'compact'
 const searchColumnsSeparator = '-'
 
+const columnsCodec = z.codec(z.string(), z.array(z.string()), {
+  encode: val => val.join(searchColumnsSeparator),
+  decode: val => val.split(searchColumnsSeparator),
+})
+
 export const tableSearchSchema = z.object({
   page: z.number().optional(),
   pageSize: z.number().optional(),
   order: z.string().optional(),
   desc: z.boolean().optional(),
   density: z.enum(['compact', 'spacious', 'comfortable']).optional(),
-  columns: z
-    .string()
-    .transform(val => val.split(searchColumnsSeparator))
-    .optional(),
+  columns: columnsCodec.optional(),
 })
 
 export type TableSearch = z.infer<typeof tableSearchSchema>
@@ -67,8 +69,7 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
           column =>
             initialColumnVisibilityState[column] === undefined ||
             initialColumnVisibilityState[column] === true
-        )
-        .join(searchColumnsSeparator),
+        ),
     [opts.columns, initialColumnVisibilityState]
   )
 
@@ -110,7 +111,7 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
     const order = singleSorting ? singleSorting.id : undefined
     const desc = singleSorting?.desc
 
-    const searchColumns = search.columns?.join(searchColumnsSeparator)
+    const searchColumns = search.columns
 
     const nextVisibleColumns = opts.columns
       .map<string | undefined>(column => column.accessorKey)
@@ -120,7 +121,6 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
           columnVisibility[column] === undefined ||
           columnVisibility[column] === true
       )
-      .join(searchColumnsSeparator)
 
     const nextSearch = {
       page:
@@ -135,7 +135,8 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
       desc: desc ? true : undefined,
       density: density === initialDensityState ? undefined : density,
       columns:
-        nextVisibleColumns === initialVisibleColumns
+        JSON.stringify(nextVisibleColumns) ===
+        JSON.stringify(initialVisibleColumns)
           ? undefined
           : nextVisibleColumns,
     }
@@ -146,12 +147,13 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
       search.order !== nextSearch.order ||
       search.desc !== nextSearch.desc ||
       search.density !== nextSearch.density ||
-      searchColumns !== nextSearch.columns
+      JSON.stringify(searchColumns) !== JSON.stringify(nextSearch.columns)
     ) {
+      const encodedNextSearch = tableSearchSchema.encode(nextSearch)
       navigate({
         replace: true,
         // @ts-ignore
-        search: { ...originalSearch, ...nextSearch },
+        search: { ...originalSearch, ...encodedNextSearch },
       })
     }
   }, [
