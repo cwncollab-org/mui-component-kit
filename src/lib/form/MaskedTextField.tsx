@@ -22,6 +22,7 @@ export function MaskedTextField(props: MaskedTextFieldProps) {
     fullWidth,
     triggerChangeOnAccept,
     triggerChangeOnComplete,
+    helperText,
     ...rest
   } = props
 
@@ -29,6 +30,7 @@ export function MaskedTextField(props: MaskedTextFieldProps) {
     <TextField
       labelBehavior={labelBehavior}
       fullWidth={fullWidth}
+      helperText={helperText}
       {...rest}
       slotProps={{
         ...slotProps,
