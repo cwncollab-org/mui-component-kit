@@ -153,7 +153,7 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
         ...originalSearch,
         ...nextSearch,
       })
-      console.debug('Navigating to search:', encodedSearch)
+      // console.debug('Navigating to search:', encodedSearch)
 
       navigate({
         replace: true,
