@@ -23,6 +23,9 @@ function RouteComponent() {
         <Link component={RouterLink} to='/form-example'>
           Form Example
         </Link>
+        <Link component={RouterLink} to='/select-example'>
+          Select Example
+        </Link>
         <Link component={RouterLink} to='/buddhist-datepicker-example'>
           Buddhist Date Picker Example
         </Link>

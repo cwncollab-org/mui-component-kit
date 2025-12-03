@@ -13,30 +13,36 @@ import { useFieldContext } from './formContext'
 import { useId, useMemo } from 'react'
 import { createSelectSlotProps } from './utils'
 
-type Option = {
+export type SelectOption = {
   value: string
   label: string
 }
 
-export type SelectProps = MuiFormControlProps & {
-  label?: string
-  labelBehavior?: 'auto' | 'shrink' | 'static'
-  size?: 'small' | 'medium'
-  fullWidth?: boolean
-  options?: Option[] | string[]
-  multiple?: boolean
-  slotProps?: {
-    inputLabel?: Omit<MuiInputLabelProps, 'id'>
-    select?: Omit<
-      MuiSelectProps,
-      'id' | 'labelId' | 'name' | 'value' | 'onChange' | 'defaultValue'
-    >
-    helperText?: MuiFormHelperTextProps
+export type SelectProps<TOption = SelectOption | string | any> =
+  MuiFormControlProps & {
+    label?: string
+    labelBehavior?: 'auto' | 'shrink' | 'static'
+    size?: 'small' | 'medium'
+    fullWidth?: boolean
+    isLoading?: boolean
+    options?: TOption[]
+    multiple?: boolean
+    slotProps?: {
+      inputLabel?: Omit<MuiInputLabelProps, 'id'>
+      select?: Omit<
+        MuiSelectProps,
+        'id' | 'labelId' | 'name' | 'value' | 'onChange' | 'defaultValue'
+      >
+      helperText?: MuiFormHelperTextProps
+    }
+    getOptionLabel?: (option: TOption) => string
+    getOptionValue?: (option: TOption) => string
+    onChange?: MuiSelectProps['onChange']
   }
-  onChange?: MuiSelectProps['onChange']
-}
 
-export function Select(props: SelectProps) {
+export function Select<TOption = SelectOption | string | any>(
+  props: SelectProps<TOption>
+) {
   const field = useFieldContext<string>()
   const {
     children,
@@ -46,7 +52,10 @@ export function Select(props: SelectProps) {
     labelBehavior = 'auto',
     size,
     fullWidth,
+    isLoading,
     onChange,
+    getOptionLabel,
+    getOptionValue,
     ...rest
   } = props
 
@@ -59,13 +68,23 @@ export function Select(props: SelectProps) {
     return field.state.meta.errors.map(error => error.message).join(', ')
   }, [field.state.meta.errors])
 
-  const renderedOptions = useMemo<Option[]>(() => {
-    if (options) {
-      return options.map(option =>
-        typeof option === 'string' ? { value: option, label: option } : option
-      )
+  const renderedOptions = useMemo<SelectOption[]>(() => {
+    if (!options || options.length === 0) {
+      return [] as SelectOption[]
     }
-    return []
+
+    if (getOptionLabel && getOptionValue) {
+      return options.map(option => ({
+        value: getOptionValue(option),
+        label: getOptionLabel(option),
+      })) as SelectOption[]
+    }
+
+    return options.map(option =>
+      typeof option === 'string'
+        ? { value: option, label: option }
+        : (option as SelectOption)
+    )
   }, [options])
 
   const { inputLabelProps, selectProps } = useMemo(
@@ -99,7 +118,7 @@ export function Select(props: SelectProps) {
         {...selectProps}
         label={props.label}
         name={field.name}
-        value={field.state.value ?? ''}
+        value={isLoading ? '' : (field.state.value ?? '')}
         onChange={(ev, child) => {
           onChange?.(ev, child)
           if (!ev.defaultPrevented) {

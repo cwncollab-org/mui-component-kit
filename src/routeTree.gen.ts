@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TabsExampleRouteImport } from './routes/tabs-example'
+import { Route as SelectExampleRouteImport } from './routes/select-example'
 import { Route as MrtExampleRouteImport } from './routes/mrt-example'
 import { Route as MaskedInputExampleRouteImport } from './routes/masked-input-example'
 import { Route as FormExampleRouteImport } from './routes/form-example'
@@ -26,6 +27,11 @@ import { Route as TabsExampleTab3IdRouteImport } from './routes/tabs-example/tab
 const TabsExampleRoute = TabsExampleRouteImport.update({
   id: '/tabs-example',
   path: '/tabs-example',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SelectExampleRoute = SelectExampleRouteImport.update({
+  id: '/select-example',
+  path: '/select-example',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MrtExampleRoute = MrtExampleRouteImport.update({
@@ -97,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
   '/mrt-example': typeof MrtExampleRoute
+  '/select-example': typeof SelectExampleRoute
   '/tabs-example': typeof TabsExampleRouteWithChildren
   '/tabs-example/tab1': typeof TabsExampleTab1Route
   '/tabs-example/tab2': typeof TabsExampleTab2Route
@@ -112,6 +119,7 @@ export interface FileRoutesByTo {
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
   '/mrt-example': typeof MrtExampleRoute
+  '/select-example': typeof SelectExampleRoute
   '/tabs-example/tab1': typeof TabsExampleTab1Route
   '/tabs-example/tab2': typeof TabsExampleTab2Route
   '/tabs-example/tab3': typeof TabsExampleTab3RouteWithChildren
@@ -127,6 +135,7 @@ export interface FileRoutesById {
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
   '/mrt-example': typeof MrtExampleRoute
+  '/select-example': typeof SelectExampleRoute
   '/tabs-example': typeof TabsExampleRouteWithChildren
   '/tabs-example/tab1': typeof TabsExampleTab1Route
   '/tabs-example/tab2': typeof TabsExampleTab2Route
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/form-example'
     | '/masked-input-example'
     | '/mrt-example'
+    | '/select-example'
     | '/tabs-example'
     | '/tabs-example/tab1'
     | '/tabs-example/tab2'
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/form-example'
     | '/masked-input-example'
     | '/mrt-example'
+    | '/select-example'
     | '/tabs-example/tab1'
     | '/tabs-example/tab2'
     | '/tabs-example/tab3'
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
     | '/form-example'
     | '/masked-input-example'
     | '/mrt-example'
+    | '/select-example'
     | '/tabs-example'
     | '/tabs-example/tab1'
     | '/tabs-example/tab2'
@@ -189,6 +201,7 @@ export interface RootRouteChildren {
   FormExampleRoute: typeof FormExampleRoute
   MaskedInputExampleRoute: typeof MaskedInputExampleRoute
   MrtExampleRoute: typeof MrtExampleRoute
+  SelectExampleRoute: typeof SelectExampleRoute
   TabsExampleRoute: typeof TabsExampleRouteWithChildren
 }
 
@@ -199,6 +212,13 @@ declare module '@tanstack/react-router' {
       path: '/tabs-example'
       fullPath: '/tabs-example'
       preLoaderRoute: typeof TabsExampleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/select-example': {
+      id: '/select-example'
+      path: '/select-example'
+      fullPath: '/select-example'
+      preLoaderRoute: typeof SelectExampleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mrt-example': {
@@ -327,6 +347,7 @@ const rootRouteChildren: RootRouteChildren = {
   FormExampleRoute: FormExampleRoute,
   MaskedInputExampleRoute: MaskedInputExampleRoute,
   MrtExampleRoute: MrtExampleRoute,
+  SelectExampleRoute: SelectExampleRoute,
   TabsExampleRoute: TabsExampleRouteWithChildren,
 }
 export const routeTree = rootRouteImport
