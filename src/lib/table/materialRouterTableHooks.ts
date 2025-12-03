@@ -149,11 +149,16 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
       search.density !== nextSearch.density ||
       JSON.stringify(searchColumns) !== JSON.stringify(nextSearch.columns)
     ) {
-      const encodedNextSearch = tableSearchSchema.encode(nextSearch)
+      const encodedSearch = tableSearchSchema.encode({
+        ...originalSearch,
+        ...nextSearch,
+      })
+      console.debug('Navigating to search:', encodedSearch)
+
       navigate({
         replace: true,
         // @ts-ignore
-        search: { ...originalSearch, ...encodedNextSearch },
+        search: encodedSearch,
       })
     }
   }, [
