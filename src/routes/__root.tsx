@@ -38,6 +38,9 @@ function RouteComponent() {
         <Link component={RouterLink} to='/tabs-example'>
           Tabs Example
         </Link>
+        <Link component={RouterLink} to='/checkboxlist-example'>
+          CheckboxList Example
+        </Link>
       </Stack>
 
       <Outlet />

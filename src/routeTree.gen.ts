@@ -15,6 +15,7 @@ import { Route as MrtExampleRouteImport } from './routes/mrt-example'
 import { Route as MaskedInputExampleRouteImport } from './routes/masked-input-example'
 import { Route as FormExampleRouteImport } from './routes/form-example'
 import { Route as DialogsExampleRouteImport } from './routes/dialogs-example'
+import { Route as CheckboxlistExampleRouteImport } from './routes/checkboxlist-example'
 import { Route as BuddhistDatepickerExampleRouteImport } from './routes/buddhist-datepicker-example'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TabsExampleIndexRouteImport } from './routes/tabs-example/index'
@@ -52,6 +53,11 @@ const FormExampleRoute = FormExampleRouteImport.update({
 const DialogsExampleRoute = DialogsExampleRouteImport.update({
   id: '/dialogs-example',
   path: '/dialogs-example',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckboxlistExampleRoute = CheckboxlistExampleRouteImport.update({
+  id: '/checkboxlist-example',
+  path: '/checkboxlist-example',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BuddhistDatepickerExampleRoute =
@@ -99,6 +105,7 @@ const TabsExampleTab3IdRoute = TabsExampleTab3IdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/buddhist-datepicker-example': typeof BuddhistDatepickerExampleRoute
+  '/checkboxlist-example': typeof CheckboxlistExampleRoute
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
@@ -115,6 +122,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/buddhist-datepicker-example': typeof BuddhistDatepickerExampleRoute
+  '/checkboxlist-example': typeof CheckboxlistExampleRoute
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
@@ -131,6 +139,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/buddhist-datepicker-example': typeof BuddhistDatepickerExampleRoute
+  '/checkboxlist-example': typeof CheckboxlistExampleRoute
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
@@ -149,6 +158,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/buddhist-datepicker-example'
+    | '/checkboxlist-example'
     | '/dialogs-example'
     | '/form-example'
     | '/masked-input-example'
@@ -165,6 +175,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/buddhist-datepicker-example'
+    | '/checkboxlist-example'
     | '/dialogs-example'
     | '/form-example'
     | '/masked-input-example'
@@ -180,6 +191,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/buddhist-datepicker-example'
+    | '/checkboxlist-example'
     | '/dialogs-example'
     | '/form-example'
     | '/masked-input-example'
@@ -197,6 +209,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BuddhistDatepickerExampleRoute: typeof BuddhistDatepickerExampleRoute
+  CheckboxlistExampleRoute: typeof CheckboxlistExampleRoute
   DialogsExampleRoute: typeof DialogsExampleRoute
   FormExampleRoute: typeof FormExampleRoute
   MaskedInputExampleRoute: typeof MaskedInputExampleRoute
@@ -247,6 +260,13 @@ declare module '@tanstack/react-router' {
       path: '/dialogs-example'
       fullPath: '/dialogs-example'
       preLoaderRoute: typeof DialogsExampleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkboxlist-example': {
+      id: '/checkboxlist-example'
+      path: '/checkboxlist-example'
+      fullPath: '/checkboxlist-example'
+      preLoaderRoute: typeof CheckboxlistExampleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/buddhist-datepicker-example': {
@@ -343,6 +363,7 @@ const TabsExampleRouteWithChildren = TabsExampleRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BuddhistDatepickerExampleRoute: BuddhistDatepickerExampleRoute,
+  CheckboxlistExampleRoute: CheckboxlistExampleRoute,
   DialogsExampleRoute: DialogsExampleRoute,
   FormExampleRoute: FormExampleRoute,
   MaskedInputExampleRoute: MaskedInputExampleRoute,
