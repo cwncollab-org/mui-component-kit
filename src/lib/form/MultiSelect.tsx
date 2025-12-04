@@ -74,11 +74,12 @@ export function MultiSelect(props: MultiSelectProps) {
   )
 
   const sortedSelectedValues = useMemo(() => {
-    if (!sortSelected) return field.state.value
+    const currentValue = field.state.value ?? []
+    if (!sortSelected) return currentValue
 
-    const selectedOptions = field.state.value.map(
+    const selectedOptions = currentValue.map(
       value =>
-        renderedOptions.find(opt => opt.value === value) || {
+        renderedOptions.find(opt => opt.value === value) ?? {
           value,
           label: value,
         }
@@ -108,11 +109,11 @@ export function MultiSelect(props: MultiSelectProps) {
     ...baseSelectProps,
     input: <OutlinedInput label={props.label} />,
     renderValue: (selected: any) => {
-      const selectedValues = selected as string[]
+      const selectedValues = (selected ?? []) as string[]
       return selectedValues
         .map(
           value =>
-            renderedOptions.find(opt => opt.value === value)?.label || value
+            renderedOptions.find(opt => opt.value === value)?.label ?? value
         )
         .join(', ')
     },
@@ -166,7 +167,9 @@ export function MultiSelect(props: MultiSelectProps) {
         {children}
         {renderedOptions.map(option => (
           <MenuItem key={option.value} value={option.value}>
-            <Checkbox checked={field.state.value.includes(option.value)} />
+            <Checkbox
+              checked={(field.state.value ?? []).includes(option.value)}
+            />
             <ListItemText primary={option.label} />
           </MenuItem>
         ))}
