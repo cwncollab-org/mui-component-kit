@@ -42,7 +42,7 @@ export type MultiSelectProps<TOption = SelectOption | string | any> =
   }
 
 export function MultiSelect(props: MultiSelectProps) {
-  const field = useFieldContext<string[]>()
+  const field = useFieldContext<string[] | null | undefined>()
   const {
     children,
     slotProps,
