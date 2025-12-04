@@ -18,27 +18,47 @@ export const Route = createFileRoute('/checkboxlist-example')({
 })
 
 const interests = [
-  { value: 'coding', label: 'Coding' },
-  { value: 'music', label: 'Music' },
-  { value: 'reading', label: 'Reading' },
-  { value: 'traveling', label: 'Traveling' },
-  { value: 'gaming', label: 'Gaming' },
+  { value: 'coding', label: 'Coding', description: 'Writing code' },
+  { value: 'music', label: 'Music', description: 'Listening to music' },
+  { value: 'reading', label: 'Reading', description: 'Reading books' },
+  {
+    value: 'traveling',
+    label: 'Traveling',
+    description: 'Visiting new places',
+  },
+  { value: 'gaming', label: 'Gaming', description: 'Playing video games' },
 ]
 
 export function CheckboxListExample() {
   const [value, setValue] = useState<FormValues | undefined>(undefined)
   const [asyncOptions, setAsyncOptions] = useState<
-    { value: string; label: string }[]
+    { value: string; label: string; description?: string }[]
   >([])
   const [isLoadingAsyncOptions, setIsLoadingAsyncOptions] = useState(true)
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setAsyncOptions([
-        { value: 'react', label: 'React' },
-        { value: 'vue', label: 'Vue' },
-        { value: 'angular', label: 'Angular' },
-        { value: 'svelte', label: 'Svelte' },
+        {
+          value: 'react',
+          label: 'React',
+          description: 'A JavaScript library for building user interfaces',
+        },
+        {
+          value: 'vue',
+          label: 'Vue',
+          description: 'The Progressive JavaScript Framework',
+        },
+        {
+          value: 'angular',
+          label: 'Angular',
+          description: "The modern web developer's platform",
+        },
+        {
+          value: 'svelte',
+          label: 'Svelte',
+          description: 'Cybernetically enhanced web apps',
+        },
       ])
       setIsLoadingAsyncOptions(false)
     }, 2000)
@@ -86,7 +106,7 @@ export function CheckboxListExample() {
             <form.AppField
               name='interests'
               children={field => (
-                <field.CheckboxList
+                <field.SubscribeCheckboxList
                   label='Select your interests'
                   options={interests}
                 />
@@ -96,7 +116,7 @@ export function CheckboxListExample() {
             <form.AppField
               name='asyncInterests'
               children={field => (
-                <field.CheckboxList
+                <field.SubscribeCheckboxList
                   label='Select your favorite frameworks (Async)'
                   options={asyncOptions}
                   isLoading={isLoadingAsyncOptions}

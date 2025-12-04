@@ -1,7 +1,7 @@
 export { IMask } from 'react-imask'
 export { type AutocompleteProps } from './Autocomplete'
 export { type CheckboxProps } from './Checkbox'
-export { CheckboxList, type CheckboxListProps } from './CheckboxList'
+export { type CheckboxListProps } from './CheckboxList'
 export { type DatePickerProps } from './DatePicker'
 export {
   fieldContext,
@@ -17,11 +17,9 @@ export { type RadioGroupProps } from './RadioGroup'
 export { type SelectProps } from './Select'
 export { type SubscribeAutocompleteProps } from './SubscribeAutocomplete'
 export { type SubscribeCheckboxProps } from './SubscribeCheckbox'
+export { type SubscribeCheckboxListProps } from './SubscribeCheckboxList'
 export { type SubscribeDatePickerProps } from './SubscribeDatePicker'
-export {
-  SubscribeMaskedTextField,
-  type SubscribeMaskedTextFieldProps,
-} from './SubscribeMaskedTextField'
+export { type SubscribeMaskedTextFieldProps } from './SubscribeMaskedTextField'
 export { type SubscribeMultiSelectProps } from './SubscribeMultiSelect'
 export { type SubscribeRadioGroupProps } from './SubscribeRadioGroup'
 export { type SubscribeSelectProps } from './SubscribeSelect'

@@ -16,6 +16,7 @@ import { createSelectSlotProps, renderOptions } from './utils'
 export type SelectOption = {
   value: string
   label: string
+  description?: string
 }
 
 export type SelectProps<TOption = SelectOption | string | any> =

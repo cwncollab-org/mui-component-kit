@@ -189,10 +189,11 @@ export function createSelectSlotProps(
   }
 }
 
-export function renderOptions<TOption = SelectOption | string | any>(
+export function renderOptions<TOption = string | any>(
   options: TOption[] | undefined,
   getOptionLabel?: (option: TOption) => string,
-  getOptionValue?: (option: TOption) => string
+  getOptionValue?: (option: TOption) => string,
+  getOptionDescription?: (option: TOption) => string | null | undefined
 ) {
   if (!options || options.length === 0) {
     return [] as SelectOption[]
@@ -208,6 +209,9 @@ export function renderOptions<TOption = SelectOption | string | any>(
           label: getOptionLabel
             ? getOptionLabel(option)
             : (option as any).label,
+          description: getOptionDescription
+            ? getOptionDescription(option)
+            : (option as any).description,
         }
   )
 }

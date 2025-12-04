@@ -10,18 +10,22 @@ import {
   FormLabel as MuiFormLabel,
   FormControl as MuiFormControl,
   FormHelperText as MuiFormHelperText,
-  CircularProgress,
   Skeleton,
 } from '@mui/material'
 import { useMemo } from 'react'
 import { useFieldContext } from './formContext'
+import { SelectOption } from './Select'
+import { renderOptions } from './utils'
 
-export type CheckboxListProps = {
+export type CheckboxListProps<TOption = string | any> = {
   label?: string
   labelBehavior?: 'auto' | 'shrink' | 'static'
-  options: { value: string; label: string }[]
+  options: TOption[]
   disabled?: boolean
   isLoading?: boolean
+  getOptionLabel?: (option: TOption) => string
+  getOptionValue?: (option: TOption) => string
+  getOptionDescription?: (option: TOption) => string | null | undefined
   sx?: MuiBoxProps['sx']
 }
 
@@ -33,6 +37,9 @@ export function CheckboxList(props: CheckboxListProps) {
     label,
     labelBehavior = 'auto',
     options,
+    getOptionLabel,
+    getOptionValue,
+    getOptionDescription,
     ...rest
   } = props
   const field = useFieldContext<string[] | null | undefined>()
@@ -40,6 +47,17 @@ export function CheckboxList(props: CheckboxListProps) {
     if (field.state.meta.errors.length === 0) return null
     return field.state.meta.errors.map(error => error.message).join(', ')
   }, [field.state.meta.errors])
+
+  const renderedOptions = useMemo(
+    () =>
+      renderOptions(
+        options,
+        getOptionLabel,
+        getOptionValue,
+        getOptionDescription
+      ),
+    [isLoading, options, getOptionLabel, getOptionValue, getOptionDescription]
+  )
 
   const handleToggle = (value: string) => () => {
     if (disabled) return
@@ -84,7 +102,7 @@ export function CheckboxList(props: CheckboxListProps) {
         </MuiList>
       ) : (
         <MuiList dense role='group' aria-label={label}>
-          {options.map(option => {
+          {renderedOptions.map(option => {
             const labelId = `checkbox-list-label-${option.value}`
             return (
               <MuiListItem key={option.value} disablePadding>
@@ -105,7 +123,11 @@ export function CheckboxList(props: CheckboxListProps) {
                       slotProps={{ input: { 'aria-labelledby': labelId } }}
                     />
                   </MuiListItemIcon>
-                  <MuiListItemText id={labelId} primary={option.label} />
+                  <MuiListItemText
+                    id={labelId}
+                    primary={option.label}
+                    secondary={option.description}
+                  />
                 </MuiListItemButton>
               </MuiListItem>
             )
