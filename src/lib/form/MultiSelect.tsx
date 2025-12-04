@@ -14,32 +14,32 @@ import {
 } from '@mui/material'
 import { useFieldContext } from './formContext'
 import { useId, useMemo } from 'react'
-import { createSelectSlotProps } from './utils'
-
-type Option = {
-  value: string
-  label: string
-}
+import { createSelectSlotProps, renderOptions } from './utils'
+import { SelectOption } from './Select'
 
 type SortBy = 'label' | 'value' | false
 
-export type MultiSelectProps = MuiFormControlProps & {
-  label?: string
-  labelBehavior?: 'auto' | 'shrink' | 'static'
-  size?: 'small' | 'medium'
-  fullWidth?: boolean
-  options?: Option[] | string[]
-  sortSelected?: SortBy
-  slotProps?: {
-    inputLabel?: Omit<MuiInputLabelProps, 'id'>
-    select?: Omit<
-      MuiSelectProps,
-      'id' | 'labelId' | 'name' | 'value' | 'onChange' | 'defaultValue'
-    >
-    helperText?: MuiFormHelperTextProps
+export type MultiSelectProps<TOption = SelectOption | string | any> =
+  MuiFormControlProps & {
+    label?: string
+    labelBehavior?: 'auto' | 'shrink' | 'static'
+    size?: 'small' | 'medium'
+    fullWidth?: boolean
+    isLoading?: boolean
+    options?: TOption[]
+    sortSelected?: SortBy
+    slotProps?: {
+      inputLabel?: Omit<MuiInputLabelProps, 'id'>
+      select?: Omit<
+        MuiSelectProps,
+        'id' | 'labelId' | 'name' | 'value' | 'onChange' | 'defaultValue'
+      >
+      helperText?: MuiFormHelperTextProps
+    }
+    getOptionLabel?: (option: TOption) => string
+    getOptionValue?: (option: TOption) => string
+    onChange?: MuiSelectProps['onChange']
   }
-  onChange?: MuiSelectProps['onChange']
-}
 
 export function MultiSelect(props: MultiSelectProps) {
   const field = useFieldContext<string[]>()
@@ -50,8 +50,12 @@ export function MultiSelect(props: MultiSelectProps) {
     labelBehavior = 'auto',
     size,
     fullWidth,
+    isLoading,
+    disabled,
     sortSelected = false,
     onChange,
+    getOptionLabel,
+    getOptionValue,
     ...rest
   } = props
 
@@ -64,16 +68,12 @@ export function MultiSelect(props: MultiSelectProps) {
     return field.state.meta.errors.map(error => error.message).join(', ')
   }, [field.state.meta.errors])
 
-  const renderedOptions = useMemo<Option[]>(() => {
-    if (options) {
-      return options.map(option =>
-        typeof option === 'string' ? { value: option, label: option } : option
-      )
-    }
-    return []
-  }, [options])
+  const renderedOptions = useMemo<SelectOption[]>(
+    () => renderOptions(options, getOptionLabel, getOptionValue),
+    [options, getOptionLabel, getOptionValue]
+  )
 
-  const getSortedSelectedValues = useMemo(() => {
+  const sortedSelectedValues = useMemo(() => {
     if (!sortSelected) return field.state.value
 
     const selectedOptions = field.state.value.map(
@@ -143,6 +143,7 @@ export function MultiSelect(props: MultiSelectProps) {
       data-istouched={field.state.meta.isTouched || undefined}
       data-isdefaultvalue={field.state.meta.isDefaultValue || undefined}
       data-isvalid={field.state.meta.isValid || undefined}
+      disabled={isLoading || disabled}
       {...rest}
     >
       <MuiInputLabel id={labelId} {...inputLabelProps}>
@@ -152,7 +153,7 @@ export function MultiSelect(props: MultiSelectProps) {
         id={selectId}
         labelId={labelId}
         multiple
-        value={getSortedSelectedValues}
+        value={isLoading ? [] : sortedSelectedValues}
         onChange={(ev, child) => {
           onChange?.(ev, child)
           if (!ev.defaultPrevented) {

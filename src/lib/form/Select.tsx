@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import { useFieldContext } from './formContext'
 import { useId, useMemo } from 'react'
-import { createSelectSlotProps } from './utils'
+import { createSelectSlotProps, renderOptions } from './utils'
 
 export type SelectOption = {
   value: string
@@ -53,6 +53,7 @@ export function Select<TOption = SelectOption | string | any>(
     size,
     fullWidth,
     isLoading,
+    disabled,
     onChange,
     getOptionLabel,
     getOptionValue,
@@ -68,24 +69,10 @@ export function Select<TOption = SelectOption | string | any>(
     return field.state.meta.errors.map(error => error.message).join(', ')
   }, [field.state.meta.errors])
 
-  const renderedOptions = useMemo<SelectOption[]>(() => {
-    if (!options || options.length === 0) {
-      return [] as SelectOption[]
-    }
-
-    if (getOptionLabel && getOptionValue) {
-      return options.map(option => ({
-        value: getOptionValue(option),
-        label: getOptionLabel(option),
-      })) as SelectOption[]
-    }
-
-    return options.map(option =>
-      typeof option === 'string'
-        ? { value: option, label: option }
-        : (option as SelectOption)
-    )
-  }, [options])
+  const renderedOptions = useMemo<SelectOption[]>(
+    () => renderOptions(options, getOptionLabel, getOptionValue),
+    [options, getOptionLabel, getOptionValue]
+  )
 
   const { inputLabelProps, selectProps } = useMemo(
     () =>
@@ -106,6 +93,7 @@ export function Select<TOption = SelectOption | string | any>(
       data-istouched={field.state.meta.isTouched || undefined}
       data-isdefaultvalue={field.state.meta.isDefaultValue || undefined}
       data-isvalid={field.state.meta.isValid || undefined}
+      disabled={isLoading || disabled}
       {...rest}
     >
       <MuiInputLabel id={labelId} {...inputLabelProps}>

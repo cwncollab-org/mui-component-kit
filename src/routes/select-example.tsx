@@ -10,6 +10,7 @@ const formSchema = z.object({
   status: z.string().optional(),
   multiSelect: z.array(z.string()).min(1, 'Select at least one'),
   asyncRole: z.string().optional(),
+  asyncMultiSelect: z.array(z.string()).min(1, 'Select at least one'),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -41,6 +42,9 @@ export function SelectExample() {
   const [asyncOptions, setAsyncOptions] = useState<
     { value: string; text: string }[]
   >([])
+  const [asyncMultiOptions, setAsyncMultiOptions] = useState<
+    { value: string; label: string }[]
+  >([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -50,6 +54,11 @@ export function SelectExample() {
         { value: 'remote', text: 'Remote' },
         { value: 'onsite', text: 'On-site' },
         { value: 'hybrid', text: 'Hybrid' },
+      ])
+      setAsyncMultiOptions([
+        { value: 'react', label: 'React' },
+        { value: 'vue', label: 'Vue' },
+        { value: 'angular', label: 'Angular' },
       ])
       setLoading(false)
     }, 2000)
@@ -63,6 +72,7 @@ export function SelectExample() {
       status: '',
       multiSelect: [],
       asyncRole: 'remote',
+      asyncMultiSelect: ['react'],
     } as FormValues,
     validators: {
       onChange: formSchema,
@@ -190,12 +200,26 @@ export function SelectExample() {
                   fullWidth
                   getOptionLabel={option => option.text}
                   getOptionValue={option => option.value}
-                  disabled={loading}
                 >
                   <MenuItem value=''>
                     <em>None</em>
                   </MenuItem>
                 </field.SubscribeSelect>
+              )}
+            />
+
+            <Typography variant='h6'>Async Multi Select</Typography>
+            <form.AppField
+              name='asyncMultiSelect'
+              children={field => (
+                <field.SubscribeMultiSelect
+                  isLoading={loading}
+                  label={loading ? 'Frameworks (Loading...)' : 'Frameworks'}
+                  options={asyncMultiOptions}
+                  labelBehavior='shrink'
+                  size='small'
+                  fullWidth
+                />
               )}
             />
 
