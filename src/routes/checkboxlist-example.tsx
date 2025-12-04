@@ -107,6 +107,7 @@ export function CheckboxListExample() {
               name='interests'
               children={field => (
                 <field.SubscribeCheckboxList
+                  fullWidth
                   label='Select your interests'
                   options={interests}
                 />

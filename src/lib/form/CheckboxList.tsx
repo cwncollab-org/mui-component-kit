@@ -1,15 +1,17 @@
 import {
-  List as MuiList,
   Box as MuiBox,
   BoxProps as MuiBoxProps,
-  ListItem as MuiListItem,
-  ListItemText as MuiListItemText,
   Checkbox as MuiCheckbox,
-  ListItemIcon as MuiListItemIcon,
-  ListItemButton as MuiListItemButton,
-  FormLabel as MuiFormLabel,
   FormControl as MuiFormControl,
+  FormControlProps as MuiFormControlProps,
   FormHelperText as MuiFormHelperText,
+  FormLabel as MuiFormLabel,
+  List as MuiList,
+  ListItem as MuiListItem,
+  ListItemButton as MuiListItemButton,
+  ListItemIcon as MuiListItemIcon,
+  ListItemText as MuiListItemText,
+  ListProps as MuiListProps,
   Skeleton,
 } from '@mui/material'
 import { useMemo } from 'react'
@@ -19,7 +21,9 @@ import { renderOptions } from './utils'
 export type CheckboxListProps<TOption = string | any> = {
   label?: string
   labelBehavior?: 'auto' | 'shrink' | 'static'
-  options: TOption[]
+  fullWidth?: MuiFormControlProps['fullWidth']
+  options?: TOption[]
+  dense?: MuiListProps['dense']
   disabled?: boolean
   isLoading?: boolean
   getOptionLabel?: (option: TOption) => string
@@ -35,7 +39,9 @@ export function CheckboxList(props: CheckboxListProps) {
     sx,
     label,
     labelBehavior = 'auto',
+    fullWidth,
     options,
+    dense,
     getOptionLabel,
     getOptionValue,
     getOptionDescription,
@@ -78,61 +84,58 @@ export function CheckboxList(props: CheckboxListProps) {
       error={!!errorText}
       component='fieldset'
       variant='standard'
+      fullWidth={fullWidth}
       sx={sx}
       {...rest}
     >
       {label && <MuiFormLabel component='legend'>{label}</MuiFormLabel>}
-      {isLoading ? (
-        <MuiList dense role='group' aria-label={label}>
-          {Array.from({ length: 3 }).map((_, index) => (
-            <MuiListItem key={index} disablePadding>
-              <MuiListItemButton dense disabled>
-                <MuiListItemIcon>
-                  <MuiBox sx={{ p: '9px', ml: '-11px', display: 'flex' }}>
-                    <Skeleton variant='circular' width={24} height={24} />
-                  </MuiBox>
-                </MuiListItemIcon>
-                <MuiListItemText
-                  primary={<Skeleton variant='text' width='60%' />}
-                />
-              </MuiListItemButton>
-            </MuiListItem>
-          ))}
-        </MuiList>
-      ) : (
-        <MuiList dense role='group' aria-label={label}>
-          {renderedOptions.map(option => {
-            const labelId = `checkbox-list-label-${option.value}`
-            return (
-              <MuiListItem key={option.value} disablePadding>
-                <MuiListItemButton
-                  role={undefined}
-                  onClick={handleToggle(option.value)}
-                  dense
-                  disabled={disabled}
-                >
+      <MuiList dense={dense} role='group' aria-label={label}>
+        {isLoading
+          ? Array.from({ length: 3 }).map((_, index) => (
+              <MuiListItem key={index} disablePadding>
+                <MuiListItemButton dense={dense} disabled>
                   <MuiListItemIcon>
-                    <MuiCheckbox
-                      edge='start'
-                      checked={
-                        (field.state.value || []).indexOf(option.value) !== -1
-                      }
-                      tabIndex={-1}
-                      disableRipple
-                      slotProps={{ input: { 'aria-labelledby': labelId } }}
-                    />
+                    <MuiBox sx={{ p: '9px', ml: '-11px', display: 'flex' }}>
+                      <Skeleton variant='circular' width={24} height={24} />
+                    </MuiBox>
                   </MuiListItemIcon>
                   <MuiListItemText
-                    id={labelId}
-                    primary={option.label}
-                    secondary={option.description}
+                    primary={<Skeleton variant='text' width='60%' />}
                   />
                 </MuiListItemButton>
               </MuiListItem>
-            )
-          })}
-        </MuiList>
-      )}
+            ))
+          : renderedOptions.map(option => {
+              const labelId = `checkbox-list-label-${option.value}`
+              return (
+                <MuiListItem key={option.value} disablePadding>
+                  <MuiListItemButton
+                    role={undefined}
+                    onClick={handleToggle(option.value)}
+                    dense={dense}
+                    disabled={disabled}
+                  >
+                    <MuiListItemIcon>
+                      <MuiCheckbox
+                        edge='start'
+                        checked={
+                          (field.state.value || []).indexOf(option.value) !== -1
+                        }
+                        tabIndex={-1}
+                        disableRipple
+                        slotProps={{ input: { 'aria-labelledby': labelId } }}
+                      />
+                    </MuiListItemIcon>
+                    <MuiListItemText
+                      id={labelId}
+                      primary={option.label}
+                      secondary={option.description}
+                    />
+                  </MuiListItemButton>
+                </MuiListItem>
+              )
+            })}
+      </MuiList>
       {errorText && <MuiFormHelperText>{errorText}</MuiFormHelperText>}
     </MuiFormControl>
   )
