@@ -14,7 +14,6 @@ import {
 } from '@mui/material'
 import { useMemo } from 'react'
 import { useFieldContext } from './formContext'
-import { SelectOption } from './Select'
 import { renderOptions } from './utils'
 
 export type CheckboxListProps<TOption = string | any> = {
