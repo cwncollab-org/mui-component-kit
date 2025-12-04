@@ -19,6 +19,7 @@ import { RadioGroup } from './RadioGroup'
 import { SubscribeRadioGroup } from './SubscribeRadioGroup'
 import { MaskedTextField } from './MaskedTextField'
 import { SubscribeMaskedTextField } from './SubscribeMaskedTextField'
+import { CheckboxList } from './CheckboxList'
 
 export const { useAppForm, withForm, withFieldGroup } = createFormHook({
   fieldContext,
@@ -27,6 +28,7 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
     Autocomplete,
     TextField,
     Checkbox,
+    CheckboxList,
     Select,
     MaskedTextField,
     MultiSelect,

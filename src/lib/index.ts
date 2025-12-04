@@ -21,6 +21,8 @@ export {
   withFieldGroup,
   withForm,
   type CheckboxProps,
+  CheckboxList,
+  type CheckboxListProps,
   type CreatePickerSlotPropsOptions,
   type CreateSelectSlotPropsOptions,
   type CreateTextFieldSlotPropsOptions,

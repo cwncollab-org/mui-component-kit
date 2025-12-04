@@ -1,6 +1,7 @@
 export { IMask } from 'react-imask'
 export { type AutocompleteProps } from './Autocomplete'
 export { type CheckboxProps } from './Checkbox'
+export { CheckboxList, type CheckboxListProps } from './CheckboxList'
 export { type DatePickerProps } from './DatePicker'
 export {
   fieldContext,
