@@ -444,6 +444,7 @@ export function FormExample() {
                     fullWidth
                     options={countries}
                     placeholder='Select a country'
+                    select={option => option.value}
                   />
                 )}
               />
@@ -457,6 +458,7 @@ export function FormExample() {
                     fullWidth
                     options={countries}
                     placeholder='Select a country'
+                    select={option => option.value}
                   />
                 )}
               />
@@ -470,6 +472,7 @@ export function FormExample() {
                     fullWidth
                     options={countries}
                     placeholder='Select a country'
+                    select={option => option.value}
                   />
                 )}
               />
@@ -487,6 +490,7 @@ export function FormExample() {
                     multiple
                     options={skills}
                     placeholder='Select skills'
+                    select={option => option.value}
                   />
                 )}
               />
@@ -501,6 +505,7 @@ export function FormExample() {
                     multiple
                     options={skills}
                     placeholder='Select skills'
+                    select={option => option.value}
                   />
                 )}
               />
@@ -515,6 +520,7 @@ export function FormExample() {
                     multiple
                     options={skills}
                     placeholder='Select skills'
+                    select={option => option.value}
                   />
                 )}
               />

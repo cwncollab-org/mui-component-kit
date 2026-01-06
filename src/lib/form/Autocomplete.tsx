@@ -7,45 +7,98 @@ import {
   FormControlProps as MuiFormControlProps,
   FormHelperText as MuiFormHelperText,
   FormHelperTextProps as MuiFormHelperTextProps,
+  ChipTypeMap,
+  AutocompleteValue,
+  AutocompleteRenderInputParams,
+  AutocompleteChangeReason,
+  AutocompleteChangeDetails,
 } from '@mui/material'
 import { useFieldContext } from './formContext'
 import { useId, useMemo } from 'react'
 import { createTextFieldSlotProps } from './utils'
 
-type Option = {
-  value: string
-  label: string
-}
-
-export type AutocompleteProps = Omit<MuiFormControlProps, 'onChange'> & {
+export type AutocompleteProps<
+  Value,
+  Multiple extends boolean | undefined,
+  DisableClearable extends boolean | undefined,
+  FreeSolo extends boolean | undefined,
+  ChipComponent extends React.ElementType = ChipTypeMap['defaultComponent'],
+> = Omit<MuiFormControlProps, 'onChange'> & {
   label?: string
   labelBehavior?: 'auto' | 'shrink' | 'static'
   size?: 'small' | 'medium'
   fullWidth?: boolean
-  options?: Option[] | string[]
-  multiple?: boolean
-  freeSolo?: boolean
+
+  select?: (value: Value) => string | number
+  options: MuiAutocompleteProps<
+    Value,
+    Multiple,
+    DisableClearable,
+    FreeSolo,
+    ChipComponent
+  >['options']
+  renderInput?: MuiAutocompleteProps<
+    Value,
+    Multiple,
+    DisableClearable,
+    FreeSolo,
+    ChipComponent
+  >['renderInput']
+
+  multiple?: Multiple
+  freeSolo?: FreeSolo
   placeholder?: string
   required?: boolean
   disabled?: boolean
   slotProps?: {
     autocomplete?: Omit<
-      MuiAutocompleteProps<Option, boolean, boolean, boolean>,
+      MuiAutocompleteProps<
+        Value,
+        Multiple,
+        DisableClearable,
+        FreeSolo,
+        ChipComponent
+      >,
       'options' | 'value' | 'onChange' | 'renderInput' | 'multiple' | 'freeSolo'
     >
     textField?: Omit<MuiTextFieldProps, 'value' | 'onChange' | 'name'>
     helperText?: MuiFormHelperTextProps
   }
-  onChange?: (value: string | string[] | null) => void
+  onChange?: MuiAutocompleteProps<
+    Value,
+    Multiple,
+    DisableClearable,
+    FreeSolo,
+    ChipComponent
+  >['onChange']
 }
 
-export function Autocomplete(props: AutocompleteProps) {
-  const field = useFieldContext<string | string[]>()
+export function Autocomplete<
+  Value,
+  Multiple extends boolean | undefined,
+  DisableClearable extends boolean | undefined,
+  FreeSolo extends boolean | undefined,
+  ChipComponent extends React.ElementType = ChipTypeMap['defaultComponent'],
+>(
+  props: AutocompleteProps<
+    Value,
+    Multiple,
+    DisableClearable,
+    FreeSolo,
+    ChipComponent
+  >
+) {
+  const field = useFieldContext<
+    Value | Value[] | string | string[] | number | number[]
+  >()
+
   const {
     slotProps,
     options,
-    multiple = false,
-    freeSolo = false,
+    select,
+    renderInput,
+    multiple,
+    freeSolo,
     labelBehavior = 'auto',
     size,
     fullWidth,
@@ -56,21 +109,20 @@ export function Autocomplete(props: AutocompleteProps) {
     ...rest
   } = props
 
-  const id = useId()
+  const defaultIsOptionEqualToValue = (option: Value, value: Value) => {
+    if (!option) return false
 
-  const errorText = useMemo(() => {
-    if (field.state.meta.errors.length === 0) return null
-    return field.state.meta.errors.map(error => error.message).join(', ')
-  }, [field.state.meta.errors])
-
-  const renderedOptions = useMemo<Option[]>(() => {
-    if (options) {
-      return options.map(option =>
-        typeof option === 'string' ? { value: option, label: option } : option
-      )
+    if (
+      typeof option === 'object' &&
+      (typeof value === 'string' || typeof value === 'number')
+    ) {
+      const selectedOption = select
+        ? select(option)
+        : (option as unknown as string | number)
+      return selectedOption === value
     }
-    return []
-  }, [options])
+    return option === value
+  }
 
   const { input: inputProps, inputLabel: inputLabelProps } = useMemo(
     () =>
@@ -90,18 +142,108 @@ export function Autocomplete(props: AutocompleteProps) {
     },
   }
 
-  const getCurrentValue = () => {
+  const defaultRenderInput = (params: AutocompleteRenderInputParams) => {
+    return (
+      <MuiTextField
+        {...params}
+        label={props.label}
+        placeholder={placeholder}
+        error={Boolean(errorText)}
+        required={required}
+        name={field.name}
+        slotProps={{
+          ...textFieldProps.slotProps,
+          input: {
+            ...params.InputProps,
+            ...inputProps,
+          },
+          inputLabel: inputLabelProps,
+        }}
+        {...(({ slotProps: _, ...rest }) => rest)(textFieldProps)}
+      />
+    )
+  }
+
+  const id = useId()
+
+  const errorText = useMemo(() => {
+    if (field.state.meta.errors.length === 0) return null
+    return field.state.meta.errors.map(error => error.message).join(', ')
+  }, [field.state.meta.errors])
+
+  const value = useMemo(() => {
     const value = field.state.value
+    const eq =
+      slotProps?.autocomplete?.isOptionEqualToValue ??
+      defaultIsOptionEqualToValue
     if (multiple) {
       if (Array.isArray(value)) {
-        return renderedOptions.filter(option => value.includes(option.value))
+        return options.filter(option =>
+          value.some(v => eq(option, v as any))
+        ) as AutocompleteValue<Value, Multiple, DisableClearable, FreeSolo>
       }
-      return []
+      return [] as AutocompleteValue<
+        Value,
+        Multiple,
+        DisableClearable,
+        FreeSolo
+      >
     } else {
-      if (typeof value === 'string') {
-        return renderedOptions.find(option => option.value === value) || null
+      if (!Array.isArray(value) && value != null) {
+        return (options.find(option => eq(option, value as any)) ??
+          null) as AutocompleteValue<
+          Value,
+          Multiple,
+          DisableClearable,
+          FreeSolo
+        >
       }
-      return null
+      return null as AutocompleteValue<
+        Value,
+        Multiple,
+        DisableClearable,
+        FreeSolo
+      >
+    }
+  }, [
+    field.state.value,
+    options,
+    multiple,
+    slotProps?.autocomplete?.isOptionEqualToValue,
+  ])
+
+  const handleChange = (
+    event: React.SyntheticEvent<Element, Event>,
+    newValue: AutocompleteValue<Value, Multiple, DisableClearable, FreeSolo>,
+    reason: AutocompleteChangeReason,
+    details?: AutocompleteChangeDetails<Value> | undefined
+  ) => {
+    onChange?.(event, newValue, reason, details)
+    if (!event.defaultPrevented) {
+      let processedValue:
+        | Value
+        | Value[]
+        | string
+        | string[]
+        | number
+        | number[]
+        | null = null
+      if (multiple) {
+        if (Array.isArray(newValue)) {
+          processedValue = newValue.map(item =>
+            select ? select(item) : item
+          ) as Value[]
+        }
+      } else {
+        if (!Array.isArray(newValue)) {
+          processedValue = select
+            ? select(newValue as Value)
+            : (newValue as Value)
+        }
+      }
+      if (processedValue) {
+        field.handleChange(processedValue)
+      }
     }
   }
 
@@ -122,62 +264,14 @@ export function Autocomplete(props: AutocompleteProps) {
         multiple={multiple}
         freeSolo={freeSolo}
         disabled={disabled}
-        options={renderedOptions}
-        getOptionLabel={option => {
-          if (typeof option === 'string') return option
-          return option.label
-        }}
-        isOptionEqualToValue={(option, value) => {
-          if (typeof option === 'string' && typeof value === 'string') {
-            return option === value
-          }
-          return option.value === value.value
-        }}
-        value={getCurrentValue()}
-        onChange={(event, newValue) => {
-          let processedValue: string | string[] | null = null
-
-          if (multiple) {
-            if (Array.isArray(newValue)) {
-              processedValue = newValue.map(item =>
-                typeof item === 'string' ? item : (item as Option).value
-              )
-            } else {
-              processedValue = []
-            }
-          } else {
-            if (newValue) {
-              processedValue =
-                typeof newValue === 'string'
-                  ? newValue
-                  : (newValue as Option).value
-            }
-          }
-
-          onChange?.(processedValue)
-          if (!event.defaultPrevented) {
-            field.handleChange(processedValue as string | string[])
-          }
-        }}
-        renderInput={params => (
-          <MuiTextField
-            {...params}
-            label={props.label}
-            placeholder={placeholder}
-            error={Boolean(errorText)}
-            required={required}
-            name={field.name}
-            slotProps={{
-              ...textFieldProps.slotProps,
-              input: {
-                ...params.InputProps,
-                ...inputProps,
-              },
-              inputLabel: inputLabelProps,
-            }}
-            {...(({ slotProps: _, ...rest }) => rest)(textFieldProps)}
-          />
-        )}
+        options={options}
+        isOptionEqualToValue={
+          slotProps?.autocomplete?.isOptionEqualToValue ??
+          defaultIsOptionEqualToValue
+        }
+        value={value}
+        onChange={handleChange}
+        renderInput={renderInput ?? defaultRenderInput}
         {...slotProps?.autocomplete}
       />
       {Boolean(errorText) && (
