@@ -437,6 +437,7 @@ export function FormExample() {
                 name='country'
                 children={field => (
                   <field.SubscribeAutocomplete
+                    freeSolo={false}
                     label='Country (auto)'
                     labelBehavior='auto'
                     size='small'
@@ -444,7 +445,8 @@ export function FormExample() {
                     fullWidth
                     options={countries}
                     placeholder='Select a country'
-                    select={option => option.value}
+                    getOptionValue={option => option.value}
+                    getOptionLabel={option => option.label}
                   />
                 )}
               />
@@ -458,7 +460,7 @@ export function FormExample() {
                     fullWidth
                     options={countries}
                     placeholder='Select a country'
-                    select={option => option.value}
+                    getOptionValue={option => option.value}
                   />
                 )}
               />
@@ -472,7 +474,7 @@ export function FormExample() {
                     fullWidth
                     options={countries}
                     placeholder='Select a country'
-                    select={option => option.value}
+                    getOptionValue={option => option.value}
                   />
                 )}
               />
@@ -490,7 +492,7 @@ export function FormExample() {
                     multiple
                     options={skills}
                     placeholder='Select skills'
-                    select={option => option.value}
+                    getOptionValue={option => option.value}
                   />
                 )}
               />
@@ -505,7 +507,7 @@ export function FormExample() {
                     multiple
                     options={skills}
                     placeholder='Select skills'
-                    select={option => option.value}
+                    getOptionValue={option => option.value}
                   />
                 )}
               />
@@ -520,7 +522,7 @@ export function FormExample() {
                     multiple
                     options={skills}
                     placeholder='Select skills'
-                    select={option => option.value}
+                    getOptionValue={option => option.value}
                   />
                 )}
               />

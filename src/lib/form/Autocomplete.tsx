@@ -17,61 +17,120 @@ import { useFieldContext } from './formContext'
 import { useId, useMemo } from 'react'
 import { createTextFieldSlotProps } from './utils'
 
+type BaseAutocompleteProps<
+  Value,
+  Multiple extends boolean | undefined,
+  DisableClearable extends boolean | undefined,
+  FreeSolo extends boolean | undefined,
+  ChipComponent extends React.ElementType = ChipTypeMap['defaultComponent'],
+> = MuiAutocompleteProps<
+  Value,
+  Multiple,
+  DisableClearable,
+  FreeSolo,
+  ChipComponent
+>
+
+type InternalAutocompleteProps =
+  | 'options'
+  | 'value'
+  | 'autoComplete'
+  | 'autoHighlight'
+  | 'autoSelect'
+  | 'blurOnSelect'
+  | 'clearIcon'
+  | 'clearOnBlur'
+  | 'clearOnEscape'
+  | 'clearText'
+  | 'closeText'
+  | 'defaultValue'
+  | 'disableClearable'
+  | 'disableCloseOnSelect'
+  | 'disabled'
+  | 'disabledItemsFocusable'
+  | 'disableListWrap'
+  | 'disablePortal'
+  | 'filterOptions'
+  | 'filterSelectedOptions'
+  | 'forcePopupIcon'
+  | 'freeSolo'
+  | 'fullWidth'
+  | 'getLimitTagsText'
+  | 'getOptionDisabled'
+  | 'getOptionKey'
+  | 'getOptionLabel'
+  | 'groupBy'
+  | 'handleHomeEndKeys'
+  | 'includeInputInList'
+  | 'inputValue'
+  | 'isOptionEqualToValue'
+  | 'limitTags'
+  | 'loading'
+  | 'loadingText'
+  | 'multiple'
+  | 'noOptionsText'
+  | 'onChange'
+  | 'onClose'
+  | 'onHighlightChange'
+  | 'onInputChange'
+  | 'onOpen'
+  | 'open'
+  | 'openOnFocus'
+  | 'openText'
+  | 'popupIcon'
+  | 'readOnly'
+  | 'selectOnFocus'
+  | 'size'
+
 export type AutocompleteProps<
   Value,
   Multiple extends boolean | undefined,
   DisableClearable extends boolean | undefined,
   FreeSolo extends boolean | undefined,
   ChipComponent extends React.ElementType = ChipTypeMap['defaultComponent'],
-> = Omit<MuiFormControlProps, 'onChange'> & {
-  label?: string
-  labelBehavior?: 'auto' | 'shrink' | 'static'
-  size?: 'small' | 'medium'
-  fullWidth?: boolean
+> = Omit<MuiFormControlProps, 'onChange'> &
+  Pick<
+    BaseAutocompleteProps<
+      Value,
+      Multiple,
+      DisableClearable,
+      FreeSolo,
+      ChipComponent
+    >,
+    Exclude<InternalAutocompleteProps, 'value'>
+  > & {
+    label?: string
+    labelBehavior?: 'auto' | 'shrink' | 'static'
+    size?: 'small' | 'medium'
+    fullWidth?: boolean
 
-  select?: (value: Value) => string | number
-  options: MuiAutocompleteProps<
-    Value,
-    Multiple,
-    DisableClearable,
-    FreeSolo,
-    ChipComponent
-  >['options']
-  renderInput?: MuiAutocompleteProps<
-    Value,
-    Multiple,
-    DisableClearable,
-    FreeSolo,
-    ChipComponent
-  >['renderInput']
+    getOptionValue?: (value: Value) => string | number
+    renderInput?: MuiAutocompleteProps<
+      Value,
+      Multiple,
+      DisableClearable,
+      FreeSolo,
+      ChipComponent
+    >['renderInput']
 
-  multiple?: Multiple
-  freeSolo?: FreeSolo
-  placeholder?: string
-  required?: boolean
-  disabled?: boolean
-  slotProps?: {
-    autocomplete?: Omit<
-      MuiAutocompleteProps<
-        Value,
-        Multiple,
-        DisableClearable,
-        FreeSolo,
-        ChipComponent
-      >,
-      'options' | 'value' | 'onChange' | 'renderInput' | 'multiple' | 'freeSolo'
-    >
-    textField?: Omit<MuiTextFieldProps, 'value' | 'onChange' | 'name'>
-    helperText?: MuiFormHelperTextProps
+    placeholder?: string
+    required?: boolean
+    disabled?: boolean
+    slotProps?: {
+      autocomplete?: Omit<
+        BaseAutocompleteProps<
+          Value,
+          Multiple,
+          DisableClearable,
+          FreeSolo,
+          ChipComponent
+        >,
+        InternalAutocompleteProps
+      >
+      textField?: Omit<MuiTextFieldProps, 'value' | 'onChange' | 'name'>
+      helperText?: MuiFormHelperTextProps
+    }
   }
-  onChange?: MuiAutocompleteProps<
-    Value,
-    Multiple,
-    DisableClearable,
-    FreeSolo,
-    ChipComponent
-  >['onChange']
-}
 
 export function Autocomplete<
   Value,
@@ -95,10 +154,16 @@ export function Autocomplete<
   const {
     slotProps,
     options,
-    select,
+    getOptionLabel,
+    isOptionEqualToValue,
+    getOptionValue,
     renderInput,
     multiple,
     freeSolo,
+    clearOnBlur,
+    clearOnEscape,
+    clearIcon,
+    clearText,
     labelBehavior = 'auto',
     size,
     fullWidth,
@@ -106,6 +171,41 @@ export function Autocomplete<
     required,
     disabled,
     onChange,
+    autoComplete,
+    autoHighlight,
+    autoSelect,
+    blurOnSelect,
+    closeText,
+    defaultValue,
+    disableClearable,
+    disableCloseOnSelect,
+    disabledItemsFocusable,
+    disableListWrap,
+    disablePortal,
+    filterOptions,
+    filterSelectedOptions,
+    forcePopupIcon,
+    getLimitTagsText,
+    getOptionDisabled,
+    getOptionKey,
+    groupBy,
+    handleHomeEndKeys,
+    includeInputInList,
+    inputValue,
+    limitTags,
+    loading,
+    loadingText,
+    noOptionsText,
+    onClose,
+    onHighlightChange,
+    onInputChange,
+    onOpen,
+    open,
+    openOnFocus,
+    openText,
+    popupIcon,
+    readOnly,
+    selectOnFocus,
     ...rest
   } = props
 
@@ -116,8 +216,8 @@ export function Autocomplete<
       typeof option === 'object' &&
       (typeof value === 'string' || typeof value === 'number')
     ) {
-      const selectedOption = select
-        ? select(option)
+      const selectedOption = getOptionValue
+        ? getOptionValue(option)
         : (option as unknown as string | number)
       return selectedOption === value
     }
@@ -173,9 +273,7 @@ export function Autocomplete<
 
   const value = useMemo(() => {
     const value = field.state.value
-    const eq =
-      slotProps?.autocomplete?.isOptionEqualToValue ??
-      defaultIsOptionEqualToValue
+    const eq = isOptionEqualToValue ?? defaultIsOptionEqualToValue
     if (multiple) {
       if (Array.isArray(value)) {
         return options.filter(option =>
@@ -205,12 +303,7 @@ export function Autocomplete<
         FreeSolo
       >
     }
-  }, [
-    field.state.value,
-    options,
-    multiple,
-    slotProps?.autocomplete?.isOptionEqualToValue,
-  ])
+  }, [field.state.value, options, multiple, isOptionEqualToValue])
 
   const handleChange = (
     event: React.SyntheticEvent<Element, Event>,
@@ -231,14 +324,16 @@ export function Autocomplete<
       if (multiple) {
         if (Array.isArray(newValue)) {
           processedValue = newValue.map(item =>
-            select ? select(item) : item
+            getOptionValue ? getOptionValue(item) : item
           ) as Value[]
         }
       } else {
         if (!Array.isArray(newValue)) {
-          processedValue = select
-            ? select(newValue as Value)
-            : (newValue as Value)
+          processedValue = newValue
+            ? getOptionValue
+              ? getOptionValue(newValue as Value)
+              : (newValue as Value)
+            : null
         }
       }
       if (processedValue) {
@@ -265,13 +360,54 @@ export function Autocomplete<
         freeSolo={freeSolo}
         disabled={disabled}
         options={options}
+        getOptionLabel={getOptionLabel}
         isOptionEqualToValue={
-          slotProps?.autocomplete?.isOptionEqualToValue ??
-          defaultIsOptionEqualToValue
+          isOptionEqualToValue ?? defaultIsOptionEqualToValue
         }
+        clearOnBlur={clearOnBlur}
+        clearOnEscape={clearOnEscape}
+        clearIcon={clearIcon}
+        clearText={clearText}
         value={value}
         onChange={handleChange}
         renderInput={renderInput ?? defaultRenderInput}
+        autoComplete={autoComplete}
+        autoHighlight={autoHighlight}
+        autoSelect={autoSelect}
+        blurOnSelect={blurOnSelect}
+        closeText={closeText}
+        defaultValue={defaultValue}
+        disableClearable={disableClearable}
+        disableCloseOnSelect={disableCloseOnSelect}
+        disabledItemsFocusable={disabledItemsFocusable}
+        disableListWrap={disableListWrap}
+        disablePortal={disablePortal}
+        filterOptions={filterOptions}
+        filterSelectedOptions={filterSelectedOptions}
+        forcePopupIcon={forcePopupIcon}
+        getLimitTagsText={getLimitTagsText}
+        getOptionDisabled={getOptionDisabled}
+        getOptionKey={getOptionKey}
+        groupBy={groupBy}
+        handleHomeEndKeys={handleHomeEndKeys}
+        includeInputInList={includeInputInList}
+        inputValue={inputValue}
+        limitTags={limitTags}
+        loading={loading}
+        loadingText={loadingText}
+        noOptionsText={noOptionsText}
+        onClose={onClose}
+        onHighlightChange={onHighlightChange}
+        onInputChange={onInputChange}
+        onOpen={onOpen}
+        open={open}
+        openOnFocus={openOnFocus}
+        openText={openText}
+        popupIcon={popupIcon}
+        readOnly={readOnly}
+        selectOnFocus={selectOnFocus}
+        size={size}
+        fullWidth={fullWidth}
         {...slotProps?.autocomplete}
       />
       {Boolean(errorText) && (
