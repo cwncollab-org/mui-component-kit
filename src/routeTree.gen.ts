@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TabsExampleRouteImport } from './routes/tabs-example'
 import { Route as SelectExampleRouteImport } from './routes/select-example'
+import { Route as MrtExampleManualPaginationRouteImport } from './routes/mrt-example-manual-pagination'
 import { Route as MrtExampleRouteImport } from './routes/mrt-example'
 import { Route as MaskedInputExampleRouteImport } from './routes/masked-input-example'
 import { Route as FormExampleRouteImport } from './routes/form-example'
@@ -35,6 +36,12 @@ const SelectExampleRoute = SelectExampleRouteImport.update({
   path: '/select-example',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MrtExampleManualPaginationRoute =
+  MrtExampleManualPaginationRouteImport.update({
+    id: '/mrt-example-manual-pagination',
+    path: '/mrt-example-manual-pagination',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const MrtExampleRoute = MrtExampleRouteImport.update({
   id: '/mrt-example',
   path: '/mrt-example',
@@ -110,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
   '/mrt-example': typeof MrtExampleRoute
+  '/mrt-example-manual-pagination': typeof MrtExampleManualPaginationRoute
   '/select-example': typeof SelectExampleRoute
   '/tabs-example': typeof TabsExampleRouteWithChildren
   '/tabs-example/tab1': typeof TabsExampleTab1Route
@@ -127,6 +135,7 @@ export interface FileRoutesByTo {
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
   '/mrt-example': typeof MrtExampleRoute
+  '/mrt-example-manual-pagination': typeof MrtExampleManualPaginationRoute
   '/select-example': typeof SelectExampleRoute
   '/tabs-example/tab1': typeof TabsExampleTab1Route
   '/tabs-example/tab2': typeof TabsExampleTab2Route
@@ -144,6 +153,7 @@ export interface FileRoutesById {
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
   '/mrt-example': typeof MrtExampleRoute
+  '/mrt-example-manual-pagination': typeof MrtExampleManualPaginationRoute
   '/select-example': typeof SelectExampleRoute
   '/tabs-example': typeof TabsExampleRouteWithChildren
   '/tabs-example/tab1': typeof TabsExampleTab1Route
@@ -163,6 +173,7 @@ export interface FileRouteTypes {
     | '/form-example'
     | '/masked-input-example'
     | '/mrt-example'
+    | '/mrt-example-manual-pagination'
     | '/select-example'
     | '/tabs-example'
     | '/tabs-example/tab1'
@@ -180,6 +191,7 @@ export interface FileRouteTypes {
     | '/form-example'
     | '/masked-input-example'
     | '/mrt-example'
+    | '/mrt-example-manual-pagination'
     | '/select-example'
     | '/tabs-example/tab1'
     | '/tabs-example/tab2'
@@ -196,6 +208,7 @@ export interface FileRouteTypes {
     | '/form-example'
     | '/masked-input-example'
     | '/mrt-example'
+    | '/mrt-example-manual-pagination'
     | '/select-example'
     | '/tabs-example'
     | '/tabs-example/tab1'
@@ -214,6 +227,7 @@ export interface RootRouteChildren {
   FormExampleRoute: typeof FormExampleRoute
   MaskedInputExampleRoute: typeof MaskedInputExampleRoute
   MrtExampleRoute: typeof MrtExampleRoute
+  MrtExampleManualPaginationRoute: typeof MrtExampleManualPaginationRoute
   SelectExampleRoute: typeof SelectExampleRoute
   TabsExampleRoute: typeof TabsExampleRouteWithChildren
 }
@@ -232,6 +246,13 @@ declare module '@tanstack/react-router' {
       path: '/select-example'
       fullPath: '/select-example'
       preLoaderRoute: typeof SelectExampleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mrt-example-manual-pagination': {
+      id: '/mrt-example-manual-pagination'
+      path: '/mrt-example-manual-pagination'
+      fullPath: '/mrt-example-manual-pagination'
+      preLoaderRoute: typeof MrtExampleManualPaginationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mrt-example': {
@@ -368,6 +389,7 @@ const rootRouteChildren: RootRouteChildren = {
   FormExampleRoute: FormExampleRoute,
   MaskedInputExampleRoute: MaskedInputExampleRoute,
   MrtExampleRoute: MrtExampleRoute,
+  MrtExampleManualPaginationRoute: MrtExampleManualPaginationRoute,
   SelectExampleRoute: SelectExampleRoute,
   TabsExampleRoute: TabsExampleRouteWithChildren,
 }

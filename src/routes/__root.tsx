@@ -35,6 +35,9 @@ function RouteComponent() {
         <Link component={RouterLink} to='/mrt-example'>
           Material Router Table Example
         </Link>
+        <Link component={RouterLink} to='/mrt-example-manual-pagination'>
+          Material Router Table Example (Manual Pagination)
+        </Link>
         <Link component={RouterLink} to='/tabs-example'>
           Tabs Example
         </Link>
