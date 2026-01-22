@@ -1,7 +1,7 @@
 {
   "name": "@cwncollab-org/mui-component-kit",
   "private": false,
-  "version": "0.16.2",
+  "version": "0.17.0",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -9,7 +9,10 @@
   "homepage": "https://github.com/cwncollab-org/mui-component-kit",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cwncollab-org/mui-component-kit.git"
+    "url": "git+https://github.com/cwncollab-org/mui-component-kit.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
   "files": [
     "dist"
