@@ -113,6 +113,14 @@ export type AutocompleteProps<
       ChipComponent
     >['renderInput']
 
+    renderOption?: MuiAutocompleteProps<
+      Value,
+      Multiple,
+      DisableClearable,
+      FreeSolo,
+      ChipComponent
+    >['renderOption']
+
     placeholder?: string
     required?: boolean
     disabled?: boolean
@@ -158,6 +166,7 @@ export function Autocomplete<
     isOptionEqualToValue,
     getOptionValue,
     renderInput,
+    renderOption,
     multiple,
     freeSolo,
     clearOnBlur,
@@ -371,6 +380,7 @@ export function Autocomplete<
         value={value}
         onChange={handleChange}
         renderInput={renderInput ?? defaultRenderInput}
+        renderOption={renderOption}
         autoComplete={autoComplete}
         autoHighlight={autoHighlight}
         autoSelect={autoSelect}
