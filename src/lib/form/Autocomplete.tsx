@@ -156,7 +156,7 @@ export function Autocomplete<
   >
 ) {
   const field = useFieldContext<
-    Value | Value[] | string | string[] | number | number[]
+    Value | Value[] | string | string[] | number | number[] | null
   >()
 
   const {
@@ -322,6 +322,10 @@ export function Autocomplete<
   ) => {
     onChange?.(event, newValue, reason, details)
     if (!event.defaultPrevented) {
+      if (newValue === null) {
+        field.handleChange(null)
+        return
+      }
       let processedValue:
         | Value
         | Value[]
@@ -345,7 +349,7 @@ export function Autocomplete<
             : null
         }
       }
-      if (processedValue) {
+      if (processedValue !== null) {
         field.handleChange(processedValue)
       }
     }
