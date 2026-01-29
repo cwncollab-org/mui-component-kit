@@ -1,4 +1,5 @@
-import { Select, SelectOption, SelectProps } from './Select'
+import { Select, SelectProps } from './Select'
+import { SelectOption } from './SelectBase'
 import { useFormContext } from './formContext'
 
 export type SubscribeSelectProps<TOption = SelectOption | string | any> =

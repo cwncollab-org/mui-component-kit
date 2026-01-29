@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Box, MenuItem, Paper, Stack, Typography } from '@mui/material'
-import { useAppForm } from '../lib'
+import { Select, useAppForm } from '../lib'
 import { useState, useEffect } from 'react'
 import { z } from 'zod'
 
@@ -47,6 +47,8 @@ export function SelectExample() {
   >([])
   const [loading, setLoading] = useState(true)
 
+  const [controlledValue, setControlledValue] = useState('user')
+
   useEffect(() => {
     setLoading(true)
     const timer = setTimeout(() => {
@@ -89,6 +91,19 @@ export function SelectExample() {
         <Typography variant='h5' gutterBottom>
           Select Example
         </Typography>
+      </Box>
+
+      <Box>
+        <Typography variant='h6'>Controlled Select</Typography>
+        <Select
+          label='Controlled Select'
+          labelBehavior='static'
+          options={roles}
+          value={controlledValue}
+          onChange={e => setControlledValue(e.target.value as string)}
+          fullWidth
+          size='small'
+        ></Select>
       </Box>
 
       <Box

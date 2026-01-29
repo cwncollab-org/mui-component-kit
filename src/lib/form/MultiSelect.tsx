@@ -15,7 +15,7 @@ import {
 import { useFieldContext } from './formContext'
 import { useId, useMemo } from 'react'
 import { createSelectSlotProps, renderOptions } from './utils'
-import { SelectOption } from './Select'
+import { SelectOption } from './SelectBase'
 
 type SortBy = 'label' | 'value' | false
 

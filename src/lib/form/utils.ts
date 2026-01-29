@@ -6,7 +6,7 @@ import {
 } from '@mui/material'
 import { InputHTMLAttributes } from 'react'
 import { PickersOutlinedInputProps } from '@mui/x-date-pickers'
-import { SelectOption } from './Select'
+import { SelectOption } from './SelectBase'
 
 export type CreateTextFieldSlotPropsOptions = {
   slotProps?: TextFieldProps['slotProps']
