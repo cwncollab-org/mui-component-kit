@@ -19,13 +19,10 @@ const converters: Record<
 
 export function TextField(props: TextFieldProps) {
   const {
-    labelBehavior = 'auto',
     min,
     max,
     maxLength,
     pattern,
-    label,
-    slotProps,
     onChange,
     helperText = '',
     ...rest
@@ -38,14 +35,12 @@ export function TextField(props: TextFieldProps) {
   }, [field.state.meta.errors])
 
   const error = field.state.meta.errors.length > 0
-
   const type = props.type
 
   return (
     <TextFieldBase
       {...rest}
       name={field.name}
-      label={label}
       value={convertToString(type, field.state.value) ?? ''}
       onBlur={field.handleBlur}
       onChange={ev => {
