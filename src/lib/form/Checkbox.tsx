@@ -1,35 +1,23 @@
-import {
-  Checkbox as MuiCheckbox,
-  CheckboxProps as MuiCheckboxProps,
-  FormControlLabel as MuiFormControlLabel,
-  FormControlLabelProps as MuiFormControlLabelProps,
-} from '@mui/material'
 import { useFieldContext } from './formContext'
+import { CheckboxBase, CheckboxBaseProps } from './CheckboxBase'
 
-export type CheckboxProps = Omit<MuiCheckboxProps, 'name'> &
-  Pick<MuiFormControlLabelProps, 'label' | 'required' | 'disabled' | 'onChange'>
+export type CheckboxProps = Omit<CheckboxBaseProps, 'name' | 'checked'>
 
 export function Checkbox(props: CheckboxProps) {
   const field = useFieldContext<boolean>()
-  const { label, required, disabled, onChange, ...rest } = props
+  const { onChange, ...rest } = props
+
   return (
-    <MuiFormControlLabel
-      label={label}
-      disabled={disabled}
-      required={required}
-      control={
-        <MuiCheckbox
-          name={field.name}
-          checked={field.state.value}
-          onChange={(ev, child) => {
-            onChange?.(ev, child)
-            if (!ev.defaultPrevented) {
-              field.handleChange(ev.target.checked)
-            }
-          }}
-          {...rest}
-        />
-      }
+    <CheckboxBase
+      {...rest}
+      name={field.name}
+      checked={field.state.value}
+      onChange={(ev, child) => {
+        onChange?.(ev, child)
+        if (!ev.defaultPrevented) {
+          field.handleChange(ev.target.checked)
+        }
+      }}
       data-isdirty={field.state.meta.isDirty || undefined}
       data-ispristine={field.state.meta.isPristine || undefined}
       data-istouched={field.state.meta.isTouched || undefined}
