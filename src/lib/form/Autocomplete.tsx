@@ -1,86 +1,12 @@
 import {
-  Autocomplete as MuiAutocomplete,
-  AutocompleteProps as MuiAutocompleteProps,
-  TextField as MuiTextField,
-  TextFieldProps as MuiTextFieldProps,
-  FormControl as MuiFormControl,
-  FormControlProps as MuiFormControlProps,
-  FormHelperText as MuiFormHelperText,
-  FormHelperTextProps as MuiFormHelperTextProps,
   ChipTypeMap,
   AutocompleteValue,
-  AutocompleteRenderInputParams,
   AutocompleteChangeReason,
   AutocompleteChangeDetails,
 } from '@mui/material'
 import { useFieldContext } from './formContext'
-import { useId, useMemo } from 'react'
-import { createTextFieldSlotProps } from './utils'
-
-type BaseAutocompleteProps<
-  Value,
-  Multiple extends boolean | undefined,
-  DisableClearable extends boolean | undefined,
-  FreeSolo extends boolean | undefined,
-  ChipComponent extends React.ElementType = ChipTypeMap['defaultComponent'],
-> = MuiAutocompleteProps<
-  Value,
-  Multiple,
-  DisableClearable,
-  FreeSolo,
-  ChipComponent
->
-
-type InternalAutocompleteProps =
-  | 'options'
-  | 'value'
-  | 'autoComplete'
-  | 'autoHighlight'
-  | 'autoSelect'
-  | 'blurOnSelect'
-  | 'clearIcon'
-  | 'clearOnBlur'
-  | 'clearOnEscape'
-  | 'clearText'
-  | 'closeText'
-  | 'defaultValue'
-  | 'disableClearable'
-  | 'disableCloseOnSelect'
-  | 'disabled'
-  | 'disabledItemsFocusable'
-  | 'disableListWrap'
-  | 'disablePortal'
-  | 'filterOptions'
-  | 'filterSelectedOptions'
-  | 'forcePopupIcon'
-  | 'freeSolo'
-  | 'fullWidth'
-  | 'getLimitTagsText'
-  | 'getOptionDisabled'
-  | 'getOptionKey'
-  | 'getOptionLabel'
-  | 'groupBy'
-  | 'handleHomeEndKeys'
-  | 'includeInputInList'
-  | 'inputValue'
-  | 'isOptionEqualToValue'
-  | 'limitTags'
-  | 'loading'
-  | 'loadingText'
-  | 'multiple'
-  | 'noOptionsText'
-  | 'onChange'
-  | 'onClose'
-  | 'onHighlightChange'
-  | 'onInputChange'
-  | 'onOpen'
-  | 'open'
-  | 'openOnFocus'
-  | 'openText'
-  | 'popupIcon'
-  | 'readOnly'
-  | 'selectOnFocus'
-  | 'size'
+import { useMemo } from 'react'
+import { AutocompleteBase, AutocompleteBaseProps } from './AutocompleteBase'
 
 export type AutocompleteProps<
   Value,
@@ -88,57 +14,16 @@ export type AutocompleteProps<
   DisableClearable extends boolean | undefined,
   FreeSolo extends boolean | undefined,
   ChipComponent extends React.ElementType = ChipTypeMap['defaultComponent'],
-> = Omit<MuiFormControlProps, 'onChange'> &
-  Pick<
-    BaseAutocompleteProps<
-      Value,
-      Multiple,
-      DisableClearable,
-      FreeSolo,
-      ChipComponent
-    >,
-    Exclude<InternalAutocompleteProps, 'value'>
-  > & {
-    label?: string
-    labelBehavior?: 'auto' | 'shrink' | 'static'
-    size?: 'small' | 'medium'
-    fullWidth?: boolean
-
-    getOptionValue?: (value: Value) => string | number
-    renderInput?: MuiAutocompleteProps<
-      Value,
-      Multiple,
-      DisableClearable,
-      FreeSolo,
-      ChipComponent
-    >['renderInput']
-
-    renderOption?: MuiAutocompleteProps<
-      Value,
-      Multiple,
-      DisableClearable,
-      FreeSolo,
-      ChipComponent
-    >['renderOption']
-
-    placeholder?: string
-    required?: boolean
-    disabled?: boolean
-    slotProps?: {
-      autocomplete?: Omit<
-        BaseAutocompleteProps<
-          Value,
-          Multiple,
-          DisableClearable,
-          FreeSolo,
-          ChipComponent
-        >,
-        InternalAutocompleteProps
-      >
-      textField?: Omit<MuiTextFieldProps, 'value' | 'onChange' | 'name'>
-      helperText?: MuiFormHelperTextProps
-    }
-  }
+> = Omit<
+  AutocompleteBaseProps<
+    Value,
+    Multiple,
+    DisableClearable,
+    FreeSolo,
+    ChipComponent
+  >,
+  'name' | 'value'
+>
 
 export function Autocomplete<
   Value,
@@ -160,61 +45,12 @@ export function Autocomplete<
   >()
 
   const {
-    slotProps,
-    options,
-    getOptionLabel,
-    isOptionEqualToValue,
     getOptionValue,
-    renderInput,
-    renderOption,
-    multiple,
-    freeSolo,
-    clearOnBlur,
-    clearOnEscape,
-    clearIcon,
-    clearText,
-    labelBehavior = 'auto',
-    size,
-    fullWidth,
-    placeholder,
-    required,
-    disabled,
     onChange,
-    autoComplete,
-    autoHighlight,
-    autoSelect,
-    blurOnSelect,
-    closeText,
-    defaultValue,
-    disableClearable,
-    disableCloseOnSelect,
-    disabledItemsFocusable,
-    disableListWrap,
-    disablePortal,
-    filterOptions,
-    filterSelectedOptions,
-    forcePopupIcon,
-    getLimitTagsText,
-    getOptionDisabled,
-    getOptionKey,
-    groupBy,
-    handleHomeEndKeys,
-    includeInputInList,
-    inputValue,
-    limitTags,
-    loading,
-    loadingText,
-    noOptionsText,
-    onClose,
-    onHighlightChange,
-    onInputChange,
-    onOpen,
-    open,
-    openOnFocus,
-    openText,
-    popupIcon,
-    readOnly,
-    selectOnFocus,
+    multiple,
+    options,
+    isOptionEqualToValue,
+    helperText,
     ...rest
   } = props
 
@@ -232,48 +68,6 @@ export function Autocomplete<
     }
     return option === value
   }
-
-  const { input: inputProps, inputLabel: inputLabelProps } = useMemo(
-    () =>
-      createTextFieldSlotProps({
-        labelBehavior,
-        slotProps: slotProps?.textField?.slotProps,
-      }),
-    [labelBehavior, slotProps?.textField?.slotProps]
-  )
-
-  const textFieldProps: Partial<MuiTextFieldProps> = {
-    ...slotProps?.textField,
-    slotProps: {
-      ...slotProps?.textField?.slotProps,
-      inputLabel: inputLabelProps,
-      input: inputProps,
-    },
-  }
-
-  const defaultRenderInput = (params: AutocompleteRenderInputParams) => {
-    return (
-      <MuiTextField
-        {...params}
-        label={props.label}
-        placeholder={placeholder}
-        error={Boolean(errorText)}
-        required={required}
-        name={field.name}
-        slotProps={{
-          ...textFieldProps.slotProps,
-          input: {
-            ...params.InputProps,
-            ...inputProps,
-          },
-          inputLabel: inputLabelProps,
-        }}
-        {...(({ slotProps: _, ...rest }) => rest)(textFieldProps)}
-      />
-    )
-  }
-
-  const id = useId()
 
   const errorText = useMemo(() => {
     if (field.state.meta.errors.length === 0) return null
@@ -356,79 +150,19 @@ export function Autocomplete<
   }
 
   return (
-    <MuiFormControl
+    <AutocompleteBase
+      {...rest}
+      multiple={multiple}
       error={Boolean(errorText)}
-      fullWidth={fullWidth}
-      size={size}
       data-isdirty={field.state.meta.isDirty || undefined}
       data-ispristine={field.state.meta.isPristine || undefined}
       data-istouched={field.state.meta.isTouched || undefined}
       data-isdefaultvalue={field.state.meta.isDefaultValue || undefined}
       data-isvalid={field.state.meta.isValid || undefined}
-      {...rest}
-    >
-      <MuiAutocomplete
-        id={id}
-        multiple={multiple}
-        freeSolo={freeSolo}
-        disabled={disabled}
-        options={options}
-        getOptionLabel={getOptionLabel}
-        isOptionEqualToValue={
-          isOptionEqualToValue ?? defaultIsOptionEqualToValue
-        }
-        clearOnBlur={clearOnBlur}
-        clearOnEscape={clearOnEscape}
-        clearIcon={clearIcon}
-        clearText={clearText}
-        value={value}
-        onChange={handleChange}
-        renderInput={renderInput ?? defaultRenderInput}
-        renderOption={renderOption}
-        autoComplete={autoComplete}
-        autoHighlight={autoHighlight}
-        autoSelect={autoSelect}
-        blurOnSelect={blurOnSelect}
-        closeText={closeText}
-        defaultValue={defaultValue}
-        disableClearable={disableClearable}
-        disableCloseOnSelect={disableCloseOnSelect}
-        disabledItemsFocusable={disabledItemsFocusable}
-        disableListWrap={disableListWrap}
-        disablePortal={disablePortal}
-        filterOptions={filterOptions}
-        filterSelectedOptions={filterSelectedOptions}
-        forcePopupIcon={forcePopupIcon}
-        getLimitTagsText={getLimitTagsText}
-        getOptionDisabled={getOptionDisabled}
-        getOptionKey={getOptionKey}
-        groupBy={groupBy}
-        handleHomeEndKeys={handleHomeEndKeys}
-        includeInputInList={includeInputInList}
-        inputValue={inputValue}
-        limitTags={limitTags}
-        loading={loading}
-        loadingText={loadingText}
-        noOptionsText={noOptionsText}
-        onClose={onClose}
-        onHighlightChange={onHighlightChange}
-        onInputChange={onInputChange}
-        onOpen={onOpen}
-        open={open}
-        openOnFocus={openOnFocus}
-        openText={openText}
-        popupIcon={popupIcon}
-        readOnly={readOnly}
-        selectOnFocus={selectOnFocus}
-        size={size}
-        fullWidth={fullWidth}
-        {...slotProps?.autocomplete}
-      />
-      {Boolean(errorText) && (
-        <MuiFormHelperText {...slotProps?.helperText}>
-          {errorText}
-        </MuiFormHelperText>
-      )}
-    </MuiFormControl>
+      options={options}
+      value={value}
+      onChange={handleChange}
+      helperText={errorText ?? helperText}
+    />
   )
 }
