@@ -20,11 +20,31 @@ export type SelectOption = {
 
 export type SelectBaseProps<TOption = SelectOption | string | any> = Omit<
   MuiFormControlProps,
-  'onChange' | 'value'
+  'onChange' | 'value' | 'error' | 'required'
 > &
   Pick<
     MuiSelectProps,
-    'id' | 'labelId' | 'name' | 'value' | 'onChange' | 'defaultValue' | 'size'
+    | 'id'
+    | 'labelId'
+    | 'name'
+    | 'value'
+    | 'onChange'
+    | 'defaultValue'
+    | 'size'
+    | 'error'
+    | 'required'
+    | 'displayEmpty'
+    | 'renderValue'
+    | 'MenuProps'
+    | 'IconComponent'
+    | 'open'
+    | 'onOpen'
+    | 'onClose'
+    | 'autoFocus'
+    | 'readOnly'
+    | 'tabIndex'
+    | 'inputProps'
+    | 'SelectDisplayProps'
   > & {
     label?: string
     labelBehavior?: 'auto' | 'shrink' | 'static'
@@ -64,6 +84,20 @@ export function SelectBase<TOption = SelectOption | string | any>(
     onChange,
     getOptionLabel,
     getOptionValue,
+    error,
+    required,
+    displayEmpty,
+    renderValue,
+    MenuProps,
+    IconComponent,
+    open,
+    onOpen,
+    onClose,
+    autoFocus,
+    readOnly,
+    tabIndex,
+    inputProps,
+    SelectDisplayProps,
     ...rest
   } = props
 
@@ -91,6 +125,8 @@ export function SelectBase<TOption = SelectOption | string | any>(
       fullWidth={fullWidth}
       size={size}
       disabled={disabled}
+      error={error}
+      required={required}
     >
       <MuiInputLabel id={labelIdFinal} {...inputLabelProps}>
         {label}
@@ -106,6 +142,20 @@ export function SelectBase<TOption = SelectOption | string | any>(
         onChange={(ev, child) => {
           onChange?.(ev, child)
         }}
+        error={error}
+        required={required}
+        displayEmpty={displayEmpty}
+        renderValue={renderValue}
+        MenuProps={MenuProps}
+        IconComponent={IconComponent}
+        open={open}
+        onOpen={onOpen}
+        onClose={onClose}
+        autoFocus={autoFocus}
+        readOnly={readOnly}
+        tabIndex={tabIndex}
+        inputProps={inputProps}
+        SelectDisplayProps={SelectDisplayProps}
       >
         {children}
         {renderedOptions.map(option => (
