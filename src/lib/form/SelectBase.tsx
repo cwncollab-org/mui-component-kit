@@ -21,43 +21,43 @@ export type SelectOption = {
 export type SelectBaseProps<TOption = SelectOption | string | any> = Omit<
   MuiFormControlProps,
   'onChange' | 'value'
-> & {
-  name?: string
-  label?: string
-  labelBehavior?: 'auto' | 'shrink' | 'static'
-  size?: 'small' | 'medium'
-  fullWidth?: boolean
-  helperText?: string
-  options?: TOption[]
-  multiple?: boolean
-  slotProps?: {
-    inputLabel?: Omit<MuiInputLabelProps, 'id'>
-    select?: Omit<
-      MuiSelectProps,
-      'id' | 'labelId' | 'name' | 'value' | 'onChange' | 'defaultValue'
-    >
-    helperText?: MuiFormHelperTextProps
+> &
+  Pick<
+    MuiSelectProps,
+    'id' | 'labelId' | 'name' | 'value' | 'onChange' | 'defaultValue' | 'size'
+  > & {
+    label?: string
+    labelBehavior?: 'auto' | 'shrink' | 'static'
+    helperText?: string
+    options?: TOption[]
+    multiple?: boolean
+    slotProps?: {
+      inputLabel?: Omit<MuiInputLabelProps, 'id'>
+      select?: Omit<
+        MuiSelectProps,
+        'id' | 'labelId' | 'name' | 'value' | 'onChange' | 'defaultValue'
+      >
+      helperText?: MuiFormHelperTextProps
+    }
+    getOptionLabel?: (option: TOption) => string
+    getOptionValue?: (option: TOption) => string
   }
-  getOptionLabel?: (option: TOption) => string
-  getOptionValue?: (option: TOption) => string
-  onChange?: MuiSelectProps['onChange']
-  value?: string
-}
 
 export function SelectBase<TOption = SelectOption | string | any>(
   props: SelectBaseProps<TOption>
 ) {
   const {
+    id,
     children,
     slotProps,
     options,
     multiple,
     name,
     label,
+    labelId,
     labelBehavior = 'auto',
     size,
     fullWidth,
-
     helperText,
     disabled,
     value,
@@ -67,9 +67,9 @@ export function SelectBase<TOption = SelectOption | string | any>(
     ...rest
   } = props
 
-  const id = useId()
-  const labelId = `${id}-label`
-  const selectId = `${id}-select`
+  const defaultId = useId()
+  const labelIdFinal = labelId ?? `${defaultId}-label`
+  const idFinal = id ?? `${defaultId}-select`
 
   const renderedOptions = useMemo<SelectOption[]>(
     () => renderOptions(options, getOptionLabel, getOptionValue),
@@ -92,12 +92,12 @@ export function SelectBase<TOption = SelectOption | string | any>(
       size={size}
       disabled={disabled}
     >
-      <MuiInputLabel id={labelId} {...inputLabelProps}>
+      <MuiInputLabel id={labelIdFinal} {...inputLabelProps}>
         {label}
       </MuiInputLabel>
       <MuiSelect
-        id={selectId}
-        labelId={labelId}
+        id={idFinal}
+        labelId={labelIdFinal}
         multiple={multiple}
         {...selectProps}
         label={label}
