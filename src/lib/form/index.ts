@@ -37,4 +37,5 @@ export {
   type CreateTextFieldSlotPropsOptions,
 } from './utils'
 
+export { TextFieldBase as TextField } from './TextFieldBase'
 export { SelectBase as Select } from './SelectBase'

@@ -1,18 +1,8 @@
-import {
-  TextField as MuiTextField,
-  TextFieldProps as MuiTextFieldProps,
-} from '@mui/material'
 import { useFieldContext } from './formContext'
-import { InputHTMLAttributes, useMemo } from 'react'
-import { createTextFieldSlotProps } from './utils'
+import { useMemo } from 'react'
+import { TextFieldBase, TextFieldBaseProps } from './TextFieldBase'
 
-export type TextFieldProps = Omit<MuiTextFieldProps, 'name' | 'value'> & {
-  labelBehavior?: 'auto' | 'shrink' | 'static'
-  min?: InputHTMLAttributes<HTMLInputElement>['min']
-  max?: InputHTMLAttributes<HTMLInputElement>['max']
-  maxLength?: InputHTMLAttributes<HTMLInputElement>['maxLength']
-  pattern?: InputHTMLAttributes<HTMLInputElement>['pattern']
-}
+export type TextFieldProps = Omit<TextFieldBaseProps, 'name' | 'value'>
 
 const converters: Record<
   string,
@@ -49,23 +39,11 @@ export function TextField(props: TextFieldProps) {
 
   const error = field.state.meta.errors.length > 0
 
-  const { input: inputProps, inputLabel: inputLabelProps } = useMemo(
-    () =>
-      createTextFieldSlotProps({
-        labelBehavior,
-        min,
-        max,
-        maxLength,
-        pattern,
-        slotProps,
-      }),
-    [labelBehavior, min, max, maxLength, pattern, slotProps]
-  )
-
   const type = props.type
 
   return (
-    <MuiTextField
+    <TextFieldBase
+      {...rest}
       name={field.name}
       label={label}
       value={convertToString(type, field.state.value) ?? ''}
@@ -80,11 +58,6 @@ export function TextField(props: TextFieldProps) {
           )
         }
       }}
-      slotProps={{
-        ...slotProps,
-        inputLabel: inputLabelProps,
-        input: inputProps,
-      }}
       error={error}
       helperText={error ? errorText : helperText}
       data-isdirty={field.state.meta.isDirty || undefined}
@@ -92,7 +65,6 @@ export function TextField(props: TextFieldProps) {
       data-istouched={field.state.meta.isTouched || undefined}
       data-isdefaultvalue={field.state.meta.isDefaultValue || undefined}
       data-isvalid={field.state.meta.isValid || undefined}
-      {...rest}
     />
   )
 }
