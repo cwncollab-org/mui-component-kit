@@ -7,6 +7,7 @@ import {
 
 export type CheckboxBaseProps = Pick<
   MuiCheckboxProps,
+  | 'id'
   | 'name'
   | 'checked'
   | 'onChange'
@@ -15,12 +16,12 @@ export type CheckboxBaseProps = Pick<
   | 'indeterminate'
   | 'color'
   | 'size'
-  | 'id'
 > &
   Pick<MuiFormControlLabelProps, 'label' | 'required' | 'disabled'>
 
 export function CheckboxBase(props: CheckboxBaseProps) {
   const {
+    id,
     label,
     name,
     required,
@@ -32,7 +33,6 @@ export function CheckboxBase(props: CheckboxBaseProps) {
     indeterminate,
     color,
     size,
-    id,
     ...rest
   } = props
   return (
@@ -43,6 +43,7 @@ export function CheckboxBase(props: CheckboxBaseProps) {
       required={required}
       control={
         <MuiCheckbox
+          id={id}
           name={name}
           checked={checked}
           defaultChecked={defaultChecked}
@@ -51,7 +52,6 @@ export function CheckboxBase(props: CheckboxBaseProps) {
           indeterminate={indeterminate}
           color={color}
           size={size}
-          id={id}
         />
       }
     />
