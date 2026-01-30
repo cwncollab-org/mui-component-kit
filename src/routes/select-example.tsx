@@ -202,6 +202,23 @@ export function SelectExample() {
               )}
             />
 
+            <Typography variant='h6'>
+              Multi Select with getOptionDisabled
+            </Typography>
+            <form.AppField
+              name='multiSelect'
+              children={field => (
+                <field.SubscribeMultiSelect
+                  label='Status (Pending disabled)'
+                  options={statuses}
+                  labelBehavior='shrink'
+                  size='small'
+                  fullWidth
+                  getOptionDisabled={option => option.value === 'pending'}
+                />
+              )}
+            />
+
             <Typography variant='h6'>Async Options (Simulated API)</Typography>
             <form.AppField
               name='asyncRole'

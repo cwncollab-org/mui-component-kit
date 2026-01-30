@@ -18,6 +18,10 @@ export type SelectOption = {
   description?: string
 }
 
+export type RenderedOption = SelectOption & {
+  disabled?: boolean
+}
+
 export type SelectBaseProps<TOption = SelectOption | string | any> = Omit<
   MuiFormControlProps,
   'onChange' | 'value' | 'error' | 'required'

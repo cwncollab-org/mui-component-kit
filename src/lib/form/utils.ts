@@ -6,7 +6,7 @@ import {
 } from '@mui/material'
 import { InputHTMLAttributes } from 'react'
 import { PickersOutlinedInputProps } from '@mui/x-date-pickers'
-import { SelectOption } from './SelectBase'
+import { RenderedOption } from './SelectBase'
 
 export type CreateTextFieldSlotPropsOptions = {
   slotProps?: TextFieldProps['slotProps']
@@ -193,10 +193,11 @@ export function renderOptions<TOption = string | any>(
   options: TOption[] | undefined,
   getOptionLabel?: (option: TOption) => string,
   getOptionValue?: (option: TOption) => string,
-  getOptionDescription?: (option: TOption) => string | null | undefined
-) {
+  getOptionDescription?: (option: TOption) => string | null | undefined,
+  getOptionDisabled?: (option: TOption) => boolean
+): RenderedOption[] {
   if (!options || options.length === 0) {
-    return [] as SelectOption[]
+    return [] as RenderedOption[]
   }
 
   return options.map(option =>
@@ -212,6 +213,9 @@ export function renderOptions<TOption = string | any>(
           description: getOptionDescription
             ? getOptionDescription(option)
             : (option as any).description,
+          disabled: getOptionDisabled
+            ? getOptionDisabled(option)
+            : (option as any).disabled,
         }
   )
 }

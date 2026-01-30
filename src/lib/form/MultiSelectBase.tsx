@@ -61,6 +61,7 @@ export type MultiSelectBaseProps<TOption = SelectOption | string | any> = Omit<
     }
     getOptionLabel?: (option: TOption) => string
     getOptionValue?: (option: TOption) => string
+    getOptionDisabled?: (option: TOption) => boolean
   }
 
 export function MultiSelectBase<TOption = SelectOption | string | any>(
@@ -84,6 +85,7 @@ export function MultiSelectBase<TOption = SelectOption | string | any>(
     onChange,
     getOptionLabel,
     getOptionValue,
+    getOptionDisabled,
     error,
     required,
     displayEmpty,
@@ -107,9 +109,16 @@ export function MultiSelectBase<TOption = SelectOption | string | any>(
 
   const currentValue = value ?? []
 
-  const renderedOptions = useMemo<SelectOption[]>(
-    () => renderOptions(options, getOptionLabel, getOptionValue),
-    [options, getOptionLabel, getOptionValue]
+  const renderedOptions = useMemo(
+    () =>
+      renderOptions(
+        options,
+        getOptionLabel,
+        getOptionValue,
+        undefined,
+        getOptionDisabled
+      ),
+    [options, getOptionLabel, getOptionValue, getOptionDisabled]
   )
 
   const { inputLabelProps, selectProps: baseSelectProps } = useMemo(
@@ -198,7 +207,11 @@ export function MultiSelectBase<TOption = SelectOption | string | any>(
       >
         {children}
         {renderedOptions.map(option => (
-          <MenuItem key={option.value} value={option.value}>
+          <MenuItem
+            key={option.value}
+            value={option.value}
+            disabled={option.disabled}
+          >
             <Checkbox
               checked={currentValue.includes(option.value)}
               {...slotProps?.checkbox}
