@@ -40,3 +40,4 @@ export {
 export { AutocompleteBase as Autocomplete } from './AutocompleteBase'
 export { TextFieldBase as TextField } from './TextFieldBase'
 export { SelectBase as Select } from './SelectBase'
+export { MultiSelectBase as MultiSelect } from './MultiSelectBase'

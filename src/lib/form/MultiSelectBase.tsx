@@ -8,17 +8,16 @@ import {
   FormHelperText as MuiFormHelperText,
   FormHelperTextProps as MuiFormHelperTextProps,
   MenuItem,
+  Checkbox,
+  CheckboxProps as MuiCheckboxProps,
+  ListItemText,
+  OutlinedInput,
 } from '@mui/material'
 import { useId, useMemo } from 'react'
 import { createSelectSlotProps, renderOptions } from './utils'
+import { SelectOption } from './SelectBase'
 
-export type SelectOption = {
-  value: string
-  label: string
-  description?: string
-}
-
-export type SelectBaseProps<TOption = SelectOption | string | any> = Omit<
+export type MultiSelectBaseProps<TOption = SelectOption | string | any> = Omit<
   MuiFormControlProps,
   'onChange' | 'value' | 'error' | 'required'
 > &
@@ -27,8 +26,6 @@ export type SelectBaseProps<TOption = SelectOption | string | any> = Omit<
     | 'id'
     | 'labelId'
     | 'name'
-    | 'value'
-    | 'onChange'
     | 'defaultValue'
     | 'size'
     | 'error'
@@ -51,7 +48,8 @@ export type SelectBaseProps<TOption = SelectOption | string | any> = Omit<
     labelBehavior?: 'auto' | 'shrink' | 'static'
     helperText?: string
     options?: TOption[]
-    multiple?: boolean
+    value?: string[]
+    onChange?: MuiSelectProps['onChange']
     slotProps?: {
       inputLabel?: Omit<MuiInputLabelProps, 'id'>
       select?: Omit<
@@ -59,13 +57,14 @@ export type SelectBaseProps<TOption = SelectOption | string | any> = Omit<
         'id' | 'labelId' | 'name' | 'value' | 'onChange' | 'defaultValue'
       >
       helperText?: MuiFormHelperTextProps
+      checkbox?: Omit<MuiCheckboxProps, 'checked'>
     }
     getOptionLabel?: (option: TOption) => string
     getOptionValue?: (option: TOption) => string
   }
 
-export function SelectBase<TOption = SelectOption | string | any>(
-  props: SelectBaseProps<TOption>
+export function MultiSelectBase<TOption = SelectOption | string | any>(
+  props: MultiSelectBaseProps<TOption>
 ) {
   const {
     id,
@@ -73,7 +72,6 @@ export function SelectBase<TOption = SelectOption | string | any>(
     children,
     slotProps,
     options,
-    multiple,
     name,
     label,
     labelId,
@@ -107,19 +105,57 @@ export function SelectBase<TOption = SelectOption | string | any>(
   const labelIdFinal = labelId ?? `${defaultId}-label`
   const idFinal = id ?? `${defaultId}-select`
 
+  const currentValue = value ?? []
+
   const renderedOptions = useMemo<SelectOption[]>(
     () => renderOptions(options, getOptionLabel, getOptionValue),
     [options, getOptionLabel, getOptionValue]
   )
 
-  const { inputLabelProps, selectProps } = useMemo(
+  const { inputLabelProps, selectProps: baseSelectProps } = useMemo(
     () =>
       createSelectSlotProps({
         labelBehavior,
-        slotProps,
+        slotProps: {
+          inputLabel: slotProps?.inputLabel,
+          select: slotProps?.select,
+        },
       }),
-    [labelBehavior, slotProps]
+    [labelBehavior, slotProps?.inputLabel, slotProps?.select]
   )
+
+  // Default renderValue for multi-select: comma-separated labels
+  const defaultRenderValue = useMemo(() => {
+    return (selected: string[]) => {
+      const selectedValues = selected ?? []
+      return selectedValues
+        .map(
+          val => renderedOptions.find(opt => opt.value === val)?.label ?? val
+        )
+        .join(', ')
+    }
+  }, [renderedOptions])
+
+  // Build input based on labelBehavior
+  const inputElement = useMemo(() => {
+    if (input) return input
+
+    if (labelBehavior === 'static') {
+      return (
+        <OutlinedInput
+          label={label}
+          notched={true}
+          sx={{
+            '& legend > span': {
+              display: 'none',
+            },
+          }}
+        />
+      )
+    }
+
+    return <OutlinedInput label={label} />
+  }, [input, label, labelBehavior])
 
   return (
     <MuiFormControl
@@ -136,19 +172,19 @@ export function SelectBase<TOption = SelectOption | string | any>(
       <MuiSelect
         id={idFinal}
         labelId={labelIdFinal}
-        input={input}
-        multiple={multiple}
-        {...selectProps}
+        input={inputElement}
+        multiple
+        {...(baseSelectProps as any)}
         label={label}
         name={name}
-        value={value}
+        value={currentValue}
         onChange={(ev, child) => {
           onChange?.(ev, child)
         }}
         error={error}
         required={required}
         displayEmpty={displayEmpty}
-        renderValue={renderValue}
+        renderValue={renderValue ?? defaultRenderValue}
         MenuProps={MenuProps}
         IconComponent={IconComponent}
         open={open}
@@ -163,7 +199,11 @@ export function SelectBase<TOption = SelectOption | string | any>(
         {children}
         {renderedOptions.map(option => (
           <MenuItem key={option.value} value={option.value}>
-            {option.label}
+            <Checkbox
+              checked={currentValue.includes(option.value)}
+              {...slotProps?.checkbox}
+            />
+            <ListItemText primary={option.label} />
           </MenuItem>
         ))}
       </MuiSelect>
