@@ -202,7 +202,11 @@ export function renderOptions<TOption = string | any>(
 
   return options.map(option =>
     typeof option === 'string'
-      ? { value: option, label: option }
+      ? {
+          value: option,
+          label: option,
+          disabled: getOptionDisabled ? getOptionDisabled(option) : false,
+        }
       : {
           value: getOptionValue
             ? getOptionValue(option)
