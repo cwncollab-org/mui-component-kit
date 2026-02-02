@@ -38,7 +38,9 @@ export {
 } from './utils'
 
 export { AutocompleteBase as Autocomplete } from './AutocompleteBase'
+export { DatePickerBase as DatePicker } from './DatePickerBase'
 export { TextFieldBase as TextField } from './TextFieldBase'
 export { SelectBase as Select } from './SelectBase'
 export { MultiSelectBase as MultiSelect } from './MultiSelectBase'
 export { CheckboxListBase as CheckboxList } from './CheckboxListBase'
+export { TimePickerBase as TimePicker } from './TimePickerBase'
