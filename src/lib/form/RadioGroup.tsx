@@ -1,52 +1,40 @@
-import {
-  FormControl,
-  FormLabel,
-  RadioGroup as MuiRadioGroup,
-  RadioGroupProps as MuiRadioGroupProps,
-} from '@mui/material'
+import { useMemo } from 'react'
 import { useFieldContext } from './formContext'
-import { useId } from 'react'
+import { RadioGroupBase, RadioGroupBaseProps } from './RadioGroupBase'
 
 export type RadioGroupProps = Omit<
-  MuiRadioGroupProps,
-  'name' | 'value' | 'defaultValue'
-> & {
-  label?: string
-  disabled?: boolean
-  required?: boolean
-}
+  RadioGroupBaseProps,
+  'name' | 'value' | 'defaultValue' | 'error' | 'helperText'
+>
 
 export function RadioGroup(props: RadioGroupProps) {
-  const { label, children, disabled, required, ...radioGroupProps } = props
+  const { onChange, ...rest } = props
 
   const field = useFieldContext<string | undefined | null>()
-  const id = useId()
-  const labelId = `${id}-label`
+
+  const errorText = useMemo(() => {
+    if (field.state.meta.errors.length === 0) return null
+    return field.state.meta.errors.map(error => error.message).join(', ')
+  }, [field.state.meta.errors])
 
   return (
-    <FormControl
-      disabled={disabled}
-      required={required}
+    <RadioGroupBase
+      {...rest}
+      name={field.name}
+      value={field.state.value ?? ''}
+      onChange={ev => {
+        if (!ev.defaultPrevented) {
+          field.handleChange(ev.target.value === '' ? null : ev.target.value)
+        }
+        onChange?.(ev, ev.target.value)
+      }}
+      error={field.state.meta.errors.length > 0}
+      helperText={errorText}
       data-isdirty={field.state.meta.isDirty || undefined}
       data-ispristine={field.state.meta.isPristine || undefined}
       data-istouched={field.state.meta.isTouched || undefined}
       data-isdefaultvalue={field.state.meta.isDefaultValue || undefined}
       data-isvalid={field.state.meta.isValid || undefined}
-    >
-      <FormLabel id={labelId}>{label}</FormLabel>
-      <MuiRadioGroup
-        aria-labelledby={labelId}
-        name={field.name}
-        value={field.state.value ?? ''}
-        onChange={ev => {
-          if (!ev.defaultPrevented) {
-            field.handleChange(ev.target.value === '' ? null : ev.target.value)
-          }
-        }}
-        {...radioGroupProps}
-      >
-        {children}
-      </MuiRadioGroup>
-    </FormControl>
+    />
   )
 }
