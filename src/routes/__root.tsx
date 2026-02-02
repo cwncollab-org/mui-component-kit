@@ -32,6 +32,9 @@ function RouteComponent() {
         <Link component={RouterLink} to='/masked-input-example'>
           Masked Input Example
         </Link>
+        <Link component={RouterLink} to='/maskedtextfield-example'>
+          MaskedTextField Example
+        </Link>
         <Link component={RouterLink} to='/mrt-example'>
           Material Router Table Example
         </Link>

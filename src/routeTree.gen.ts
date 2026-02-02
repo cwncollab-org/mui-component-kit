@@ -13,6 +13,7 @@ import { Route as TabsExampleRouteImport } from './routes/tabs-example'
 import { Route as SelectExampleRouteImport } from './routes/select-example'
 import { Route as MrtExampleManualPaginationRouteImport } from './routes/mrt-example-manual-pagination'
 import { Route as MrtExampleRouteImport } from './routes/mrt-example'
+import { Route as MaskedtextfieldExampleRouteImport } from './routes/maskedtextfield-example'
 import { Route as MaskedInputExampleRouteImport } from './routes/masked-input-example'
 import { Route as FormExampleRouteImport } from './routes/form-example'
 import { Route as DialogsExampleRouteImport } from './routes/dialogs-example'
@@ -45,6 +46,11 @@ const MrtExampleManualPaginationRoute =
 const MrtExampleRoute = MrtExampleRouteImport.update({
   id: '/mrt-example',
   path: '/mrt-example',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MaskedtextfieldExampleRoute = MaskedtextfieldExampleRouteImport.update({
+  id: '/maskedtextfield-example',
+  path: '/maskedtextfield-example',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MaskedInputExampleRoute = MaskedInputExampleRouteImport.update({
@@ -116,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
+  '/maskedtextfield-example': typeof MaskedtextfieldExampleRoute
   '/mrt-example': typeof MrtExampleRoute
   '/mrt-example-manual-pagination': typeof MrtExampleManualPaginationRoute
   '/select-example': typeof SelectExampleRoute
@@ -134,6 +141,7 @@ export interface FileRoutesByTo {
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
+  '/maskedtextfield-example': typeof MaskedtextfieldExampleRoute
   '/mrt-example': typeof MrtExampleRoute
   '/mrt-example-manual-pagination': typeof MrtExampleManualPaginationRoute
   '/select-example': typeof SelectExampleRoute
@@ -152,6 +160,7 @@ export interface FileRoutesById {
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
+  '/maskedtextfield-example': typeof MaskedtextfieldExampleRoute
   '/mrt-example': typeof MrtExampleRoute
   '/mrt-example-manual-pagination': typeof MrtExampleManualPaginationRoute
   '/select-example': typeof SelectExampleRoute
@@ -172,6 +181,7 @@ export interface FileRouteTypes {
     | '/dialogs-example'
     | '/form-example'
     | '/masked-input-example'
+    | '/maskedtextfield-example'
     | '/mrt-example'
     | '/mrt-example-manual-pagination'
     | '/select-example'
@@ -190,6 +200,7 @@ export interface FileRouteTypes {
     | '/dialogs-example'
     | '/form-example'
     | '/masked-input-example'
+    | '/maskedtextfield-example'
     | '/mrt-example'
     | '/mrt-example-manual-pagination'
     | '/select-example'
@@ -207,6 +218,7 @@ export interface FileRouteTypes {
     | '/dialogs-example'
     | '/form-example'
     | '/masked-input-example'
+    | '/maskedtextfield-example'
     | '/mrt-example'
     | '/mrt-example-manual-pagination'
     | '/select-example'
@@ -226,6 +238,7 @@ export interface RootRouteChildren {
   DialogsExampleRoute: typeof DialogsExampleRoute
   FormExampleRoute: typeof FormExampleRoute
   MaskedInputExampleRoute: typeof MaskedInputExampleRoute
+  MaskedtextfieldExampleRoute: typeof MaskedtextfieldExampleRoute
   MrtExampleRoute: typeof MrtExampleRoute
   MrtExampleManualPaginationRoute: typeof MrtExampleManualPaginationRoute
   SelectExampleRoute: typeof SelectExampleRoute
@@ -260,6 +273,13 @@ declare module '@tanstack/react-router' {
       path: '/mrt-example'
       fullPath: '/mrt-example'
       preLoaderRoute: typeof MrtExampleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/maskedtextfield-example': {
+      id: '/maskedtextfield-example'
+      path: '/maskedtextfield-example'
+      fullPath: '/maskedtextfield-example'
+      preLoaderRoute: typeof MaskedtextfieldExampleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/masked-input-example': {
@@ -388,6 +408,7 @@ const rootRouteChildren: RootRouteChildren = {
   DialogsExampleRoute: DialogsExampleRoute,
   FormExampleRoute: FormExampleRoute,
   MaskedInputExampleRoute: MaskedInputExampleRoute,
+  MaskedtextfieldExampleRoute: MaskedtextfieldExampleRoute,
   MrtExampleRoute: MrtExampleRoute,
   MrtExampleManualPaginationRoute: MrtExampleManualPaginationRoute,
   SelectExampleRoute: SelectExampleRoute,
