@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Box, MenuItem, Paper, Stack, Typography } from '@mui/material'
-import { Select, useAppForm } from '../lib'
+import { MultiSelect, Select, useAppForm } from '../lib'
 import { useState, useEffect } from 'react'
 import { z } from 'zod'
 
@@ -217,6 +217,19 @@ export function SelectExample() {
                   getOptionDisabled={option => option.value === 'pending'}
                 />
               )}
+            />
+
+            <Typography variant='h6'>
+              Multi Select with getOptionDisabled (standalone)
+            </Typography>
+
+            <MultiSelect
+              label='Status (Pending disabled)'
+              options={['active', 'inactive', 'pending']}
+              labelBehavior='shrink'
+              size='small'
+              fullWidth
+              getOptionDisabled={option => option === 'pending'}
             />
 
             <Typography variant='h6'>Async Options (Simulated API)</Typography>
