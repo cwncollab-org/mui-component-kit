@@ -47,6 +47,9 @@ function RouteComponent() {
         <Link component={RouterLink} to='/checkboxlist-example'>
           CheckboxList Example
         </Link>
+        <Link component={RouterLink} to='/subscribe-button-example'>
+          Subscribe Button Example
+        </Link>
       </Stack>
 
       <Outlet />

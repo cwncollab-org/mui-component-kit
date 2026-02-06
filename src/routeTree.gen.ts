@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TabsExampleRouteImport } from './routes/tabs-example'
+import { Route as SubscribeButtonExampleRouteImport } from './routes/subscribe-button-example'
 import { Route as SelectExampleRouteImport } from './routes/select-example'
 import { Route as MrtExampleManualPaginationRouteImport } from './routes/mrt-example-manual-pagination'
 import { Route as MrtExampleRouteImport } from './routes/mrt-example'
@@ -30,6 +31,11 @@ import { Route as TabsExampleTab3IdRouteImport } from './routes/tabs-example/tab
 const TabsExampleRoute = TabsExampleRouteImport.update({
   id: '/tabs-example',
   path: '/tabs-example',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubscribeButtonExampleRoute = SubscribeButtonExampleRouteImport.update({
+  id: '/subscribe-button-example',
+  path: '/subscribe-button-example',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SelectExampleRoute = SelectExampleRouteImport.update({
@@ -126,6 +132,7 @@ export interface FileRoutesByFullPath {
   '/mrt-example': typeof MrtExampleRoute
   '/mrt-example-manual-pagination': typeof MrtExampleManualPaginationRoute
   '/select-example': typeof SelectExampleRoute
+  '/subscribe-button-example': typeof SubscribeButtonExampleRoute
   '/tabs-example': typeof TabsExampleRouteWithChildren
   '/tabs-example/tab1': typeof TabsExampleTab1Route
   '/tabs-example/tab2': typeof TabsExampleTab2Route
@@ -145,6 +152,7 @@ export interface FileRoutesByTo {
   '/mrt-example': typeof MrtExampleRoute
   '/mrt-example-manual-pagination': typeof MrtExampleManualPaginationRoute
   '/select-example': typeof SelectExampleRoute
+  '/subscribe-button-example': typeof SubscribeButtonExampleRoute
   '/tabs-example/tab1': typeof TabsExampleTab1Route
   '/tabs-example/tab2': typeof TabsExampleTab2Route
   '/tabs-example/tab3': typeof TabsExampleTab3RouteWithChildren
@@ -164,6 +172,7 @@ export interface FileRoutesById {
   '/mrt-example': typeof MrtExampleRoute
   '/mrt-example-manual-pagination': typeof MrtExampleManualPaginationRoute
   '/select-example': typeof SelectExampleRoute
+  '/subscribe-button-example': typeof SubscribeButtonExampleRoute
   '/tabs-example': typeof TabsExampleRouteWithChildren
   '/tabs-example/tab1': typeof TabsExampleTab1Route
   '/tabs-example/tab2': typeof TabsExampleTab2Route
@@ -185,6 +194,7 @@ export interface FileRouteTypes {
     | '/mrt-example'
     | '/mrt-example-manual-pagination'
     | '/select-example'
+    | '/subscribe-button-example'
     | '/tabs-example'
     | '/tabs-example/tab1'
     | '/tabs-example/tab2'
@@ -204,6 +214,7 @@ export interface FileRouteTypes {
     | '/mrt-example'
     | '/mrt-example-manual-pagination'
     | '/select-example'
+    | '/subscribe-button-example'
     | '/tabs-example/tab1'
     | '/tabs-example/tab2'
     | '/tabs-example/tab3'
@@ -222,6 +233,7 @@ export interface FileRouteTypes {
     | '/mrt-example'
     | '/mrt-example-manual-pagination'
     | '/select-example'
+    | '/subscribe-button-example'
     | '/tabs-example'
     | '/tabs-example/tab1'
     | '/tabs-example/tab2'
@@ -242,6 +254,7 @@ export interface RootRouteChildren {
   MrtExampleRoute: typeof MrtExampleRoute
   MrtExampleManualPaginationRoute: typeof MrtExampleManualPaginationRoute
   SelectExampleRoute: typeof SelectExampleRoute
+  SubscribeButtonExampleRoute: typeof SubscribeButtonExampleRoute
   TabsExampleRoute: typeof TabsExampleRouteWithChildren
 }
 
@@ -252,6 +265,13 @@ declare module '@tanstack/react-router' {
       path: '/tabs-example'
       fullPath: '/tabs-example'
       preLoaderRoute: typeof TabsExampleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/subscribe-button-example': {
+      id: '/subscribe-button-example'
+      path: '/subscribe-button-example'
+      fullPath: '/subscribe-button-example'
+      preLoaderRoute: typeof SubscribeButtonExampleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/select-example': {
@@ -412,6 +432,7 @@ const rootRouteChildren: RootRouteChildren = {
   MrtExampleRoute: MrtExampleRoute,
   MrtExampleManualPaginationRoute: MrtExampleManualPaginationRoute,
   SelectExampleRoute: SelectExampleRoute,
+  SubscribeButtonExampleRoute: SubscribeButtonExampleRoute,
   TabsExampleRoute: TabsExampleRouteWithChildren,
 }
 export const routeTree = rootRouteImport

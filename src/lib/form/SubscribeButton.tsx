@@ -1,24 +1,47 @@
-import { Button, ButtonProps } from '@mui/material'
+import { Button, ButtonProps, ButtonTypeMap } from '@mui/material'
 import { useFormContext } from './formContext'
 
-export type SubscribeButtonProps = ButtonProps & {
+export type SubscribeButtonProps<
+  RootComponent extends React.ElementType = ButtonTypeMap['defaultComponent'],
+  ButtonComponent extends React.ElementType<ButtonProps> = typeof Button,
+  AdditionalProps = {},
+> = ButtonProps<RootComponent, AdditionalProps> & {
   showIndicator?: boolean
+  ButtonComponent?: ButtonComponent
 }
 
-export function SubscribeButton(props: SubscribeButtonProps) {
+export function SubscribeButton<
+  RootComponent extends React.ElementType = ButtonTypeMap['defaultComponent'],
+  ButtonComponent extends React.ElementType<ButtonProps> = typeof Button,
+  AdditionalProps = {},
+>(
+  props: SubscribeButtonProps<RootComponent, ButtonComponent, AdditionalProps>
+) {
   const form = useFormContext()
-  const { children, disabled, showIndicator, ...rest } = props
+  const { children, disabled, showIndicator, ButtonComponent, ...rest } = props
+
   return (
     <form.Subscribe selector={state => state.isSubmitting}>
-      {isSubmitting => (
-        <Button
-          disabled={isSubmitting || disabled}
-          loading={showIndicator && isSubmitting}
-          {...rest}
-        >
-          {children}
-        </Button>
-      )}
+      {isSubmitting => {
+        const loading = showIndicator && isSubmitting
+        return ButtonComponent ? (
+          <ButtonComponent
+            disabled={isSubmitting || disabled}
+            loading={loading}
+            {...(rest as any)}
+          >
+            {children}
+          </ButtonComponent>
+        ) : (
+          <Button
+            disabled={isSubmitting || disabled}
+            loading={loading}
+            {...rest}
+          >
+            {children}
+          </Button>
+        )
+      }}
     </form.Subscribe>
   )
 }
