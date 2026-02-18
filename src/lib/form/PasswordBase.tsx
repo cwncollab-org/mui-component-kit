@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { IconButton, InputAdornment } from '@mui/material'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
@@ -7,10 +7,18 @@ import { TextFieldBase, TextFieldBaseProps } from './TextFieldBase'
 
 export type PasswordBaseProps = Omit<TextFieldBaseProps, 'type'> & {
   showToggle?: boolean
+  showPasswordIcon?: ReactNode
+  hidePasswordIcon?: ReactNode
 }
 
 export function PasswordBase(props: PasswordBaseProps) {
-  const { showToggle = false, slotProps, ...rest } = props
+  const {
+    showToggle = false,
+    slotProps,
+    showPasswordIcon = <VisibilityIcon fontSize='small' />,
+    hidePasswordIcon = <VisibilityOffIcon fontSize='small' />,
+    ...rest
+  } = props
   const [isVisible, setIsVisible] = useState(false)
   const inputType = showToggle ? (isVisible ? 'text' : 'password') : 'password'
 
@@ -27,7 +35,7 @@ export function PasswordBase(props: PasswordBaseProps) {
                 edge='end'
                 onClick={() => setIsVisible(prev => !prev)}
               >
-                {isVisible ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                {isVisible ? hidePasswordIcon : showPasswordIcon}
               </IconButton>
             </InputAdornment>
           ),

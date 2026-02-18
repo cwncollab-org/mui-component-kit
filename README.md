@@ -1252,6 +1252,113 @@ The `SubscribeMaskedTextField` component has the same props as `MaskedTextField`
 For more advanced masking scenarios, refer to the [react-imask documentation](https://imask.js.org/) as the MaskedTextField component provides full access to all react-imask features.
 
 
+### Password Component
+
+The Password component provides a secure password input field with an optional show/hide toggle button, built on top of MUI's TextField component and integrated with TanStack Form.
+
+```tsx
+import { useAppForm } from '@cwncollab-org/component-kit'
+import { z } from 'zod'
+
+// Define your form schema with password confirmation validation
+const formSchema = z
+  .object({
+    password: z.string().min(8, 'Password must be at least 8 characters'),
+    confirmPassword: z.string().min(8, 'Password must be at least 8 characters'),
+  })
+  .refine(data => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  })
+
+type FormValues = z.infer<typeof formSchema>
+
+function PasswordForm() {
+  const form = useAppForm({
+    defaultValues: {
+      password: '',
+      confirmPassword: '',
+    } as FormValues,
+    validators: { onChange: formSchema },
+    onSubmit: ({ value }) => {
+      console.log('Form submitted:', value)
+    },
+  })
+
+  return (
+    <form
+      onSubmit={e => {
+        e.preventDefault()
+        form.handleSubmit()
+      }}
+    >
+      <form.AppForm>
+        {/* Basic password field (no toggle) */}
+        <form.AppField
+          name="password"
+          children={field => (
+            <field.Password
+              label="Password"
+              fullWidth
+            />
+          )}
+        />
+
+        {/* Password field with show/hide toggle */}
+        <form.AppField
+          name="password"
+          children={field => (
+            <field.Password
+              label="Password"
+              showToggle
+              fullWidth
+            />
+          )}
+        />
+
+        {/* SubscribePassword automatically disables during form submission */}
+        <form.AppField
+          name="confirmPassword"
+          children={field => (
+            <field.SubscribePassword
+              label="Confirm Password"
+              showToggle
+              fullWidth
+            />
+          )}
+        />
+
+        <form.SubscribeButton type="submit" variant="contained">
+          Submit
+        </form.SubscribeButton>
+      </form.AppForm>
+    </form>
+  )
+}
+```
+
+#### Password Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | - | The label text for the password field |
+| `showToggle` | `boolean` | `false` | Whether to show a visibility toggle button in the field |
+| `showPasswordIcon` | `ReactNode` | `<VisibilityIcon />` | Custom icon shown when password is hidden (clicking reveals it) |
+| `hidePasswordIcon` | `ReactNode` | `<VisibilityOffIcon />` | Custom icon shown when password is visible (clicking hides it) |
+| `labelBehavior` | `'auto' \| 'shrink' \| 'static'` | `'auto'` | How the label should behave |
+| `size` | `'small' \| 'medium'` | `'medium'` | The size of the password field |
+| `fullWidth` | `boolean` | `false` | Whether the password field should take full width |
+| `required` | `boolean` | `false` | Whether the password field is required |
+| `disabled` | `boolean` | `false` | Whether the password field is disabled |
+| `helperText` | `string` | - | Helper text displayed below the field |
+| `slotProps` | `object` | - | Props for underlying MUI components |
+
+The Password component also accepts all standard MUI TextField props except `type`, `name`, `value`, and `defaultValue` which are managed internally.
+
+**SubscribePassword:**
+The `SubscribePassword` component has the same props as `Password` but automatically disables the field when the form is submitting, providing better UX during form submission.
+
+
 ### Router Tabs
 
 The Router Tabs components provide tabbed navigation integrated with TanStack Router, allowing you to create tabs that are synced with the browser URL and support nested routing.
