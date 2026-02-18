@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TabsExampleRouteImport } from './routes/tabs-example'
 import { Route as SubscribeButtonExampleRouteImport } from './routes/subscribe-button-example'
 import { Route as SelectExampleRouteImport } from './routes/select-example'
+import { Route as PasswordExampleRouteImport } from './routes/password-example'
 import { Route as MrtExampleManualPaginationRouteImport } from './routes/mrt-example-manual-pagination'
 import { Route as MrtExampleRouteImport } from './routes/mrt-example'
 import { Route as MaskedtextfieldExampleRouteImport } from './routes/maskedtextfield-example'
@@ -41,6 +42,11 @@ const SubscribeButtonExampleRoute = SubscribeButtonExampleRouteImport.update({
 const SelectExampleRoute = SelectExampleRouteImport.update({
   id: '/select-example',
   path: '/select-example',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PasswordExampleRoute = PasswordExampleRouteImport.update({
+  id: '/password-example',
+  path: '/password-example',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MrtExampleManualPaginationRoute =
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/maskedtextfield-example': typeof MaskedtextfieldExampleRoute
   '/mrt-example': typeof MrtExampleRoute
   '/mrt-example-manual-pagination': typeof MrtExampleManualPaginationRoute
+  '/password-example': typeof PasswordExampleRoute
   '/select-example': typeof SelectExampleRoute
   '/subscribe-button-example': typeof SubscribeButtonExampleRoute
   '/tabs-example': typeof TabsExampleRouteWithChildren
@@ -151,6 +158,7 @@ export interface FileRoutesByTo {
   '/maskedtextfield-example': typeof MaskedtextfieldExampleRoute
   '/mrt-example': typeof MrtExampleRoute
   '/mrt-example-manual-pagination': typeof MrtExampleManualPaginationRoute
+  '/password-example': typeof PasswordExampleRoute
   '/select-example': typeof SelectExampleRoute
   '/subscribe-button-example': typeof SubscribeButtonExampleRoute
   '/tabs-example/tab1': typeof TabsExampleTab1Route
@@ -171,6 +179,7 @@ export interface FileRoutesById {
   '/maskedtextfield-example': typeof MaskedtextfieldExampleRoute
   '/mrt-example': typeof MrtExampleRoute
   '/mrt-example-manual-pagination': typeof MrtExampleManualPaginationRoute
+  '/password-example': typeof PasswordExampleRoute
   '/select-example': typeof SelectExampleRoute
   '/subscribe-button-example': typeof SubscribeButtonExampleRoute
   '/tabs-example': typeof TabsExampleRouteWithChildren
@@ -193,6 +202,7 @@ export interface FileRouteTypes {
     | '/maskedtextfield-example'
     | '/mrt-example'
     | '/mrt-example-manual-pagination'
+    | '/password-example'
     | '/select-example'
     | '/subscribe-button-example'
     | '/tabs-example'
@@ -213,6 +223,7 @@ export interface FileRouteTypes {
     | '/maskedtextfield-example'
     | '/mrt-example'
     | '/mrt-example-manual-pagination'
+    | '/password-example'
     | '/select-example'
     | '/subscribe-button-example'
     | '/tabs-example/tab1'
@@ -232,6 +243,7 @@ export interface FileRouteTypes {
     | '/maskedtextfield-example'
     | '/mrt-example'
     | '/mrt-example-manual-pagination'
+    | '/password-example'
     | '/select-example'
     | '/subscribe-button-example'
     | '/tabs-example'
@@ -253,6 +265,7 @@ export interface RootRouteChildren {
   MaskedtextfieldExampleRoute: typeof MaskedtextfieldExampleRoute
   MrtExampleRoute: typeof MrtExampleRoute
   MrtExampleManualPaginationRoute: typeof MrtExampleManualPaginationRoute
+  PasswordExampleRoute: typeof PasswordExampleRoute
   SelectExampleRoute: typeof SelectExampleRoute
   SubscribeButtonExampleRoute: typeof SubscribeButtonExampleRoute
   TabsExampleRoute: typeof TabsExampleRouteWithChildren
@@ -279,6 +292,13 @@ declare module '@tanstack/react-router' {
       path: '/select-example'
       fullPath: '/select-example'
       preLoaderRoute: typeof SelectExampleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/password-example': {
+      id: '/password-example'
+      path: '/password-example'
+      fullPath: '/password-example'
+      preLoaderRoute: typeof PasswordExampleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mrt-example-manual-pagination': {
@@ -431,6 +451,7 @@ const rootRouteChildren: RootRouteChildren = {
   MaskedtextfieldExampleRoute: MaskedtextfieldExampleRoute,
   MrtExampleRoute: MrtExampleRoute,
   MrtExampleManualPaginationRoute: MrtExampleManualPaginationRoute,
+  PasswordExampleRoute: PasswordExampleRoute,
   SelectExampleRoute: SelectExampleRoute,
   SubscribeButtonExampleRoute: SubscribeButtonExampleRoute,
   TabsExampleRoute: TabsExampleRouteWithChildren,

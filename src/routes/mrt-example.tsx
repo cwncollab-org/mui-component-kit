@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useMaterialRouterTable } from '../lib'
 import { MaterialReactTable } from 'material-react-table'
-import { ColumnVisibility } from '@tanstack/react-table'
 
 const columns = [
   {

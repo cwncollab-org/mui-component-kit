@@ -50,6 +50,9 @@ function RouteComponent() {
         <Link component={RouterLink} to='/subscribe-button-example'>
           Subscribe Button Example
         </Link>
+        <Link component={RouterLink} to='/password-example'>
+          Password Example
+        </Link>
       </Stack>
 
       <Outlet />
