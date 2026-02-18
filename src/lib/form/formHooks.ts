@@ -21,6 +21,8 @@ import { MaskedTextField } from './MaskedTextField'
 import { SubscribeMaskedTextField } from './SubscribeMaskedTextField'
 import { CheckboxList } from './CheckboxList'
 import { SubscribeCheckboxList } from './SubscribeCheckboxList'
+import { Password } from './Password'
+import { SubscribePassword } from './SubscribePassword'
 
 export const { useAppForm, withForm, withFieldGroup } = createFormHook({
   fieldContext,
@@ -46,6 +48,8 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
     SubscribeTimePicker,
     SubscribeRadioGroup,
     SubscribeCheckboxList,
+    Password,
+    SubscribePassword,
   },
   formComponents: { SubscribeButton },
 })
