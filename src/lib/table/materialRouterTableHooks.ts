@@ -158,7 +158,10 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
       navigate({
         replace: true,
         // @ts-ignore
-        search: encodedSearch,
+        search: {
+          ...originalSearch,
+          ...encodedSearch,
+        },
       })
     }
   }, [
