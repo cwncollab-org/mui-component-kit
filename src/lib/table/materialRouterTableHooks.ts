@@ -149,12 +149,9 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
       search.density !== nextSearch.density ||
       JSON.stringify(searchColumns) !== JSON.stringify(nextSearch.columns)
     ) {
-      const encodedSearch = tableSearchSchema.encode({
-        ...originalSearch,
-        ...nextSearch,
-      })
-      // console.debug('Navigating to search:', encodedSearch)
-
+      const encodedSearch = tableSearchSchema.encode(
+        mergeSearch(originalSearch, nextSearch)
+      )
       navigate({
         replace: true,
         // @ts-ignore
@@ -202,4 +199,19 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
       columnVisibility,
     },
   })
+}
+
+function mergeSearch<T extends TableSearch>(
+  originalSearch: T,
+  tableSearch: TableSearch
+) {
+  const merged = {
+    page: tableSearch.page ?? originalSearch.page,
+    pageSize: tableSearch.pageSize ?? originalSearch.pageSize,
+    order: tableSearch.order ?? originalSearch.order,
+    desc: tableSearch.desc ?? originalSearch.desc,
+    density: tableSearch.density ?? originalSearch.density,
+    columns: tableSearch.columns ?? originalSearch.columns,
+  }
+  return merged as TableSearch
 }
