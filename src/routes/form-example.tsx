@@ -95,7 +95,7 @@ export function FormExample() {
   const [value, setValue] = useState<FormValues | undefined>(undefined)
   const form = useAppForm({
     defaultValues: {
-      username: 'default',
+      username: '',
       role: undefined,
       priority: undefined,
       agree: false,
@@ -151,12 +151,12 @@ export function FormExample() {
                 name='username'
                 children={field => (
                   <field.SubscribeTextField
-                    required
                     label='Username (auto)'
                     maxLength={20}
                     fullWidth
                     labelBehavior='auto'
                     size='small'
+                    placeholder='Username with auto label behavior'
                   />
                 )}
               />
@@ -164,12 +164,12 @@ export function FormExample() {
                 name='username'
                 children={field => (
                   <field.SubscribeTextField
-                    required
                     label='Username (shrink)'
                     maxLength={20}
                     fullWidth
                     labelBehavior='shrink'
                     size='small'
+                    placeholder='Username with shrink label behavior'
                   />
                 )}
               />
@@ -177,12 +177,12 @@ export function FormExample() {
                 name='username'
                 children={field => (
                   <field.SubscribeTextField
-                    required
                     label='Username (static)'
                     maxLength={20}
                     fullWidth
                     labelBehavior='static'
                     size='small'
+                    placeholder='Username with static label behavior'
                   />
                 )}
               />

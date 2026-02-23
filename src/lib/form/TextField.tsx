@@ -25,6 +25,7 @@ export function TextField(props: TextFieldProps) {
     pattern,
     onChange,
     helperText = '',
+    type,
     ...rest
   } = props
   const field = useFieldContext<string | number | undefined | null>()
@@ -35,22 +36,17 @@ export function TextField(props: TextFieldProps) {
   }, [field.state.meta.errors])
 
   const error = field.state.meta.errors.length > 0
-  const type = props.type
 
   return (
     <TextFieldBase
       {...rest}
       name={field.name}
-      value={convertToString(type, field.state.value) ?? ''}
+      value={convertToString(type, field.state.value)}
       onBlur={field.handleBlur}
       onChange={ev => {
         onChange?.(ev)
         if (!ev.defaultPrevented) {
-          field.handleChange(
-            ev.target.value === ''
-              ? null
-              : convertFromString(type, ev.target.value)
-          )
+          field.handleChange(convertFromString(type, ev.target.value))
         }
       }}
       error={error}
