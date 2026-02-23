@@ -43,11 +43,27 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
     ...rest
   } = opts
 
-  const initialState = opts.initialState
-  const originalSearch = useSearch({ strict: false })
   const navigate = useNavigate({})
+  const initialState = opts.initialState
 
-  const search = tableSearchSchema.parse(originalSearch)
+  const {
+    page: originalPage,
+    pageSize: originalPageSize,
+    order: originalOrder,
+    desc: originalDesc,
+    density: originalDensity,
+    columns: originalColumns,
+    ...originalSearchRest
+  } = useSearch({ strict: false }) as TableSearch & Record<string, string>
+
+  const search = tableSearchSchema.parse({
+    page: originalPage,
+    pageSize: originalPageSize,
+    order: originalOrder,
+    desc: originalDesc,
+    density: originalDensity,
+    columns: originalColumns,
+  })
 
   const initialPaginationState: MRT_PaginationState = {
     pageIndex: initialState?.pagination?.pageIndex ?? 0,
@@ -149,14 +165,13 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
       search.density !== nextSearch.density ||
       JSON.stringify(searchColumns) !== JSON.stringify(nextSearch.columns)
     ) {
-      const encodedSearch = tableSearchSchema.encode(
-        mergeSearch(originalSearch, nextSearch)
-      )
+      const encodedSearch = tableSearchSchema.encode(nextSearch)
+
       navigate({
         replace: true,
         // @ts-ignore
         search: {
-          ...originalSearch,
+          ...originalSearchRest,
           ...encodedSearch,
         },
       })
@@ -199,19 +214,4 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
       columnVisibility,
     },
   })
-}
-
-function mergeSearch<T extends TableSearch>(
-  originalSearch: T,
-  tableSearch: TableSearch
-) {
-  const merged = {
-    page: tableSearch.page ?? originalSearch.page,
-    pageSize: tableSearch.pageSize ?? originalSearch.pageSize,
-    order: tableSearch.order ?? originalSearch.order,
-    desc: tableSearch.desc ?? originalSearch.desc,
-    density: tableSearch.density ?? originalSearch.density,
-    columns: tableSearch.columns ?? originalSearch.columns,
-  }
-  return merged as TableSearch
 }
