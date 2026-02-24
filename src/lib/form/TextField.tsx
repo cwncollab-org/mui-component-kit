@@ -18,16 +18,7 @@ const converters: Record<
 }
 
 export function TextField(props: TextFieldProps) {
-  const {
-    min,
-    max,
-    maxLength,
-    pattern,
-    onChange,
-    helperText = '',
-    type,
-    ...rest
-  } = props
+  const { onChange, helperText = '', type, ...rest } = props
   const field = useFieldContext<string | number | undefined | null>()
 
   const errorText = useMemo(() => {
