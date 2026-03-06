@@ -10,8 +10,10 @@ const converters: Record<
 > = {
   number: {
     fromString: (value: string) => {
-      const parsed = parseFloat(value)
-      return isNaN(parsed) ? null : parsed
+      const trimmed = value.trim()
+      if (trimmed === '') return null
+      const num = Number(trimmed)
+      return isNaN(num) ? null : num
     },
     toString: (value: any) => (value == null ? '' : String(value)),
   },
@@ -32,6 +34,7 @@ export function TextField(props: TextFieldProps) {
     <TextFieldBase
       {...rest}
       name={field.name}
+      type={type}
       value={convertToString(type, field.state.value)}
       onBlur={field.handleBlur}
       onChange={ev => {
