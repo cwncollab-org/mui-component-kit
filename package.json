@@ -12,17 +12,21 @@
     "url": "git+https://github.com/cwncollab-org/mui-component-kit.git"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
+    "registry": "https://cwncollab-619005574504.d.codeartifact.ap-southeast-1.amazonaws.com/npm/cwncollab/"
   },
   "files": [
     "dist"
   ],
   "scripts": {
     "dev": "vite",
+    "build": "npm run build:lib",
     "build:lib": "tsc -p tsconfig.build.json",
+    "clean": "node scripts/clean.cjs",
     "lint": "eslint .",
+    "prepublishOnly": "npm run clean && npm run build",
     "preview": "vite preview",
-    "prepare": "npm run build:lib",
+    "prepare": "npm run build",
+    "publish:aws": "node scripts/publish-codeartifact.cjs",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
