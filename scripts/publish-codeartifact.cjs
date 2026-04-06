@@ -1,10 +1,14 @@
 const { spawnSync } = require("node:child_process");
+const { readFileSync } = require("node:fs");
+const { resolve } = require("node:path");
 
 if (require.main === module) {
   main();
 }
 
 function main(argv = process.argv.slice(2), env = process.env) {
+  const pkg = JSON.parse(readFileSync(resolve(__dirname, "..", "package.json"), "utf8"));
+
   const awsRegion = env.AWS_REGION || "ap-southeast-1";
   const codeArtifactDomain = env.CODEARTIFACT_DOMAIN || "cwncollab";
   const codeArtifactDomainOwner = env.CODEARTIFACT_DOMAIN_OWNER || "619005574504";
@@ -12,6 +16,7 @@ function main(argv = process.argv.slice(2), env = process.env) {
   const defaultNpmRegistry = env.DEFAULT_NPM_REGISTRY || "https://registry.npmjs.org/";
   const codeArtifactRegistry =
     env.CODEARTIFACT_REGISTRY ||
+    pkg.publishConfig?.registry ||
     `https://${codeArtifactDomain}-${codeArtifactDomainOwner}.d.codeartifact.${awsRegion}.amazonaws.com/npm/${codeArtifactRepository}/`;
 
   const awsVersion = capture("aws", ["--version"], { env });
