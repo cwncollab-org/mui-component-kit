@@ -33,6 +33,7 @@ export function PasswordBase(props: PasswordBaseProps) {
               <IconButton
                 aria-label={isVisible ? 'Hide password' : 'Show password'}
                 edge='end'
+                tabIndex={-1}
                 onClick={() => setIsVisible(prev => !prev)}
               >
                 {isVisible ? hidePasswordIcon : showPasswordIcon}
@@ -43,6 +44,11 @@ export function PasswordBase(props: PasswordBaseProps) {
       }
 
   return (
-    <TextFieldBase type={inputType} slotProps={mergedSlotProps} {...rest} />
+    <TextFieldBase
+      autoComplete='off'
+      type={inputType}
+      slotProps={mergedSlotProps}
+      {...rest}
+    />
   )
 }
