@@ -9,9 +9,9 @@ import {
   FormHelperTextProps as MuiFormHelperTextProps,
   ChipTypeMap,
   AutocompleteRenderInputParams,
+  AutocompleteValueOrFreeSoloValueMapping,
 } from '@mui/material'
-import { useId, useMemo } from 'react'
-import { createTextFieldSlotProps } from './utils'
+import { useId } from 'react'
 
 type BaseProps<
   Value,
@@ -205,7 +205,16 @@ export function AutocompleteBase<
     ...rest
   } = props
 
-  const defaultIsOptionEqualToValue = (option: Value, value: Value) => {
+  const defaultIsOptionEqualToValue: MuiAutocompleteProps<
+    Value,
+    Multiple,
+    DisableClearable,
+    FreeSolo,
+    ChipComponent
+  >['isOptionEqualToValue'] = (
+    option: Value,
+    value: AutocompleteValueOrFreeSoloValueMapping<Value, FreeSolo>
+  ) => {
     if (!option) return false
 
     if (
@@ -220,24 +229,6 @@ export function AutocompleteBase<
     return option === value
   }
 
-  const { input: inputProps, inputLabel: inputLabelProps } = useMemo(
-    () =>
-      createTextFieldSlotProps({
-        labelBehavior,
-        slotProps: slotProps?.textField?.slotProps,
-      }),
-    [labelBehavior, slotProps?.textField?.slotProps]
-  )
-
-  const textFieldProps: Partial<MuiTextFieldProps> = {
-    ...slotProps?.textField,
-    slotProps: {
-      ...slotProps?.textField?.slotProps,
-      inputLabel: inputLabelProps,
-      input: inputProps,
-    },
-  }
-
   const defaultRenderInput = (params: AutocompleteRenderInputParams) => {
     return (
       <MuiTextField
@@ -247,15 +238,6 @@ export function AutocompleteBase<
         error={error}
         required={required}
         name={name}
-        slotProps={{
-          ...textFieldProps.slotProps,
-          input: {
-            ...params.InputProps,
-            ...inputProps,
-          },
-          inputLabel: inputLabelProps,
-        }}
-        {...(({ slotProps: _, ...rest }) => rest)(textFieldProps)}
       />
     )
   }

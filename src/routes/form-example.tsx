@@ -36,7 +36,7 @@ const formSchema = z.object({
   categories: z.array(z.string()).min(1, 'Please select at least one category'),
   skills: z.array(z.string()).optional(),
   country: z.string().optional(),
-  age: z.number().min(1).max(120).optional(),
+  age: z.number().min(1).max(150).optional(),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -143,7 +143,7 @@ export function FormExample() {
             <form.Subscribe selector={state => state.isDirty}>
               {isDirty => <>isDirty: {isDirty ? 'true' : 'false'}</>}
             </form.Subscribe>
-            <Stack spacing={2} alignItems='stretch'>
+            <Stack spacing={2} >
               <Typography variant='h6'>
                 TextField with different label behaviors
               </Typography>
@@ -537,10 +537,9 @@ export function FormExample() {
                   <field.SubscribeTextField
                     label='Age'
                     type='number'
-                    inputProps={{
-                      min: 1,
-                      max: 120,
-                    }}
+                    min={1}
+                    max={150}
+                    
                     fullWidth
                     size='small'
                     placeholder='Enter your age'
