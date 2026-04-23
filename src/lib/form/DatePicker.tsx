@@ -5,7 +5,7 @@ import { useFieldContext } from './formContext'
 
 export type DatePickerProps = Omit<
   DatePickerBaseProps,
-  'name' | 'value' | 'defaultValue' | 'error' | 'helperText'
+  'name' | 'value' | 'defaultValue' | 'error'
 > & {
   valueFormat?: 'adapter' | 'Date'
 }
@@ -57,7 +57,7 @@ export function DatePicker(props: DatePickerProps) {
       value={adapterValue}
       onChange={handleDateChange}
       error={field.state.meta.errors.length > 0}
-      helperText={errorText}
+      helperText={errorText ?? props?.helperText}
     />
   )
 }

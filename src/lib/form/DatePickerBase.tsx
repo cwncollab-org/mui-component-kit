@@ -83,9 +83,12 @@ export function DatePickerBase(props: DatePickerBaseProps) {
           helperText: helperText,
           size: size,
           fullWidth: fullWidth,
-          InputLabelProps: inputLabelProps,
-          InputProps: inputProps,
           ...(slotProps?.textField as any),
+          slotProps: {
+            inputLabel: inputLabelProps,
+            input: inputProps,
+            ...(slotProps?.textField as any)?.slotProps,
+          },
         },
       }}
     />

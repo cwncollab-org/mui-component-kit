@@ -1,7 +1,6 @@
 import {
   Autocomplete as MuiAutocomplete,
   AutocompleteProps as MuiAutocompleteProps,
-  TextField as MuiTextField,
   TextFieldProps as MuiTextFieldProps,
   FormControl as MuiFormControl,
   FormControlProps as MuiFormControlProps,
@@ -12,6 +11,7 @@ import {
   AutocompleteValueOrFreeSoloValueMapping,
 } from '@mui/material'
 import { useId } from 'react'
+import { TextFieldBase } from './TextFieldBase'
 
 type BaseProps<
   Value,
@@ -231,9 +231,10 @@ export function AutocompleteBase<
 
   const defaultRenderInput = (params: AutocompleteRenderInputParams) => {
     return (
-      <MuiTextField
+      <TextFieldBase
         {...params}
         label={label}
+        labelBehavior={labelBehavior}
         placeholder={placeholder}
         error={error}
         required={required}
@@ -245,7 +246,14 @@ export function AutocompleteBase<
   const id = useId()
 
   return (
-    <MuiFormControl {...rest} fullWidth={fullWidth} size={size}>
+    <MuiFormControl
+      {...rest}
+      error={error}
+      required={required}
+      disabled={disabled}
+      fullWidth={fullWidth}
+      size={size}
+    >
       <MuiAutocomplete
         id={id}
         multiple={multiple}
