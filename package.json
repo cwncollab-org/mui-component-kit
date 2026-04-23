@@ -1,7 +1,7 @@
 {
   "name": "@cwncollab-org/mui-component-kit",
   "private": false,
-  "version": "0.23.0",
+  "version": "0.23.1",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
-    "@tanstack/react-router-devtools": "^1.116.0",
+    "@tanstack/react-router-devtools": "^1.166.13",
     "@tanstack/router-vite-plugin": "^1.116.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
