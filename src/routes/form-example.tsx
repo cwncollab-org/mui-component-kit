@@ -143,7 +143,7 @@ export function FormExample() {
             <form.Subscribe selector={state => state.isDirty}>
               {isDirty => <>isDirty: {isDirty ? 'true' : 'false'}</>}
             </form.Subscribe>
-            <Stack spacing={2} >
+            <Stack spacing={2}>
               <Typography variant='h6'>
                 TextField with different label behaviors
               </Typography>
@@ -539,7 +539,6 @@ export function FormExample() {
                     type='number'
                     min={1}
                     max={150}
-                    
                     fullWidth
                     size='small'
                     placeholder='Enter your age'

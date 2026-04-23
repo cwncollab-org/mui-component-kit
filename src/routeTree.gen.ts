@@ -19,8 +19,10 @@ import { Route as MaskedtextfieldExampleRouteImport } from './routes/maskedtextf
 import { Route as MaskedInputExampleRouteImport } from './routes/masked-input-example'
 import { Route as FormExampleRouteImport } from './routes/form-example'
 import { Route as DialogsExampleRouteImport } from './routes/dialogs-example'
+import { Route as DatepickerExampleRouteImport } from './routes/datepicker-example'
 import { Route as CheckboxlistExampleRouteImport } from './routes/checkboxlist-example'
 import { Route as BuddhistDatepickerExampleRouteImport } from './routes/buddhist-datepicker-example'
+import { Route as AutocompleteExampleRouteImport } from './routes/autocomplete-example'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TabsExampleIndexRouteImport } from './routes/tabs-example/index'
 import { Route as TabsExampleTab3RouteImport } from './routes/tabs-example/tab3'
@@ -80,6 +82,11 @@ const DialogsExampleRoute = DialogsExampleRouteImport.update({
   path: '/dialogs-example',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DatepickerExampleRoute = DatepickerExampleRouteImport.update({
+  id: '/datepicker-example',
+  path: '/datepicker-example',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CheckboxlistExampleRoute = CheckboxlistExampleRouteImport.update({
   id: '/checkboxlist-example',
   path: '/checkboxlist-example',
@@ -91,6 +98,11 @@ const BuddhistDatepickerExampleRoute =
     path: '/buddhist-datepicker-example',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AutocompleteExampleRoute = AutocompleteExampleRouteImport.update({
+  id: '/autocomplete-example',
+  path: '/autocomplete-example',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -129,8 +141,10 @@ const TabsExampleTab3IdRoute = TabsExampleTab3IdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/autocomplete-example': typeof AutocompleteExampleRoute
   '/buddhist-datepicker-example': typeof BuddhistDatepickerExampleRoute
   '/checkboxlist-example': typeof CheckboxlistExampleRoute
+  '/datepicker-example': typeof DatepickerExampleRoute
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
@@ -150,8 +164,10 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/autocomplete-example': typeof AutocompleteExampleRoute
   '/buddhist-datepicker-example': typeof BuddhistDatepickerExampleRoute
   '/checkboxlist-example': typeof CheckboxlistExampleRoute
+  '/datepicker-example': typeof DatepickerExampleRoute
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
@@ -171,8 +187,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/autocomplete-example': typeof AutocompleteExampleRoute
   '/buddhist-datepicker-example': typeof BuddhistDatepickerExampleRoute
   '/checkboxlist-example': typeof CheckboxlistExampleRoute
+  '/datepicker-example': typeof DatepickerExampleRoute
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
@@ -194,8 +212,10 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/autocomplete-example'
     | '/buddhist-datepicker-example'
     | '/checkboxlist-example'
+    | '/datepicker-example'
     | '/dialogs-example'
     | '/form-example'
     | '/masked-input-example'
@@ -215,8 +235,10 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/autocomplete-example'
     | '/buddhist-datepicker-example'
     | '/checkboxlist-example'
+    | '/datepicker-example'
     | '/dialogs-example'
     | '/form-example'
     | '/masked-input-example'
@@ -235,8 +257,10 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/autocomplete-example'
     | '/buddhist-datepicker-example'
     | '/checkboxlist-example'
+    | '/datepicker-example'
     | '/dialogs-example'
     | '/form-example'
     | '/masked-input-example'
@@ -257,8 +281,10 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AutocompleteExampleRoute: typeof AutocompleteExampleRoute
   BuddhistDatepickerExampleRoute: typeof BuddhistDatepickerExampleRoute
   CheckboxlistExampleRoute: typeof CheckboxlistExampleRoute
+  DatepickerExampleRoute: typeof DatepickerExampleRoute
   DialogsExampleRoute: typeof DialogsExampleRoute
   FormExampleRoute: typeof FormExampleRoute
   MaskedInputExampleRoute: typeof MaskedInputExampleRoute
@@ -343,6 +369,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DialogsExampleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/datepicker-example': {
+      id: '/datepicker-example'
+      path: '/datepicker-example'
+      fullPath: '/datepicker-example'
+      preLoaderRoute: typeof DatepickerExampleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/checkboxlist-example': {
       id: '/checkboxlist-example'
       path: '/checkboxlist-example'
@@ -355,6 +388,13 @@ declare module '@tanstack/react-router' {
       path: '/buddhist-datepicker-example'
       fullPath: '/buddhist-datepicker-example'
       preLoaderRoute: typeof BuddhistDatepickerExampleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/autocomplete-example': {
+      id: '/autocomplete-example'
+      path: '/autocomplete-example'
+      fullPath: '/autocomplete-example'
+      preLoaderRoute: typeof AutocompleteExampleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -443,8 +483,10 @@ const TabsExampleRouteWithChildren = TabsExampleRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AutocompleteExampleRoute: AutocompleteExampleRoute,
   BuddhistDatepickerExampleRoute: BuddhistDatepickerExampleRoute,
   CheckboxlistExampleRoute: CheckboxlistExampleRoute,
+  DatepickerExampleRoute: DatepickerExampleRoute,
   DialogsExampleRoute: DialogsExampleRoute,
   FormExampleRoute: FormExampleRoute,
   MaskedInputExampleRoute: MaskedInputExampleRoute,

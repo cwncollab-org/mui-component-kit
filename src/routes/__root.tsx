@@ -26,6 +26,9 @@ function RouteComponent() {
         <Link component={RouterLink} to='/select-example'>
           Select Example
         </Link>
+        <Link component={RouterLink} to='/datepicker-example'>
+          DatePicker Example
+        </Link>
         <Link component={RouterLink} to='/buddhist-datepicker-example'>
           Buddhist Date Picker Example
         </Link>
@@ -52,6 +55,9 @@ function RouteComponent() {
         </Link>
         <Link component={RouterLink} to='/password-example'>
           Password Example
+        </Link>
+        <Link component={RouterLink} to='/autocomplete-example'>
+          Autocomplete Example
         </Link>
       </Stack>
 
