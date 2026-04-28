@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@mui/material'
 import { useState } from 'react'
-import { FileDropZoneBase, useAppForm } from '../lib'
+import { FileDropZone, useAppForm } from '../lib'
 import { z } from 'zod'
 
 const formSchema = z.object({
@@ -51,7 +51,7 @@ function FileDropZoneExample() {
             Default appearance. Accepts any file type. The file list with remove
             buttons is rendered below the drop zone.
           </Typography>
-          <FileDropZoneBase
+          <FileDropZone
             label='Attachments'
             value={basicFiles}
             onChange={setBasicFiles}
@@ -72,7 +72,7 @@ function FileDropZoneExample() {
             <code>accept</code> restricts to PNG / JPEG / GIF. Non-image files
             will be rejected. The accepted extensions are shown as a hint.
           </Typography>
-          <FileDropZoneBase
+          <FileDropZone
             label='Images'
             value={imageFiles}
             onChange={setImageFiles}
@@ -91,7 +91,7 @@ function FileDropZoneExample() {
           <Typography variant='body2' color='text.secondary' gutterBottom>
             Each drop replaces the previous selection.
           </Typography>
-          <FileDropZoneBase
+          <FileDropZone
             label='Upload document'
             value={singleFile}
             onChange={setSingleFile}
@@ -112,7 +112,7 @@ function FileDropZoneExample() {
             The <code>error</code> prop turns the border red and colours the
             helper text accordingly.
           </Typography>
-          <FileDropZoneBase
+          <FileDropZone
             label='Required upload'
             value={errorFiles}
             onChange={setErrorFiles}
@@ -134,7 +134,7 @@ function FileDropZoneExample() {
           <Typography variant='body2' color='text.secondary' gutterBottom>
             The zone is greyed out and all interactions are blocked.
           </Typography>
-          <FileDropZoneBase
+          <FileDropZone
             label='Upload (locked)'
             disabled
             value={[]}
@@ -152,7 +152,7 @@ function FileDropZoneExample() {
             External file list rendered separately. The drop zone itself has a
             custom height and background via <code>sx</code>.
           </Typography>
-          <FileDropZoneBase
+          <FileDropZone
             label='Files'
             value={basicFiles}
             onChange={setBasicFiles}
@@ -190,7 +190,7 @@ function FileDropZoneExample() {
             entirely, giving full layout control while keeping all drag/drop
             wiring.
           </Typography>
-          <FileDropZoneBase fullWidth noClick>
+          <FileDropZone fullWidth noClick>
             {({ getRootProps, getInputProps, isDragActive, open }) => (
               <Box
                 {...getRootProps()}
@@ -217,7 +217,7 @@ function FileDropZoneExample() {
                 </Button>
               </Box>
             )}
-          </FileDropZoneBase>
+          </FileDropZone>
         </Box>
 
         {/* ── 8. TanStack Form integration ────────────────────────────── */}
