@@ -23,6 +23,8 @@ import { CheckboxList } from './CheckboxList'
 import { SubscribeCheckboxList } from './SubscribeCheckboxList'
 import { Password } from './Password'
 import { SubscribePassword } from './SubscribePassword'
+import { FileDropZone } from './FileDropZone'
+import { SubscribeFileDropZone } from './SubscribeFileDropZone'
 
 export const { useAppForm, withForm, withFieldGroup } = createFormHook({
   fieldContext,
@@ -50,6 +52,8 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
     SubscribeCheckboxList,
     Password,
     SubscribePassword,
+    FileDropZone,
+    SubscribeFileDropZone,
   },
   formComponents: { SubscribeButton },
 })

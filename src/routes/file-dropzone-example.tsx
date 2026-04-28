@@ -11,7 +11,14 @@ import {
   Typography,
 } from '@mui/material'
 import { useState } from 'react'
-import { FileDropZone } from '../lib'
+import { FileDropZoneBase, useAppForm } from '../lib'
+import { z } from 'zod'
+
+const formSchema = z.object({
+  attachments: z
+    .array(z.instanceof(File))
+    .min(1, 'At least one file is required'),
+})
 
 export const Route = createFileRoute('/file-dropzone-example')({
   component: FileDropZoneExample,
@@ -44,7 +51,7 @@ function FileDropZoneExample() {
             Default appearance. Accepts any file type. The file list with remove
             buttons is rendered below the drop zone.
           </Typography>
-          <FileDropZone
+          <FileDropZoneBase
             label='Attachments'
             value={basicFiles}
             onChange={setBasicFiles}
@@ -65,7 +72,7 @@ function FileDropZoneExample() {
             <code>accept</code> restricts to PNG / JPEG / GIF. Non-image files
             will be rejected. The accepted extensions are shown as a hint.
           </Typography>
-          <FileDropZone
+          <FileDropZoneBase
             label='Images'
             value={imageFiles}
             onChange={setImageFiles}
@@ -84,7 +91,7 @@ function FileDropZoneExample() {
           <Typography variant='body2' color='text.secondary' gutterBottom>
             Each drop replaces the previous selection.
           </Typography>
-          <FileDropZone
+          <FileDropZoneBase
             label='Upload document'
             value={singleFile}
             onChange={setSingleFile}
@@ -105,7 +112,7 @@ function FileDropZoneExample() {
             The <code>error</code> prop turns the border red and colours the
             helper text accordingly.
           </Typography>
-          <FileDropZone
+          <FileDropZoneBase
             label='Required upload'
             value={errorFiles}
             onChange={setErrorFiles}
@@ -127,7 +134,7 @@ function FileDropZoneExample() {
           <Typography variant='body2' color='text.secondary' gutterBottom>
             The zone is greyed out and all interactions are blocked.
           </Typography>
-          <FileDropZone
+          <FileDropZoneBase
             label='Upload (locked)'
             disabled
             value={[]}
@@ -145,7 +152,7 @@ function FileDropZoneExample() {
             External file list rendered separately. The drop zone itself has a
             custom height and background via <code>sx</code>.
           </Typography>
-          <FileDropZone
+          <FileDropZoneBase
             label='Files'
             value={basicFiles}
             onChange={setBasicFiles}
@@ -153,7 +160,7 @@ function FileDropZoneExample() {
             fullWidth
             sx={{ minHeight: 140, bgcolor: 'action.hover' }}
           />
-          <Stack direction='row' spacing={1} flexWrap='wrap' sx={{ mt: 1 }}>
+          <Stack direction='row' spacing={1} sx={{ mt: 1, flexWrap: 'wrap' }}>
             {basicFiles.map((f, i) => (
               <Chip
                 key={i}
@@ -183,7 +190,7 @@ function FileDropZoneExample() {
             entirely, giving full layout control while keeping all drag/drop
             wiring.
           </Typography>
-          <FileDropZone fullWidth noClick>
+          <FileDropZoneBase fullWidth noClick>
             {({ getRootProps, getInputProps, isDragActive, open }) => (
               <Box
                 {...getRootProps()}
@@ -210,9 +217,67 @@ function FileDropZoneExample() {
                 </Button>
               </Box>
             )}
-          </FileDropZone>
+          </FileDropZoneBase>
+        </Box>
+
+        {/* ── 8. TanStack Form integration ────────────────────────────── */}
+        <Box>
+          <Typography variant='h6' gutterBottom>
+            8 · TanStack Form integration
+          </Typography>
+          <Typography variant='body2' color='text.secondary' gutterBottom>
+            <code>SubscribeFileDropZone</code> wires the drop zone into TanStack
+            Form — validation errors are shown automatically, and the zone is
+            disabled while submitting.
+          </Typography>
+          <FileDropZoneFormExample />
         </Box>
       </Stack>
     </Paper>
+  )
+}
+
+function FileDropZoneFormExample() {
+  const form = useAppForm({
+    defaultValues: { attachments: [] as File[] },
+    validators: { onChange: formSchema },
+    onSubmit: async ({ value }) => {
+      console.log('Submitted files:', value.attachments)
+    },
+  })
+
+  return (
+    <form.AppForm>
+      <form
+        onSubmit={e => {
+          e.preventDefault()
+          form.handleSubmit()
+        }}
+      >
+        <Stack spacing={2}>
+          <form.AppField name='attachments'>
+            {field => (
+              <field.SubscribeFileDropZone
+                label='Attachments'
+                fullWidth
+                helperText='At least one file required'
+              />
+            )}
+          </form.AppField>
+          <form.Subscribe selector={state => state.values.attachments}>
+            {files => (
+              <Typography variant='caption'>
+                {files.length} file(s) selected
+              </Typography>
+            )}
+          </form.Subscribe>
+          <Box>
+            <Button type='submit' variant='contained'>
+              Submit
+            </Button>
+          </Box>
+        </Stack>
+      </form>
+    </form.AppForm>
   )
 }
