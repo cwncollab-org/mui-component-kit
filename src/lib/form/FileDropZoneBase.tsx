@@ -87,7 +87,6 @@ export type FileDropZoneBaseProps = {
 
   // customisation
   placeholder?: ReactNode
-  dropText?: ReactNode
   clickText?: ReactNode
   acceptHint?: ReactNode
   icon?: ReactNode
@@ -128,7 +127,6 @@ export function FileDropZoneBase(props: FileDropZoneBaseProps) {
     onFileDialogOpen,
     onFileDialogCancel,
     placeholder,
-    dropText = 'Drag & drop files here, or',
     clickText = 'click to select',
     acceptHint,
     icon = <CloudUploadIcon sx={{ fontSize: 40, mb: 1, color: 'inherit' }} />,
@@ -277,7 +275,7 @@ export function FileDropZoneBase(props: FileDropZoneBaseProps) {
             <MuiTypography variant='body2' align='center'>
               {placeholder ?? (
                 <>
-                  {dropText}{' '}
+                  Drag &amp; drop files here, or{' '}
                   <Box
                     component='span'
                     sx={{
