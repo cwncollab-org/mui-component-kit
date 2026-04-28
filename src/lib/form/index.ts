@@ -42,7 +42,7 @@ export {
 export { AutocompleteBase as Autocomplete } from './AutocompleteBase'
 export { CheckboxBase as Checkbox } from './CheckboxBase'
 export {
-  FileDropZoneBase,
+  FileDropZoneBase as FileDropZone,
   type FileDropZoneBaseProps,
   type FileDropZoneRenderProps,
 } from './FileDropZoneBase'
