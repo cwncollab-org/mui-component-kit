@@ -41,6 +41,11 @@ export {
 
 export { AutocompleteBase as Autocomplete } from './AutocompleteBase'
 export { CheckboxBase as Checkbox } from './CheckboxBase'
+export {
+  FileDropZoneBase as FileDropZone,
+  type FileDropZoneBaseProps as FileDropZoneProps,
+  type FileDropZoneRenderProps,
+} from './FileDropZoneBase'
 export { CheckboxListBase as CheckboxList } from './CheckboxListBase'
 export { DatePickerBase as DatePicker } from './DatePickerBase'
 export { MaskedTextFieldBase as MaskedTextField } from './MaskedTextFieldBase'

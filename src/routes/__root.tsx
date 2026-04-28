@@ -59,6 +59,9 @@ function RouteComponent() {
         <Link component={RouterLink} to='/autocomplete-example'>
           Autocomplete Example
         </Link>
+        <Link component={RouterLink} to='/file-dropzone-example'>
+          File Drop Zone Example
+        </Link>
       </Stack>
 
       <Outlet />

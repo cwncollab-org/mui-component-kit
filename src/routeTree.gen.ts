@@ -18,6 +18,7 @@ import { Route as MrtExampleRouteImport } from './routes/mrt-example'
 import { Route as MaskedtextfieldExampleRouteImport } from './routes/maskedtextfield-example'
 import { Route as MaskedInputExampleRouteImport } from './routes/masked-input-example'
 import { Route as FormExampleRouteImport } from './routes/form-example'
+import { Route as FileDropzoneExampleRouteImport } from './routes/file-dropzone-example'
 import { Route as DialogsExampleRouteImport } from './routes/dialogs-example'
 import { Route as DatepickerExampleRouteImport } from './routes/datepicker-example'
 import { Route as CheckboxlistExampleRouteImport } from './routes/checkboxlist-example'
@@ -75,6 +76,11 @@ const MaskedInputExampleRoute = MaskedInputExampleRouteImport.update({
 const FormExampleRoute = FormExampleRouteImport.update({
   id: '/form-example',
   path: '/form-example',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FileDropzoneExampleRoute = FileDropzoneExampleRouteImport.update({
+  id: '/file-dropzone-example',
+  path: '/file-dropzone-example',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DialogsExampleRoute = DialogsExampleRouteImport.update({
@@ -146,6 +152,7 @@ export interface FileRoutesByFullPath {
   '/checkboxlist-example': typeof CheckboxlistExampleRoute
   '/datepicker-example': typeof DatepickerExampleRoute
   '/dialogs-example': typeof DialogsExampleRoute
+  '/file-dropzone-example': typeof FileDropzoneExampleRoute
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
   '/maskedtextfield-example': typeof MaskedtextfieldExampleRoute
@@ -169,6 +176,7 @@ export interface FileRoutesByTo {
   '/checkboxlist-example': typeof CheckboxlistExampleRoute
   '/datepicker-example': typeof DatepickerExampleRoute
   '/dialogs-example': typeof DialogsExampleRoute
+  '/file-dropzone-example': typeof FileDropzoneExampleRoute
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
   '/maskedtextfield-example': typeof MaskedtextfieldExampleRoute
@@ -192,6 +200,7 @@ export interface FileRoutesById {
   '/checkboxlist-example': typeof CheckboxlistExampleRoute
   '/datepicker-example': typeof DatepickerExampleRoute
   '/dialogs-example': typeof DialogsExampleRoute
+  '/file-dropzone-example': typeof FileDropzoneExampleRoute
   '/form-example': typeof FormExampleRoute
   '/masked-input-example': typeof MaskedInputExampleRoute
   '/maskedtextfield-example': typeof MaskedtextfieldExampleRoute
@@ -217,6 +226,7 @@ export interface FileRouteTypes {
     | '/checkboxlist-example'
     | '/datepicker-example'
     | '/dialogs-example'
+    | '/file-dropzone-example'
     | '/form-example'
     | '/masked-input-example'
     | '/maskedtextfield-example'
@@ -240,6 +250,7 @@ export interface FileRouteTypes {
     | '/checkboxlist-example'
     | '/datepicker-example'
     | '/dialogs-example'
+    | '/file-dropzone-example'
     | '/form-example'
     | '/masked-input-example'
     | '/maskedtextfield-example'
@@ -262,6 +273,7 @@ export interface FileRouteTypes {
     | '/checkboxlist-example'
     | '/datepicker-example'
     | '/dialogs-example'
+    | '/file-dropzone-example'
     | '/form-example'
     | '/masked-input-example'
     | '/maskedtextfield-example'
@@ -286,6 +298,7 @@ export interface RootRouteChildren {
   CheckboxlistExampleRoute: typeof CheckboxlistExampleRoute
   DatepickerExampleRoute: typeof DatepickerExampleRoute
   DialogsExampleRoute: typeof DialogsExampleRoute
+  FileDropzoneExampleRoute: typeof FileDropzoneExampleRoute
   FormExampleRoute: typeof FormExampleRoute
   MaskedInputExampleRoute: typeof MaskedInputExampleRoute
   MaskedtextfieldExampleRoute: typeof MaskedtextfieldExampleRoute
@@ -360,6 +373,13 @@ declare module '@tanstack/react-router' {
       path: '/form-example'
       fullPath: '/form-example'
       preLoaderRoute: typeof FormExampleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/file-dropzone-example': {
+      id: '/file-dropzone-example'
+      path: '/file-dropzone-example'
+      fullPath: '/file-dropzone-example'
+      preLoaderRoute: typeof FileDropzoneExampleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dialogs-example': {
@@ -488,6 +508,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckboxlistExampleRoute: CheckboxlistExampleRoute,
   DatepickerExampleRoute: DatepickerExampleRoute,
   DialogsExampleRoute: DialogsExampleRoute,
+  FileDropzoneExampleRoute: FileDropzoneExampleRoute,
   FormExampleRoute: FormExampleRoute,
   MaskedInputExampleRoute: MaskedInputExampleRoute,
   MaskedtextfieldExampleRoute: MaskedtextfieldExampleRoute,
