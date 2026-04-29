@@ -1,4 +1,4 @@
-import CloudUploadIcon from '@mui/icons-material/CloudUpload'
+import UploadIcon from '@mui/icons-material/UploadFile'
 import CloseIcon from '@mui/icons-material/Close'
 import {
   Box as MuiBox,
@@ -58,6 +58,7 @@ export type FileDropZoneBaseProps = {
   fullWidth?: boolean
   disabled?: boolean
   sx?: MuiBoxProps['sx']
+  dropZoneProps?: MuiBoxProps
 
   // dropzone options
   accept?: Accept
@@ -110,6 +111,7 @@ export function FileDropZoneBase(props: FileDropZoneBaseProps) {
     fullWidth = false,
     disabled = false,
     sx,
+    dropZoneProps,
     accept,
     multiple = true,
     maxFiles,
@@ -129,7 +131,7 @@ export function FileDropZoneBase(props: FileDropZoneBaseProps) {
     placeholder,
     clickText = 'click to select',
     acceptHint,
-    icon = <CloudUploadIcon sx={{ fontSize: 40, mb: 1, color: 'inherit' }} />,
+    icon = <UploadIcon sx={{ fontSize: 40, mb: 1, color: 'inherit' }} />,
     showFileList = true,
     getFileLabel,
     children,
@@ -204,6 +206,7 @@ export function FileDropZoneBase(props: FileDropZoneBaseProps) {
   const baseSx: MuiBoxProps['sx'] = {
     display: 'flex',
     flexDirection: 'column',
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
     p: 3,
@@ -238,12 +241,15 @@ export function FileDropZoneBase(props: FileDropZoneBaseProps) {
 
   // ── render ───────────────────────────────────────────────────────────────
 
+  const { sx: dropZoneSx, ...restDropZoneProps } = dropZoneProps ?? {}
+
   return (
     <MuiFormControl
       error={error}
       fullWidth={fullWidth}
       disabled={disabled}
       component='div'
+      sx={sx}
     >
       {label && (
         <MuiFormLabel
@@ -256,14 +262,21 @@ export function FileDropZoneBase(props: FileDropZoneBaseProps) {
       )}
 
       <MuiBox
+        {...restDropZoneProps}
         {...getRootProps({
           sx: [
             baseSx,
             stateSx,
-            ...(Array.isArray(sx) ? sx : [sx]),
+            ...(Array.isArray(dropZoneSx) ? dropZoneSx : [dropZoneSx]),
           ] as MuiBoxProps['sx'],
         })}
         id={name}
+        data-dropzone-drag-active={isDragActive}
+        data-dropzone-drag-accept={isDragAccept}
+        data-dropzone-drag-reject={isDragReject}
+        data-dropzone-focused={isFocused}
+        data-dropzone-disabled={disabled}
+        data-dropzone-error={error}
       >
         <input {...getInputProps({ name })} />
 
@@ -291,7 +304,10 @@ export function FileDropZoneBase(props: FileDropZoneBaseProps) {
             {acceptHint !== undefined
               ? acceptHint
               : accept && (
-                  <MuiTypography variant='caption' sx={{ mt: 0.5, opacity: 0.7 }}>
+                  <MuiTypography
+                    variant='caption'
+                    sx={{ mt: 0.5, opacity: 0.7 }}
+                  >
                     {Object.values(accept).flat().filter(Boolean).join(', ') ||
                       Object.keys(accept).join(', ')}
                   </MuiTypography>

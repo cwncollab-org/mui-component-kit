@@ -158,7 +158,7 @@ function FileDropZoneExample() {
             onChange={setBasicFiles}
             showFileList={false}
             fullWidth
-            sx={{ minHeight: 140, bgcolor: 'action.hover' }}
+            sx={{ bgcolor: 'action.hover', height: '20rem' }}
           />
           <Stack direction='row' spacing={1} sx={{ mt: 1, flexWrap: 'wrap' }}>
             {basicFiles.map((f, i) => (
