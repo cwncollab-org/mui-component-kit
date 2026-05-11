@@ -113,13 +113,25 @@ export function DialogsExample() {
       </Paper>
       <Paper sx={{ p: 2 }}>
         <Typography variant='h6'>Example dialog 2 (Lazy)</Typography>
-        <Button variant='contained' onClick={() => openDialog(ExampleDialog2)}>
+        <Button
+          variant='contained'
+          onClick={() => {
+            console.log('Opening ExampleDialog2', ExampleDialog2.name)
+            openDialog(ExampleDialog2, {})
+          }}
+        >
           Open Dialog
         </Button>
       </Paper>
       <Paper sx={{ p: 2 }}>
         <Typography variant='h6'>Example dialog 3 (Lazy)</Typography>
-        <Button variant='contained' onClick={() => openDialog(ExampleDialog3)}>
+        <Button
+          variant='contained'
+          onClick={() => {
+            console.log('Opening ExampleDialog3', ExampleDialog3.name)
+            openDialog(ExampleDialog3, {})
+          }}
+        >
           Open Dialog
         </Button>
       </Paper>

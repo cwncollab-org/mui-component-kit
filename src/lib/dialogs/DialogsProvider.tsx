@@ -3,6 +3,7 @@ import {
   Suspense,
   useCallback,
   useId,
+  useRef,
   useState,
 } from 'react'
 import {
@@ -18,15 +19,50 @@ export function DialogsProvider({ children }: PropsWithChildren) {
   const [dialogs, setDialogs] = useState<ManagedDialog<unknown, unknown>[]>([])
   const providerId = useId()
 
+  // Stable registry: same component ref => same generated key
+  const componentKeyMapRef = useRef(new WeakMap<object, string>())
+  const componentSeqRef = useRef(0)
+
+  const getFallbackDialogKey = useCallback(
+    (Dialog: unknown) => {
+      if (
+        typeof Dialog !== 'function' &&
+        (typeof Dialog !== 'object' || Dialog === null)
+      ) {
+        componentSeqRef.current += 1
+        return `${providerId}-dialog-${componentSeqRef.current}`
+      }
+
+      const comp = Dialog as object
+      const existing = componentKeyMapRef.current.get(comp)
+      if (existing) return existing
+
+      componentSeqRef.current += 1
+      const maybeName =
+        (Dialog as any).displayName ||
+        (Dialog as any).name ||
+        ((Dialog as any)?.$$typeof === Symbol.for('react.lazy')
+          ? 'lazy-dialog'
+          : 'dialog')
+
+      const key = `${providerId}-${maybeName}-${componentSeqRef.current}`
+      componentKeyMapRef.current.set(comp, key)
+      return key
+    },
+    [providerId]
+  )
+
   const openDialog = useCallback(
     async <TPayload, TResult>(
       Dialog: React.FC<DialogProps<TPayload, TResult>>,
       opts?: OpenDialogOptions<TPayload, TResult>
     ): Promise<DialogResult<TResult>> => {
-      const { dialogKey = Dialog.name, ...props } = opts || {}
+      const { dialogKey, ...props } = opts || {}
+      const resolvedDialogKey = dialogKey ?? getFallbackDialogKey(Dialog)
+
       return new Promise<DialogResult<TResult>>(resolve => {
         const existingDialog = dialogs.find(
-          dialog => dialog.dialogKey === dialogKey
+          dialog => dialog.dialogKey === resolvedDialogKey
         )
         if (existingDialog) {
           existingDialog.open = true
@@ -35,17 +71,19 @@ export function DialogsProvider({ children }: PropsWithChildren) {
           ) => void
           existingDialog.props = props as ManagedDialogProps<unknown, unknown>
           setDialogs(prev =>
-            prev.map(d => (d.dialogKey === dialogKey ? existingDialog : d))
+            prev.map(d =>
+              d.dialogKey === resolvedDialogKey ? existingDialog : d
+            )
           )
           return
         }
 
-        const dialogId = `${providerId}-${dialogKey}`
+        const dialogId = `${providerId}-${resolvedDialogKey}`
         const dialog: ManagedDialog<unknown, unknown> = {
           id: dialogId,
           open: true,
           Component: Dialog as React.FC<DialogProps<unknown, unknown>>,
-          dialogKey,
+          dialogKey: resolvedDialogKey,
           props: props as ManagedDialogProps<unknown, unknown>,
           resolve: resolve as (
             value: DialogResult<unknown> | PromiseLike<DialogResult<unknown>>
