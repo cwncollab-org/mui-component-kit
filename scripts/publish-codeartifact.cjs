@@ -51,7 +51,15 @@ function main(argv = process.argv.slice(2), env = process.env) {
   // Reset it so unrelated npm commands still use the public registry.
   runNpm(["config", "set", "registry", defaultNpmRegistry, "--location=user"], env);
 
-  runNpm(["publish", "--registry", codeArtifactRegistry, ...argv], env);
+  // Auto-tag by major.minor (e.g. "v1.1" for 1.1.x) unless the caller
+  // already passed an explicit --tag flag.
+  const publishArgs = ["publish", "--registry", codeArtifactRegistry, ...argv];
+  if (!argv.some((a) => a === "--tag" || a.startsWith("--tag="))) {
+    const [major, minor] = (pkg.version || "0.0.0").split(".");
+    publishArgs.push("--tag", `v${major}-${minor}`);
+  }
+
+  runNpm(publishArgs, env);
 }
 
 function npmCommand() {

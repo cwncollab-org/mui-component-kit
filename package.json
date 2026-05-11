@@ -1,7 +1,7 @@
 {
   "name": "@cwncollab-org/mui-component-kit",
   "private": false,
-  "version": "0.24.3",
+  "version": "1.1.0",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -43,8 +43,8 @@
     "@tanstack/react-table": "8.21.3",
     "dayjs": "1.11.20",
     "material-react-table": "3.2.1",
-    "react": "19.2.5",
-    "react-dom": "19.2.5",
+    "react": "19.1.7",
+    "react-dom": "19.1.7",
     "react-imask": "7.6.1"
   },
   "devDependencies": {
@@ -54,8 +54,8 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@types/jest": "^29.5.14",
-    "@types/react": "^19.0.10",
-    "@types/react-dom": "^19.0.4",
+    "@types/react": "^19.1.7",
+    "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react-swc": "^3.8.0",
     "eslint": "^9.22.0",
     "eslint-plugin-react-hooks": "^5.2.0",

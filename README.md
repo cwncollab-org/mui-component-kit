@@ -4,6 +4,13 @@
 
 A React component library built with TypeScript and Vite. This package provides a set of reusable components built on top of [Material-UI (MUI)](https://mui.com/) and [Tanstack Form](https://tanstack.com/form/latest) for form handling.
 
+## Versioning
+
+| Package version | React version |
+|-----------------|---------------|
+| `1.1.x`         | React 19.1.x  |
+| `1.2.x`         | React 19.2.x  |
+
 ## Publish
 
 This package is published manually to AWS CodeArtifact.
