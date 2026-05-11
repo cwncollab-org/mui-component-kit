@@ -1,6 +1,6 @@
 import { Box, Button, Input, Paper, Stack, Typography } from '@mui/material'
 import { createFileRoute } from '@tanstack/react-router'
-import { lazy, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import ExampleDialog from '../examples/ExampleDialog'
 import ExampleDialogWithPayload from '../examples/ExampleDialogWithPayload'
 import ExampleDialogWithResult from '../examples/ExampleDialogWithResult'
@@ -9,7 +9,8 @@ export const Route = createFileRoute('/dialogs-example')({
   component: DialogsExample,
 })
 
-const ExampleDialog2 = lazy(() => import('../examples/ExampleDialog2'))
+import { ExampleDialog2 } from '../examples/lazy/ExampleDialog2'
+import { ExampleDialog3 } from '../examples/lazy/ExampleDialog3'
 
 export function DialogsExample() {
   const { openDialog, dialogs } = useDialogs()
@@ -113,6 +114,12 @@ export function DialogsExample() {
       <Paper sx={{ p: 2 }}>
         <Typography variant='h6'>Example dialog 2 (Lazy)</Typography>
         <Button variant='contained' onClick={() => openDialog(ExampleDialog2)}>
+          Open Dialog
+        </Button>
+      </Paper>
+      <Paper sx={{ p: 2 }}>
+        <Typography variant='h6'>Example dialog 3 (Lazy)</Typography>
+        <Button variant='contained' onClick={() => openDialog(ExampleDialog3)}>
           Open Dialog
         </Button>
       </Paper>
